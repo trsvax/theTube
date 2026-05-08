@@ -7,13 +7,21 @@ export async function generateStaticParams() {
   return getPosts().map((p) => ({ slug: p.slug }));
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const post = await getPost(slug);
   return { title: `${post.title} — theTube` };
 }
 
-export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const post = await getPost(slug);
 
@@ -32,7 +40,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             ))}
           </div>
         </div>
-        <div className="post-body" dangerouslySetInnerHTML={{ __html: post.html }} />
+        <div
+          className="post-body"
+          dangerouslySetInnerHTML={{ __html: post.html }}
+        />
         <Link href="/" className="back-link">
           ← All posts
         </Link>

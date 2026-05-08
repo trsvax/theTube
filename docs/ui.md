@@ -2,10 +2,10 @@
 
 ## Page Inventory
 
-| Page | Route | Component | Description |
-|---|---|---|---|
-| Index | `/` | `app/page.tsx` | All posts, filterable by tag |
-| Post | `/posts/[slug]` | `app/posts/[slug]/page.tsx` | Individual post |
+| Page  | Route           | Component                   | Description                  |
+| ----- | --------------- | --------------------------- | ---------------------------- |
+| Index | `/`             | `app/page.tsx`              | All posts, filterable by tag |
+| Post  | `/posts/[slug]` | `app/posts/[slug]/page.tsx` | Individual post              |
 
 ## Slot Order — Index Page
 
@@ -46,11 +46,11 @@
 
 ## Component Inventory
 
-| Component | File | Purpose |
-|---|---|---|
-| `Header` | `app/components/Header.tsx` | Site title, nav links |
-| `Footer` | `app/components/Footer.tsx` | Simple footer |
-| `PostList` | `app/components/PostList.tsx` | Client component — tag filter + post cards |
+| Component  | File                          | Purpose                                         |
+| ---------- | ----------------------------- | ----------------------------------------------- |
+| `Header`   | `app/components/Header.tsx`   | Site title, nav links                           |
+| `Footer`   | `app/components/Footer.tsx`   | Simple footer                                   |
+| `PostList` | `app/components/PostList.tsx` | Client component — tag filter + post cards      |
 | `PostCard` | `app/components/PostCard.tsx` | Single post teaser (date, tags, title, summary) |
 
 ## Visual Conventions
@@ -64,11 +64,11 @@
 
 ## Tag Conventions
 
-| Tag | Use |
-|---|---|
-| `tech` | Technical / programming posts |
-| `travel` | Travel writing |
-| `tg` | TxGang related |
+| Tag      | Use                           |
+| -------- | ----------------------------- |
+| `tech`   | Technical / programming posts |
+| `travel` | Travel writing                |
+| `tg`     | TxGang related                |
 
 New tags can be added freely — no registration needed, just use them in frontmatter.
 

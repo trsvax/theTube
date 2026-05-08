@@ -6,17 +6,17 @@ theTube is a personal blog — technical posts and travel writing. Public, no au
 
 ## Stack
 
-| Concern | Decision | Rationale |
-|---|---|---|
-| Framework | Next.js 15, App Router, TypeScript | Familiar from other projects |
-| Content | Markdown files in `content/posts/` | Plain text, git-versioned, editor-friendly |
-| Markdown → HTML | `marked` | Single dep, runs at build time |
-| Styling | Plain CSS (`app/globals.css`) | No framework, loads fast, survives long gaps |
-| Images | S3 + CloudFront URLs in `<img>` tags | No server-side optimization needed |
-| Storage | None (static export) | No server, no DB needed |
-| Output | `next export` → static HTML/JS/CSS | Served from S3 + CloudFront |
-| Hosting | S3 bucket + CloudFront distribution | ~$0.50/mo, zero maintenance |
-| Deploy | GitHub Actions → build → upload to S3 | Zero-touch on push to `main` |
+| Concern         | Decision                              | Rationale                                    |
+| --------------- | ------------------------------------- | -------------------------------------------- |
+| Framework       | Next.js 15, App Router, TypeScript    | Familiar from other projects                 |
+| Content         | Markdown files in `content/posts/`    | Plain text, git-versioned, editor-friendly   |
+| Markdown → HTML | `marked`                              | Single dep, runs at build time               |
+| Styling         | Plain CSS (`app/globals.css`)         | No framework, loads fast, survives long gaps |
+| Images          | S3 + CloudFront URLs in `<img>` tags  | No server-side optimization needed           |
+| Storage         | None (static export)                  | No server, no DB needed                      |
+| Output          | `next export` → static HTML/JS/CSS    | Served from S3 + CloudFront                  |
+| Hosting         | S3 bucket + CloudFront distribution   | ~$0.50/mo, zero maintenance                  |
+| Deploy          | GitHub Actions → build → upload to S3 | Zero-touch on push to `main`                 |
 
 ## Content Model
 
@@ -34,6 +34,7 @@ Post body here...
 ```
 
 **Fields:**
+
 - `title` — display title
 - `date` — ISO date string, used for sorting
 - `tags` — array of strings: `tech`, `travel`, `tg` (extensible)
@@ -41,10 +42,10 @@ Post body here...
 
 ## URL Structure
 
-| URL | Content |
-|---|---|
-| `/` | Post index (all posts, filterable by tag) |
-| `/posts/[slug]` | Individual post |
+| URL             | Content                                   |
+| --------------- | ----------------------------------------- |
+| `/`             | Post index (all posts, filterable by tag) |
+| `/posts/[slug]` | Individual post                           |
 
 Slug = filename without `.md`.
 
@@ -66,6 +67,7 @@ git push main
 ## No-server Constraints
 
 `output: 'export'` means:
+
 - No API routes
 - No server components that read files at request time (build-time only)
 - No `next/image` optimization — use plain `<img>` with S3/CloudFront URLs
@@ -74,6 +76,7 @@ git push main
 ## Adding Dynamic Features Later
 
 If comments, view counts, or other dynamic features are needed:
+
 - Switch to EC2 + systemd (same pattern as DPS-Ops)
 - Add SQLite (`node:sqlite`) for storage
 - Drop `output: 'export'`, add API routes

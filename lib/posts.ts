@@ -17,7 +17,10 @@ export interface Post extends PostMeta {
 
 // Vendored frontmatter parser — reads YAML block between --- delimiters.
 // Supports string, array, and date values. No external dep needed.
-function parseFrontmatter(raw: string): { meta: Record<string, unknown>; body: string } {
+function parseFrontmatter(raw: string): {
+  meta: Record<string, unknown>;
+  body: string;
+} {
   const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
   if (!match) return { meta: {}, body: raw };
 

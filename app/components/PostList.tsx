@@ -8,20 +8,23 @@ export default function PostList({ posts }: { posts: PostMeta[] }) {
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
-  const filtered = activeTag ? posts.filter((p) => p.tags.includes(activeTag)) : posts;
+  const filtered = activeTag
+    ? posts.filter((p) => p.tags.includes(activeTag))
+    : posts;
 
   return (
     <>
       <div className="tag-filter">
-        <button className={`tag-btn${activeTag === null ? " active" : ""}`} onClick={() => setActiveTag(null)}>
+        <button
+          className={`tag-btn${activeTag === null ? " active" : ""}`}
+          onClick={() => setActiveTag(null)}>
           All
         </button>
         {allTags.map((tag) => (
           <button
             key={tag}
             className={`tag-btn${activeTag === tag ? " active" : ""}`}
-            onClick={() => setActiveTag(activeTag === tag ? null : tag)}
-          >
+            onClick={() => setActiveTag(activeTag === tag ? null : tag)}>
             {tag}
           </button>
         ))}

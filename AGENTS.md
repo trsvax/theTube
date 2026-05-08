@@ -105,6 +105,7 @@ Slug = filename without `.md`.
 ## Deploy
 
 Push to `main` → GitHub Actions:
+
 1. `npm ci`
 2. `npm run build` (generates `out/`)
 3. `aws s3 sync out/ s3://<bucket> --delete`
@@ -117,6 +118,7 @@ AWS credentials stored as GitHub Actions secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECR
 ## Static Export Constraints
 
 `output: 'export'` means:
+
 - No API routes
 - No server-side file reads at request time (build-time only)
 - No `next/image` optimization
