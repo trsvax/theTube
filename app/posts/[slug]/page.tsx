@@ -1,6 +1,4 @@
 import { getPosts, getPost } from "@/lib/posts";
-import Header from "@/app/components/Header";
-import Footer from "@/app/components/Footer";
 import Link from "next/link";
 
 export async function generateStaticParams() {
@@ -27,28 +25,24 @@ export default async function PostPage({
 
   return (
     <>
-      <Header />
-      <main>
-        <div className="post-header">
-          <h1>{post.title}</h1>
-          <div className="post-meta">
-            {post.date}
-            {post.tags.map((t) => (
-              <span key={t} className="tag">
-                #{t}
-              </span>
-            ))}
-          </div>
+      <div className="post-header">
+        <h1>{post.title}</h1>
+        <div className="post-meta">
+          {post.date}
+          {post.tags.map((t) => (
+            <span key={t} className="tag">
+              #{t}
+            </span>
+          ))}
         </div>
-        <div
-          className="post-body"
-          dangerouslySetInnerHTML={{ __html: post.html }}
-        />
-        <Link href="/" className="back-link">
-          ← All posts
-        </Link>
-      </main>
-      <Footer />
+      </div>
+      <div
+        className="post-body"
+        dangerouslySetInnerHTML={{ __html: post.html }}
+      />
+      <Link href="/" className="back-link">
+        ← All posts
+      </Link>
     </>
   );
 }
