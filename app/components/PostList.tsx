@@ -1,16 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import type { PostMeta } from "@/lib/posts";
 
-export default function PostList({ posts }: { posts: PostMeta[] }) {
+interface PostItem {
+  type: "post";
+  slug: string;
+  title: string;
+  date: string;
+  tags: string[];
+  summary: string;
+}
+
+const FEEDS = [
+  "/public/content.json",
+  "/user/content.json",
+  "/kids/content.json",
+  "/friends/content.json",
+];
+
+async function tryFetch(url: string): Promise<PostItem[]> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.items ?? []).filter((i: PostItem) => i.type === "post");
+  } catch {
+    return [];
+  }
+}
+
+export default function PostList() {
+  const [posts, setPosts] = useState<PostItem[]>([]);
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
+  useEffect(() => {
+    Promise.all(FEEDS.map(tryFetch)).then((results) => {
+      const seen = new Set<string>();
+      const merged = results
+        .flat()
+        .filter((p) => (seen.has(p.slug) ? false : seen.add(p.slug) && true))
+        .sort((a, b) => (a.date < b.date ? 1 : -1));
+      setPosts(merged);
+    });
+  }, []);
+
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
-  const filtered = activeTag
-    ? posts.filter((p) => p.tags.includes(activeTag))
-    : posts;
+  const filtered = activeTag ? posts.filter((p) => p.tags.includes(activeTag)) : posts;
 
   return (
     <>

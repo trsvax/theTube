@@ -2,6 +2,7 @@
 title: Building theTube
 date: 2026-05-08
 tags: [tech]
+audience: public
 summary: How I built this blog — Next.js static export, plain CSS, markdown files, four npm deps, and a proper brand.
 ---
 

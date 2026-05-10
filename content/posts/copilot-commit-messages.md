@@ -2,6 +2,7 @@
 title: Copilot Commit Messages
 date: 2023-11-11
 tags: [tech]
+audience: public
 summary: Updated VSCode the other day and noticed Copilot will now create git commit messages. Since most of mine are "did some stuff" I figured, what's the worst that could happen.
 ---
 

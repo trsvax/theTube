@@ -8,6 +8,7 @@ export interface PostMeta {
   title: string;
   date: string;
   tags: string[];
+  audience: string;
   summary: string;
 }
 
@@ -59,6 +60,7 @@ export function getPosts(): PostMeta[] {
         title: (meta.title as string) ?? slugify(filename),
         date: (meta.date as string) ?? "",
         tags: (meta.tags as string[]) ?? [],
+        audience: (meta.audience as string) ?? "public",
         summary: (meta.summary as string) ?? "",
       };
     })
@@ -75,6 +77,7 @@ export async function getPost(slug: string): Promise<Post> {
     title: (meta.title as string) ?? slug,
     date: (meta.date as string) ?? "",
     tags: (meta.tags as string[]) ?? [],
+    audience: (meta.audience as string) ?? "public",
     summary: (meta.summary as string) ?? "",
     html,
   };
