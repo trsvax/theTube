@@ -59,10 +59,10 @@ scripts/
 
 ### Two-repo structure
 
-| Repo | Visibility | Contains |
-|------|-----------|----------|
-| `trsvax/theTube` | Public | App code, public post content, docs |
-| `trsvax/theTube-private` | Private | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
+| Repo                     | Visibility | Contains                                                                                          |
+| ------------------------ | ---------- | ------------------------------------------------------------------------------------------------- |
+| `trsvax/theTube`         | Public     | App code, public post content, docs                                                               |
+| `trsvax/theTube-private` | Private    | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
 
 The deploy workflow checks out both repos, merges private assets into the public build tree, then runs `next build`. Private content never touches the public repo.
 

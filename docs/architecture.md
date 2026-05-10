@@ -82,16 +82,19 @@ git push main
 The static export is the floor, not the ceiling. `PostList` is already a client component — it can `fetch` from any endpoint at runtime without touching `output: 'export'` or the build pipeline.
 
 **Client-side fetches that need no server change:**
+
 - Role-based JSON index files from S3 (permissioned via CloudFront signed cookies)
 - Bluesky/AT Protocol reply counts fetched at build time or client-side
 - Any public read API (DynamoDB via API Gateway, a feed endpoint, etc.)
 
 **If a write path or private server is needed:**
+
 - Add an API Gateway + Lambda (or EC2 + systemd) alongside the static site
 - `PostList` fetches from it at runtime — the static export stays intact
 - Add SQLite (`node:sqlite`) or DynamoDB for storage
 
 **If full server rendering is needed:**
+
 - Drop `output: 'export'`, add Next.js API routes
 - Move to EC2 + systemd (same pattern as DPS-Ops)
 

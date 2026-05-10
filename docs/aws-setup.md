@@ -46,11 +46,11 @@ Attach this policy to the bucket, replacing `<DISTRIBUTION_ARN>` and `<BUCKET_NA
 
 ### Behaviors
 
-| Path pattern   | Cache policy      | Signed cookies required | Notes                        |
-|----------------|-------------------|------------------------|------------------------------|
-| `default (*)`  | CachingOptimized  | No                     | All public content           |
-| `/protected/*` | CachingDisabled   | Yes                    | Role-gated assets and images |
-| `/_indexes/*`  | CachingDisabled   | Role-dependent         | Role-based JSON index files  |
+| Path pattern   | Cache policy     | Signed cookies required | Notes                        |
+| -------------- | ---------------- | ----------------------- | ---------------------------- |
+| `default (*)`  | CachingOptimized | No                      | All public content           |
+| `/protected/*` | CachingDisabled  | Yes                     | Role-gated assets and images |
+| `/_indexes/*`  | CachingDisabled  | Role-dependent          | Role-based JSON index files  |
 
 #### Setting up signed cookies on `/protected/*`
 
@@ -66,11 +66,11 @@ The private key is used server-side (or locally via CLI) to generate signed cook
 
 Role-gated index files live under `/_indexes/`:
 
-| File                        | Audience                  | Access                  |
-|-----------------------------|---------------------------|-------------------------|
-| `/_indexes/public.json`     | Everyone                  | Public                  |
-| `/_indexes/kids.json`       | Kids role                 | Signed cookie required  |
-| `/_indexes/friends.json`    | Friends role              | Signed cookie required  |
+| File                     | Audience     | Access                 |
+| ------------------------ | ------------ | ---------------------- |
+| `/_indexes/public.json`  | Everyone     | Public                 |
+| `/_indexes/kids.json`    | Kids role    | Signed cookie required |
+| `/_indexes/friends.json` | Friends role | Signed cookie required |
 
 Set `/protected/*` and `/_indexes/kids.json`, `/_indexes/friends.json` behaviors to require signed cookies.
 
@@ -88,15 +88,8 @@ Create an IAM user (or role) for GitHub Actions with least-privilege permissions
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:PutObject",
-        "s3:DeleteObject",
-        "s3:ListBucket"
-      ],
-      "Resource": [
-        "arn:aws:s3:::<BUCKET_NAME>",
-        "arn:aws:s3:::<BUCKET_NAME>/*"
-      ]
+      "Action": ["s3:PutObject", "s3:DeleteObject", "s3:ListBucket"],
+      "Resource": ["arn:aws:s3:::<BUCKET_NAME>", "arn:aws:s3:::<BUCKET_NAME>/*"]
     },
     {
       "Effect": "Allow",
@@ -109,13 +102,13 @@ Create an IAM user (or role) for GitHub Actions with least-privilege permissions
 
 ### GitHub Actions secrets required
 
-| Secret                       | Value                              |
-|------------------------------|------------------------------------|
-| `AWS_ACCESS_KEY_ID`          | IAM user access key                |
-| `AWS_SECRET_ACCESS_KEY`      | IAM user secret key                |
-| `AWS_REGION`                 | e.g. `us-east-1`                   |
-| `S3_BUCKET`                  | Bucket name                        |
-| `CLOUDFRONT_DISTRIBUTION_ID` | Distribution ID                    |
+| Secret                       | Value                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------ |
+| `AWS_ACCESS_KEY_ID`          | IAM user access key                                                      |
+| `AWS_SECRET_ACCESS_KEY`      | IAM user secret key                                                      |
+| `AWS_REGION`                 | e.g. `us-east-1`                                                         |
+| `S3_BUCKET`                  | Bucket name                                                              |
+| `CLOUDFRONT_DISTRIBUTION_ID` | Distribution ID                                                          |
 | `PRIVATE_REPO_TOKEN`         | GitHub PAT with `repo` scope — for checking out the private content repo |
 
 ---

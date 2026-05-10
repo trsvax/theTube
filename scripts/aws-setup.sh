@@ -25,8 +25,8 @@ set -euo pipefail
 BUCKET_NAME="thetube-today"
 REGION="us-east-1"
 DOMAIN="thetube.today"
-ACM_CERT_ARN=""   # Fill in after requesting cert at ACM (must be us-east-1)
-HOSTED_ZONE_ID="" # Fill in from Route 53 console
+ACM_CERT_ARN="arn:aws:acm:us-east-1:110255818591:certificate/f7a101e7-aff7-45bd-8f3a-4ebac8e43e0a"
+HOSTED_ZONE_ID="Z09834561ROB66CQGZHJH"
 # ─────────────────────────────────────────────────────────────────────────────
 
 if [[ -z "$ACM_CERT_ARN" || -z "$HOSTED_ZONE_ID" ]]; then
@@ -90,17 +90,6 @@ DISTRIBUTION=$(aws cloudfront create-distribution --distribution-config "{
     \"ViewerProtocolPolicy\": \"redirect-to-https\",
     \"CachePolicyId\": \"658327ea-f89d-4fab-a63d-7e88639e58f6\",
     \"AllowedMethods\": { \"Quantity\": 2, \"Items\": [\"GET\", \"HEAD\"] }
-  },
-  \"CacheBehaviors\": {
-    \"Quantity\": 1,
-    \"Items\": [{
-      \"PathPattern\": \"/protected/*\",
-      \"TargetOriginId\": \"s3-origin\",
-      \"ViewerProtocolPolicy\": \"redirect-to-https\",
-      \"CachePolicyId\": \"4135ea2d-6df8-44a3-9df3-4b5a84be39ad\",
-      \"AllowedMethods\": { \"Quantity\": 2, \"Items\": [\"GET\", \"HEAD\"] },
-      \"TrustedKeyGroups\": { \"Enabled\": true, \"Quantity\": 0, \"Items\": [] }
-    }]
   },
   \"CustomErrorResponses\": {
     \"Quantity\": 2,

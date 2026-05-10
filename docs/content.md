@@ -2,16 +2,16 @@
 
 ## Frontmatter Spec
 
-| Field    | Required | Type       | Default | Description                                           |
-|----------|----------|------------|---------|-------------------------------------------------------|
+| Field    | Required | Type       | Default | Description                                             |
+| -------- | -------- | ---------- | ------- | ------------------------------------------------------- |
 | title    | yes      | string     | —       | Display title — post page, PostCard, `<title>`, Bluesky |
-| date     | yes      | YYYY-MM-DD | —       | Sort order and display date                           |
-| tags     | yes      | array      | —       | e.g. `[tech, travel]` — see Tag Registry below        |
-| summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card      |
-| image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail           |
-| bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions       |
-| draft    | no       | boolean    | false   | Exclude from index; URL still builds and works        |
-| audience | no       | string     | public  | Role gate — routes into JSON index files (see Roles)  |
+| date     | yes      | YYYY-MM-DD | —       | Sort order and display date                             |
+| tags     | yes      | array      | —       | e.g. `[tech, travel]` — see Tag Registry below          |
+| summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card        |
+| image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail             |
+| bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions         |
+| draft    | no       | boolean    | false   | Exclude from index; URL still builds and works          |
+| audience | no       | string     | public  | Role gate — routes into JSON index files (see Roles)    |
 
 ### Example
 
@@ -32,11 +32,11 @@ audience: public
 
 ## Tag Registry
 
-| Tag    | Use                        |
-|--------|----------------------------|
-| tech   | Technical / programming    |
-| travel | Travel writing             |
-| tg     | TxGang related             |
+| Tag    | Use                     |
+| ------ | ----------------------- |
+| tech   | Technical / programming |
+| travel | Travel writing          |
+| tg     | TxGang related          |
 
 New tags can be added freely — just use them in frontmatter. They appear automatically in the index tag filter with no code change.
 
@@ -44,11 +44,11 @@ New tags can be added freely — just use them in frontmatter. They appear autom
 
 ## Audience / Roles
 
-| Value  | JSON index file        | Visible to                        |
-|--------|------------------------|-----------------------------------|
-| public | `public-index.json`    | Everyone (default)                |
-| kids   | `kids-index.json`      | Kids + anyone with CloudFront cookie |
-| friends| `friends-index.json`   | Friends + anyone with CloudFront cookie |
+| Value   | JSON index file      | Visible to                              |
+| ------- | -------------------- | --------------------------------------- |
+| public  | `public-index.json`  | Everyone (default)                      |
+| kids    | `kids-index.json`    | Kids + anyone with CloudFront cookie    |
+| friends | `friends-index.json` | Friends + anyone with CloudFront cookie |
 
 The index page (`PostList`) fetches whichever JSON files the current visitor can reach. Posts only appear if their index file is accessible. Content files for non-public posts should live in the private repo.
 
@@ -60,14 +60,14 @@ The index page (`PostList`) fetches whichever JSON files the current visitor can
 
 Syntax: `> [!TYPE]` or `> [!TYPE arg=value arg2=value]` on the first line of a blockquote.
 
-| Type    | Color               | Purpose                         | Supported Args  |
-|---------|---------------------|---------------------------------|-----------------|
-| NOTE    | Open Sky `#455978`  | General info worth highlighting | —               |
-| WARNING | Sunshine `#f18636`  | Watch out / gotcha              | —               |
-| TIP     | Green `#4a7c59`     | Helpful hint or shortcut        | —               |
-| TLDR    | Warm Midnight `#2a0002` | Summary at top of long post | —               |
-| TRAVEL  | Warm earthy `#8b5e3c` | Practical travel info         | `visa`, `cost`  |
-| GEAR    | Muted gray `#6b7280` | Tools / equipment used         | —               |
+| Type    | Color                   | Purpose                         | Supported Args |
+| ------- | ----------------------- | ------------------------------- | -------------- |
+| NOTE    | Open Sky `#455978`      | General info worth highlighting | —              |
+| WARNING | Sunshine `#f18636`      | Watch out / gotcha              | —              |
+| TIP     | Green `#4a7c59`         | Helpful hint or shortcut        | —              |
+| TLDR    | Warm Midnight `#2a0002` | Summary at top of long post     | —              |
+| TRAVEL  | Warm earthy `#8b5e3c`   | Practical travel info           | `visa`, `cost` |
+| GEAR    | Muted gray `#6b7280`    | Tools / equipment used          | —              |
 
 ### Adding a new callout type
 
@@ -90,8 +90,8 @@ Args render as small badges inside the callout header.
 
 Inline shortcodes using `[!SHORTCODE args]` syntax (not inside a blockquote).
 
-| Shortcode | Required Args | Optional Args                          | Output                                 |
-|-----------|---------------|----------------------------------------|----------------------------------------|
+| Shortcode | Required Args | Optional Args                                 | Output                                    |
+| --------- | ------------- | --------------------------------------------- | ----------------------------------------- |
 | IMG       | `src`         | `width`, `height`, `float`, `caption`, `role` | Sized/floated `<figure>` + `<figcaption>` |
 
 ### Adding a new shortcode
