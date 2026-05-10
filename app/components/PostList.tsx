@@ -34,7 +34,7 @@ export default function PostList() {
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
-  useEffect(() => {
+  const fetchPosts = () =>
     Promise.all(FEEDS.map(tryFetch)).then((results) => {
       const seen = new Set<string>();
       const merged = results
@@ -43,6 +43,12 @@ export default function PostList() {
         .sort((a, b) => (a.date < b.date ? 1 : -1));
       setPosts(merged);
     });
+
+  useEffect(() => {
+    fetchPosts();
+    const onVisible = () => document.visibilityState === "visible" && fetchPosts();
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
   }, []);
 
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
