@@ -2,7 +2,11 @@
 
 ## Overview
 
-theTube is a personal blog — technical posts and travel writing. Public, no auth, no ads, no analytics.
+theTube is a personal blog — technical posts and travel writing. No ads, no analytics.
+
+**Goal: a permissioned, dynamic-feeling site built entirely from static content with no server.**
+
+Permissions are enforced at the CDN layer (CloudFront signed cookies) and through role-based JSON index files fetched client-side at runtime. `PostList` is already a client component — it fetches whichever index files the visitor can reach and builds the post list from what comes back. The build is static; the browser provides the dynamism.
 
 ## Stack
 
@@ -75,10 +79,20 @@ git push main
 
 ## Adding Dynamic Features Later
 
-If comments, view counts, or other dynamic features are needed:
+The static export is the floor, not the ceiling. `PostList` is already a client component — it can `fetch` from any endpoint at runtime without touching `output: 'export'` or the build pipeline.
 
-- Switch to EC2 + systemd (same pattern as DPS-Ops)
-- Add SQLite (`node:sqlite`) for storage
-- Drop `output: 'export'`, add API routes
+**Client-side fetches that need no server change:**
+- Role-based JSON index files from S3 (permissioned via CloudFront signed cookies)
+- Bluesky/AT Protocol reply counts fetched at build time or client-side
+- Any public read API (DynamoDB via API Gateway, a feed endpoint, etc.)
 
-The content model and component structure don't need to change.
+**If a write path or private server is needed:**
+- Add an API Gateway + Lambda (or EC2 + systemd) alongside the static site
+- `PostList` fetches from it at runtime — the static export stays intact
+- Add SQLite (`node:sqlite`) or DynamoDB for storage
+
+**If full server rendering is needed:**
+- Drop `output: 'export'`, add Next.js API routes
+- Move to EC2 + systemd (same pattern as DPS-Ops)
+
+The content model and component structure don't need to change in any of these paths.

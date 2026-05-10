@@ -8,7 +8,9 @@ Guidance for automated agents working in this repository.
 
 ## Project Overview
 
-theTube is a personal blog — technical posts and travel writing. Public, no auth.
+theTube is a personal blog — technical posts and travel writing.
+
+**Goal: a permissioned, dynamic-feeling site built entirely from static content with no server.** Permissions are enforced at the CDN layer (CloudFront) and through role-based JSON index files fetched client-side. The browser does the dynamic work; the build produces static assets.
 
 - **Content** — Markdown files in `content/posts/` with YAML frontmatter
 - **Output** — Static HTML via `next build` with `output: 'export'`
@@ -35,19 +37,34 @@ lib/
   posts.ts            Vendored post loader — reads content/posts/*.md, parses frontmatter
 
 content/
-  posts/              *.md files — one per post
+  posts/              *.md files — public posts only
 
 docs/
   architecture.md     Stack decisions, hosting, deploy pipeline
   ui.md               Page inventory, slot diagrams, component inventory
+  content.md          Frontmatter spec, callout inventory, shortcode inventory
+  aws-setup.md        One-time AWS infrastructure setup (S3, CloudFront, IAM, DNS)
 
 skills/
   ui/SKILL.md         UI conventions — read before touching any page or component
+  post/SKILL.md       Post authoring — read before creating or editing a post
 
 .github/
   workflows/
     deploy.yml        Build + S3 sync + CloudFront invalidation
+
+scripts/
+  aws-setup.sh        One-time AWS infrastructure provisioning script
 ```
+
+### Two-repo structure
+
+| Repo | Visibility | Contains |
+|------|-----------|----------|
+| `trsvax/theTube` | Public | App code, public post content, docs |
+| `trsvax/theTube-private` | Private | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
+
+The deploy workflow checks out both repos, merges private assets into the public build tree, then runs `next build`. Private content never touches the public repo.
 
 ---
 

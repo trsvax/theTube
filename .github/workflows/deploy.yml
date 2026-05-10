@@ -9,14 +9,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: public-repo
+
+      - name: Checkout private content
+        uses: actions/checkout@v4
+        with:
+          repository: trsvax/theTube-private
+          token: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          path: private-repo
+
+      - name: Merge private assets
+        run: |
+          cp -r private-repo/public/fonts public-repo/public/fonts
+          cp -r private-repo/public/protected public-repo/public/protected
+          cp -r private-repo/content/posts/. public-repo/content/posts/
 
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+          cache-dependency-path: public-repo/package-lock.json
 
       - name: Install
         run: npm ci
+        working-directory: public-repo
 
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
@@ -24,23 +41,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Pull fonts from S3
-        run: |
-          mkdir -p public/fonts
-          aws s3 sync s3://${{ secrets.S3_BUCKET }}/fonts/ public/fonts/
 
       - name: Build
+        working-directory: public-repo
         run: npm run build
 
-      - name: Configure AWS
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
-
       - name: Sync to S3
+        working-directory: public-repo
         run: aws s3 sync out/ s3://${{ secrets.S3_BUCKET }} --delete
 
       - name: Invalidate CloudFront
