@@ -46,7 +46,9 @@ export default function PostList() {
   }, []);
 
   const allTags = Array.from(new Set(posts.flatMap((p) => p.tags))).sort();
-  const filtered = activeTag ? posts.filter((p) => p.tags.includes(activeTag)) : posts;
+  const filtered = activeTag
+    ? posts.filter((p) => p.tags.includes(activeTag))
+    : posts;
 
   return (
     <>
