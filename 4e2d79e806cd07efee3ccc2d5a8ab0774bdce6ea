@@ -1,0 +1,7 @@
+Verify:
+- https://thetube.today/blog loads and shows posts (fetched from /public/content.json)
+- https://thetube.today/public/content.json returns 2 posts with correct fields
+- https://thetube.today/posts/building-the-tube renders correctly
+- https://thetube.today/posts/copilot-commit-messages renders correctly
+- /user/content.json, /kids/content.json, /friends/content.json return empty items arrays
+- Tag filter (All / tech) works on /blog
