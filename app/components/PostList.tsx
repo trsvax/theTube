@@ -13,10 +13,10 @@ interface PostItem {
 }
 
 const FEEDS = [
-  "https://thetube.today/public/content.json",
-  "https://user.thetube.today/content.json",
-  "https://kids.thetube.today/content.json",
-  "https://friends.thetube.today/content.json",
+  "/public/content.json",
+  "/user/content.json",
+  "/kids/content.json",
+  "/friends/content.json",
 ];
 
 async function tryFetch(url: string): Promise<PostItem[]> {
