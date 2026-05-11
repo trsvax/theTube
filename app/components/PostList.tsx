@@ -13,10 +13,10 @@ interface PostItem {
 }
 
 const FEEDS = [
-  "/public/content.json",
-  "/user/content.json",
-  "/kids/content.json",
-  "/friends/content.json",
+  "https://thetube.today/public/content.json",
+  "https://user.thetube.today/content.json",
+  "https://kids.thetube.today/content.json",
+  "https://friends.thetube.today/content.json",
 ];
 
 async function tryFetch(url: string): Promise<PostItem[]> {
@@ -46,7 +46,8 @@ export default function PostList() {
 
   useEffect(() => {
     fetchPosts();
-    const onVisible = () => document.visibilityState === "visible" && fetchPosts();
+    const onVisible = () =>
+      document.visibilityState === "visible" && fetchPosts();
     document.addEventListener("visibilitychange", onVisible);
     return () => document.removeEventListener("visibilitychange", onVisible);
   }, []);
