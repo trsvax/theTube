@@ -61,6 +61,22 @@ That's already useful. But there's one more step. A workflow on the `issues: clo
 
 It's a stretch goal, but the pieces are all there.
 
+## Voting
+
+GitHub reactions on the issue body are votes. The 👍 count is exposed in the API and sortable:
+
+```ts
+const res = await fetch(
+  "https://api.github.com/repos/trsvax/theTube/issues?labels=post-idea&sort=reactions-%2B1&direction=desc"
+);
+```
+
+That's a ranked list of what readers want written next. No plugin, no database, no feature to build — just a sort parameter.
+
+## Issue templates
+
+GitHub lets you define issue templates so readers know what to put in a submission. A comment template asks for the post it's about and what the reader wants to say. A correction template asks for the wrong thing and the right thing. Templates don't enforce structure, but they set expectations and cut down on empty issues.
+
 ## What I'm not building
 
 No real-time. No notifications. No reply threading in the UI. If someone wants to respond to a specific comment, they do it on GitHub, where this kind of interaction already has good tooling.
