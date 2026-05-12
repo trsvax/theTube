@@ -10,7 +10,7 @@ Guidance for automated agents working in this repository.
 
 theTube is a personal blog — technical posts and travel writing.
 
-**Goal: a permissioned, dynamic-feeling site built entirely from static content with no server.** Permissions are enforced at the CDN layer (CloudFront) and through role-based JSON index files fetched client-side. The browser does the dynamic work; the build produces static assets.
+**Goal: enhance the old-school web without breaking it.** Static HTML first, CSS for presentation, JS for enhancement, auth for gating — each layer optional, none required for the one below. Permissions are enforced at the CDN layer (CloudFront) and through role-based JSON index files fetched client-side. The browser does the dynamic work; the build produces static assets.
 
 - **Content** — Markdown files in `content/posts/` with YAML frontmatter
 - **Output** — Static HTML via `next build` with `output: 'export'`
