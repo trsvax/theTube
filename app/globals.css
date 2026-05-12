@@ -313,12 +313,28 @@ footer {
 
 .back-link {
   display: inline-block;
-  margin-top: 3rem;
   color: var(--color-muted);
   text-decoration: none;
   font-size: 0.9rem;
 }
 
 .back-link:hover {
+  color: var(--color-text);
+}
+
+.post-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 3rem;
+}
+
+.discuss-link {
+  color: var(--color-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.discuss-link:hover {
   color: var(--color-text);
 }

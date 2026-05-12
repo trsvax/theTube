@@ -11,11 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       issues: write
-      contents: read
+      contents: write
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 2
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync post issues
         uses: actions/github-script@v7
@@ -47,6 +48,8 @@ jobs:
             const changed = execSync("git diff --name-only HEAD~1 HEAD")
               .toString().trim().split("\n")
               .filter(f => f.startsWith("content/posts/") && f.endsWith(".md"));
+
+            const filesToCommit = [];
 
             for (const file of changed) {
               const slug = path.basename(file, ".md");
@@ -127,6 +130,27 @@ jobs:
                   ].join("\n"),
                   labels,
                 });
-                console.log(`Created issue #${issue.data.number} for ${slug}`);
+                const issueNumber = issue.data.number;
+                console.log(`Created issue #${issueNumber} for ${slug}`);
+
+                // Write issue number back to frontmatter
+                const updated = content.replace(
+                  /^(---\n[\s\S]*?)(---)/,
+                  (_, fm, close) =>
+                    fm.includes("issueNumber:")
+                      ? `${fm.replace(/issueNumber:.*\n/, `issueNumber: ${issueNumber}\n`)}${close}`
+                      : `${fm}issueNumber: ${issueNumber}\n${close}`
+                );
+                fs.writeFileSync(file, updated);
+                filesToCommit.push(file);
               }
+            }
+
+            if (filesToCommit.length > 0) {
+              const { execSync: exec } = require("child_process");
+              exec('git config user.name "github-actions[bot]"');
+              exec('git config user.email "github-actions[bot]@users.noreply.github.com"');
+              exec(`git add ${filesToCommit.join(" ")}`);
+              exec('git commit -m "add issue numbers to frontmatter [skip ci]"');
+              exec("git push");
             }

@@ -10,6 +10,7 @@ export interface PostMeta {
   tags: string[];
   audience: string;
   summary: string;
+  issueNumber?: number;
 }
 
 export interface Post extends PostMeta {
@@ -79,6 +80,7 @@ export async function getPost(slug: string): Promise<Post> {
     tags: (meta.tags as string[]) ?? [],
     audience: (meta.audience as string) ?? "public",
     summary: (meta.summary as string) ?? "",
+    issueNumber: meta.issueNumber ? Number(meta.issueNumber) : undefined,
     html,
   };
 }

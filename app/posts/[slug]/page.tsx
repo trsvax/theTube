@@ -40,9 +40,20 @@ export default async function PostPage({
         className="post-body"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
-      <Link href="/" className="back-link">
-        ← All posts
-      </Link>
+      <div className="post-footer">
+        <Link href="/" className="back-link">
+          ← All posts
+        </Link>
+        {post.issueNumber && (
+          <a
+            href={`https://github.com/trsvax/theTube/issues/${post.issueNumber}`}
+            className="discuss-link"
+            target="_blank"
+            rel="noopener noreferrer">
+            Discuss on GitHub →
+          </a>
+        )}
+      </div>
     </>
   );
 }
