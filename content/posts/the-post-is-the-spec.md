@@ -4,6 +4,8 @@ date: 2026-05-12
 tags: [tech]
 audience: user
 summary: The markdown file drives the workflow. What you write in the post determines what gets built around it.
+issueNumber: 7
+discussionNumber: 9
 ---
 
 Most content workflows separate the writing from the project management. You write in one tool, track tasks in another, brief collaborators in a third. The post and the work around it live in different places.
