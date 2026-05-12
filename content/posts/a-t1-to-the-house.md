@@ -9,6 +9,8 @@ issueNumber: 5
 
 In the late 90s I ran an ad serving site — cigar.com. Buy clicks cheap, sell impressions at a higher rate, make money on the difference. It worked. The infrastructure was a Sun SPARC box in my office and an ISDN line. Then I upgraded to a T1.
 
+![Cigar.com 1997](/images/posts/a-t1-to-the-house/cigar-com-1997.png)
+
 A T1 to the house was $1,000-1,500 a month just for the line. The SPARC box was a capital expense. When traffic spiked, the box fell over or the line saturated — not a bigger bill, a down site. Every decision about capacity was made in advance and paid for whether you needed it or not.
 
 The economics of running anything on the web were: buy hardware, pay for bandwidth, hope your traffic estimates were right, and accept that scaling up meant a phone call to a vendor and a wait.
