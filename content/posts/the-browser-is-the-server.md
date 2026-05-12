@@ -20,6 +20,8 @@ The content lives in separate JSON index files — one per role. The CDN enforce
 
 The browser reads a JS-readable cookie that lists the user's roles, fetches only the feeds it's entitled to, and assembles the page from whatever comes back. Not logged in — only public content loads. Logged in with two roles — two feeds plus public. A 403 is never expected and never needed.
 
+The cookie isn't a security boundary — it's a hint. Tampering with it is just the hard way of typing a URL in the address bar. The edge function is the lock; the cookie saves a round trip.
+
 No server. No session store. No database. No per-request compute for the 95% of visitors who never log in.
 
 ## What didn't work

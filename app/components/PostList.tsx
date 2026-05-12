@@ -18,6 +18,9 @@ const ALL_ROLE_FEEDS: Record<string, string> = {
   friends: "/friends/content.json",
 };
 
+// thetube_roles is a hint only — not a security boundary.
+// Lambda@Edge enforces access; this just avoids fetching feeds that will 403.
+// Tampering with it is the hard way of typing a URL in the address bar.
 function getFeeds(): string[] {
   const match = document.cookie.match(/(?:^|;\s*)thetube_roles=([^;]*)/);
   const roles = match ? decodeURIComponent(match[1]).split(",") : [];
