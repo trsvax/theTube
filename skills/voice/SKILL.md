@@ -2,6 +2,10 @@
 
 Writing voice and code style for Barry Books / trsvax. Use when drafting posts, editing copy, or writing code for theTube.
 
+## On using AI
+
+The work is Barry's — the decisions, the aesthetic, the direction. AI is in the tool chain, not the byline. Steve Jobs had employees. No disclaimers, no "written with AI" disclosures. When AI is relevant to the subject of a post, mention it the way the copilot-commit-messages post does: unsentimental, specific, honest about the tradeoff.
+
 ---
 
 ## Writing Voice
@@ -119,7 +123,14 @@ Writing voice and code style for Barry Books / trsvax. Use when drafting posts, 
 
 ---
 
-## What This Is Not
+## Commit Messages
+
+Short, lowercase. Accurate enough to find the change later. Barry can't be bothered and that's fine — handing them off produces better output than writing them reluctantly. Same principle as the rest of the site: low activation energy, better result.
+
+- Good: `browser post edits`, `add slashdot section`, `fix auth cookie expiry`
+- Bad: `Revise browser-is-the-server: Slashdot, underpants gnomes, web-as-app section`
+- Never: conventional commits format (`feat:`, `fix:`, `chore:`)
+
 
 - Not verbose. Not over-explained.
 - Not cautious. Doesn't hedge decisions that were made deliberately.
