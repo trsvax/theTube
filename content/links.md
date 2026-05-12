@@ -11,6 +11,7 @@ Sites I actually read and return to. A blogroll is an editorial act — these ar
 
 ## Tools and tech
 
+- [JotBird](https://www.jotbird.com) — paste Markdown, get a shareable URL, no account
 - [Oh No Type Company](https://ohnotype.co) — the type foundry behind Swear Display
 - [Plausible](https://plausible.io) — privacy-friendly analytics, no cookie banner
 - [Cloudflare Radar](https://radar.cloudflare.com) — internet traffic and trends, live
