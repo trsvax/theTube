@@ -66,15 +66,15 @@ theTube: **CloudFront**, Amazon's CDN. At this traffic level, it's cents.
 
 ## What it adds up to
 
-| What it does | Commercial option | Monthly cost | theTube |
-|---|---|---|---|
-| Blog platform + hosting | Ghost Pro | $36 | S3 + CloudFront: ~$1 |
-| Membership + gated content | Memberstack | $49 | Cognito: $0 |
-| Newsletter | Kit | $29 | SES: ~$0 |
-| Comments | Disqus (no ads) | $11 | GitHub Issues: $0 |
-| Analytics | Plausible | $9 | Plausible: $9 |
-| Workflow | Jira | $8 | GitHub: $0 |
-| CDN | Netlify Pro | $19 | Included above |
+| What it does               | Commercial option | Monthly cost | theTube              |
+| -------------------------- | ----------------- | ------------ | -------------------- |
+| Blog platform + hosting    | Ghost Pro         | $36          | S3 + CloudFront: ~$1 |
+| Membership + gated content | Memberstack       | $49          | Cognito: $0          |
+| Newsletter                 | Kit               | $29          | SES: ~$0             |
+| Comments                   | Disqus (no ads)   | $11          | GitHub Issues: $0    |
+| Analytics                  | Plausible         | $9           | Plausible: $9        |
+| Workflow                   | Jira              | $8           | GitHub: $0           |
+| CDN                        | Netlify Pro       | $19          | Included above       |
 
 **Commercial total: ~$161/month. theTube: ~$10/month** (mostly the domain and Plausible).
 
