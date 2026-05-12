@@ -1,0 +1,132 @@
+name: Post Issues
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "content/posts/**.md"
+
+jobs:
+  sync-issues:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Sync post issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { execSync } = require("child_process");
+            const fs = require("fs");
+            const path = require("path");
+
+            // Parse YAML frontmatter (no external deps)
+            function parseFrontmatter(content) {
+              const match = content.match(/^---\n([\s\S]*?)\n---/);
+              if (!match) return {};
+              const fm = {};
+              for (const line of match[1].split("\n")) {
+                const [key, ...rest] = line.split(":");
+                if (!key || !rest.length) continue;
+                const val = rest.join(":").trim().replace(/^['"]|['"]$/g, "");
+                if (val.startsWith("[")) {
+                  fm[key.trim()] = val.slice(1, -1).split(",").map(s => s.trim());
+                } else {
+                  fm[key.trim()] = val;
+                }
+              }
+              return fm;
+            }
+
+            // Files changed in this push
+            const changed = execSync("git diff --name-only HEAD~1 HEAD")
+              .toString().trim().split("\n")
+              .filter(f => f.startsWith("content/posts/") && f.endsWith(".md"));
+
+            for (const file of changed) {
+              const slug = path.basename(file, ".md");
+              const content = fs.readFileSync(file, "utf8");
+              const fm = parseFrontmatter(content);
+
+              const slugLabel = `post:${slug}`;
+              const audienceLabel = fm.audience === "public" ? "post-published" : "post-draft";
+              const tagLabels = Array.isArray(fm.tags) ? fm.tags : [];
+              const labels = [slugLabel, audienceLabel, ...tagLabels];
+
+              // Ensure all labels exist
+              for (const label of labels) {
+                try {
+                  await github.rest.issues.getLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label,
+                  });
+                } catch {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label,
+                    color: label.startsWith("post:") ? "0075ca"
+                      : label === "post-published" ? "0e8a16"
+                      : label === "post-draft" ? "e4e669"
+                      : "ededed",
+                  });
+                }
+              }
+
+              // Check if an issue already exists for this slug
+              const existing = await github.rest.issues.listForRepo({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                labels: slugLabel,
+                state: "all",
+              });
+
+              if (existing.data.length > 0) {
+                // Update labels (audience may have changed draft→published)
+                const issue = existing.data[0];
+                const currentLabels = issue.labels.map(l => l.name);
+                const toAdd = labels.filter(l => !currentLabels.includes(l));
+                const toRemove = currentLabels.filter(
+                  l => (l === "post-draft" || l === "post-published") && !labels.includes(l)
+                );
+                for (const l of toAdd) {
+                  await github.rest.issues.addLabels({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    labels: [l],
+                  });
+                }
+                for (const l of toRemove) {
+                  await github.rest.issues.removeLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    name: l,
+                  });
+                }
+                console.log(`Updated issue #${issue.number} for ${slug}`);
+              } else {
+                // Create new issue
+                const issue = await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: fm.title || slug,
+                  body: [
+                    fm.summary || "",
+                    "",
+                    `**Slug:** \`${slug}\``,
+                    `**Audience:** ${fm.audience || "unset"}`,
+                    `**Date:** ${fm.date || "unset"}`,
+                  ].join("\n"),
+                  labels,
+                });
+                console.log(`Created issue #${issue.data.number} for ${slug}`);
+              }
+            }
