@@ -4,6 +4,7 @@ date: 2026-05-12
 tags: [tech]
 audience: user
 summary: Running a web business in the late 90s meant a SPARC box, a T1 line, and a prayer that traffic stayed flat.
+issueNumber: 5
 ---
 
 In the late 90s I ran an ad serving site — cigar.com. Buy clicks cheap, sell impressions at a higher rate, make money on the difference. It worked. The infrastructure was a Sun SPARC box in my office and an ISDN line. Then I upgraded to a T1.
