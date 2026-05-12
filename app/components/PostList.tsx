@@ -12,12 +12,18 @@ interface PostItem {
   summary: string;
 }
 
-const FEEDS = [
-  "/public/content.json",
-  "/user/content.json",
-  "/kids/content.json",
-  "/friends/content.json",
-];
+const ALL_ROLE_FEEDS: Record<string, string> = {
+  user: "/user/content.json",
+  kids: "/kids/content.json",
+  friends: "/friends/content.json",
+};
+
+function getFeeds(): string[] {
+  const match = document.cookie.match(/(?:^|;\s*)thetube_roles=([^;]*)/);
+  const roles = match ? decodeURIComponent(match[1]).split(",") : [];
+  const roleFeeds = roles.flatMap((r) => ALL_ROLE_FEEDS[r] ?? []);
+  return ["/public/content.json", ...roleFeeds];
+}
 
 async function tryFetch(url: string): Promise<PostItem[]> {
   try {
@@ -30,12 +36,16 @@ async function tryFetch(url: string): Promise<PostItem[]> {
   }
 }
 
-export default function PostList({ initialPosts = [] }: { initialPosts?: PostItem[] }) {
+export default function PostList({
+  initialPosts = [],
+}: {
+  initialPosts?: PostItem[];
+}) {
   const [posts, setPosts] = useState<PostItem[]>(initialPosts);
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const fetchPosts = () =>
-    Promise.all(FEEDS.map(tryFetch)).then((results) => {
+    Promise.all(getFeeds().map(tryFetch)).then((results) => {
       const seen = new Set<string>();
       const merged = results
         .flat()
