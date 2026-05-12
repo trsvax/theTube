@@ -11,6 +11,7 @@ export interface PostMeta {
   audience: string;
   summary: string;
   issueNumber?: number;
+  discussionNumber?: number;
 }
 
 export interface Post extends PostMeta {
@@ -81,6 +82,9 @@ export async function getPost(slug: string): Promise<Post> {
     audience: (meta.audience as string) ?? "public",
     summary: (meta.summary as string) ?? "",
     issueNumber: meta.issueNumber ? Number(meta.issueNumber) : undefined,
+    discussionNumber: meta.discussionNumber
+      ? Number(meta.discussionNumber)
+      : undefined,
     html,
   };
 }

@@ -62,7 +62,7 @@ jobs:
               const labels = [slugLabel, audienceLabel, ...tagLabels];
 
               // Ensure all labels exist
-              for (const label of labels) {
+              for (const label of [...labels, "post-tracking", "discussion"]) {
                 try {
                   await github.rest.issues.getLabel({
                     owner: context.repo.owner,
@@ -77,6 +77,8 @@ jobs:
                     color: label.startsWith("post:") ? "0075ca"
                       : label === "post-published" ? "0e8a16"
                       : label === "post-draft" ? "e4e669"
+                      : label === "post-tracking" ? "d4c5f9"
+                      : label === "discussion" ? "c2e0c6"
                       : "ededed",
                   });
                 }
@@ -116,8 +118,8 @@ jobs:
                 }
                 console.log(`Updated issue #${issue.number} for ${slug}`);
               } else {
-                // Create new issue
-                const issue = await github.rest.issues.create({
+                // Create parent issue
+                const parent = await github.rest.issues.create({
                   owner: context.repo.owner,
                   repo: context.repo.repo,
                   title: fm.title || slug,
@@ -127,19 +129,76 @@ jobs:
                     `**Slug:** \`${slug}\``,
                     `**Audience:** ${fm.audience || "unset"}`,
                     `**Date:** ${fm.date || "unset"}`,
+                    "",
+                    "Sub-issues: tracking (creation lifecycle) + discussion (maintenance lifecycle)",
                   ].join("\n"),
                   labels,
                 });
-                const issueNumber = issue.data.number;
-                console.log(`Created issue #${issueNumber} for ${slug}`);
+                const parentNumber = parent.data.number;
+                console.log(`Created parent issue #${parentNumber} for ${slug}`);
 
-                // Write issue number back to frontmatter
+                // Create tracking sub-issue (creation lifecycle — closes on publish)
+                const tracking = await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `[tracking] ${fm.title || slug}`,
+                  body: [
+                    `Tracks the creation lifecycle for #${parentNumber}.`,
+                    "",
+                    "- [ ] Draft complete",
+                    "- [ ] Ready to publish",
+                    "",
+                    "Close this issue when the post goes public.",
+                  ].join("\n"),
+                  labels: [slugLabel, "post-tracking", ...tagLabels],
+                });
+                console.log(`Created tracking issue #${tracking.data.number}`);
+
+                // Create discussion sub-issue (maintenance lifecycle — stays open)
+                const discussion = await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: `[discussion] ${fm.title || slug}`,
+                  body: [
+                    `Discussion for: #${parentNumber}`,
+                    "",
+                    fm.summary || "",
+                    "",
+                    `Post: https://thetube.today/posts/${slug}`,
+                  ].join("\n"),
+                  labels: [slugLabel, "discussion", ...tagLabels],
+                });
+                const discussionNumber = discussion.data.number;
+                console.log(`Created discussion issue #${discussionNumber}`);
+
+                // Link sub-issues to parent via GitHub sub-issues API
+                for (const subNumber of [tracking.data.number, discussionNumber]) {
+                  try {
+                    await github.request("POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues", {
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: parentNumber,
+                      sub_issue_id: subNumber,
+                    });
+                  } catch (e) {
+                    // Sub-issues API may not be available on all plans — log and continue
+                    console.log(`Could not link sub-issue #${subNumber}: ${e.message}`);
+                  }
+                }
+
+                // Write parent and discussion issue numbers back to frontmatter
                 const updated = content.replace(
                   /^(---\n[\s\S]*?)(---)/,
-                  (_, fm, close) =>
-                    fm.includes("issueNumber:")
-                      ? `${fm.replace(/issueNumber:.*\n/, `issueNumber: ${issueNumber}\n`)}${close}`
-                      : `${fm}issueNumber: ${issueNumber}\n${close}`
+                  (_, fmBlock, close) => {
+                    let block = fmBlock;
+                    block = block.includes("issueNumber:")
+                      ? block.replace(/issueNumber:.*\n/, `issueNumber: ${parentNumber}\n`)
+                      : `${block}issueNumber: ${parentNumber}\n`;
+                    block = block.includes("discussionNumber:")
+                      ? block.replace(/discussionNumber:.*\n/, `discussionNumber: ${discussionNumber}\n`)
+                      : `${block}discussionNumber: ${discussionNumber}\n`;
+                    return `${block}${close}`;
+                  }
                 );
                 fs.writeFileSync(file, updated);
                 filesToCommit.push(file);

@@ -44,9 +44,9 @@ export default async function PostPage({
         <Link href="/" className="back-link">
           ← All posts
         </Link>
-        {post.issueNumber && (
+        {(post.discussionNumber || post.issueNumber) && (
           <a
-            href={`https://github.com/trsvax/theTube/issues/${post.issueNumber}`}
+            href={`https://github.com/trsvax/theTube/issues/${post.discussionNumber ?? post.issueNumber}`}
             className="discuss-link"
             target="_blank"
             rel="noopener noreferrer">
