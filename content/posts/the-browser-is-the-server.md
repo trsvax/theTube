@@ -18,7 +18,7 @@ Here's a different model: the browser fetches what it's allowed to fetch, ignore
 
 The content lives in separate JSON index files — one per role. The CDN enforces access at the edge. A JWT in a cookie carries the user's identity and group membership. A 2ms edge function checks the token on protected paths and either passes the request through or returns a 403.
 
-The browser tries all four feeds — public, user, kids, friends. It gets back whatever it's entitled to. 403s are silently dropped. The page renders from the union of what arrived.
+The browser reads a JS-readable cookie that lists the user's roles, fetches only the feeds it's entitled to, and assembles the page from whatever comes back. Not logged in — only public content loads. Logged in with two roles — two feeds plus public. A 403 is never expected and never needed.
 
 No server. No session store. No database. No per-request compute for the 95% of visitors who never log in.
 
@@ -29,6 +29,8 @@ The first approach used CloudFront signed cookies — one set per role. The brow
 Subdomains would have fixed the name collision, but `auth.thetube.today` can only set cookies for `.thetube.today`, not for individual subdomains. Same problem, different layer.
 
 The JWT approach eliminates it. One cookie, full identity, group membership in the claim. The edge function reads it and decides. No signing keys to rotate, no Secrets Manager dependency, no cookie arithmetic.
+
+Adding a new role is a Cognito group, a CloudFront path, and a line of code. The number of roles is not a meaningful constraint.
 
 ## The constraint is the point
 
