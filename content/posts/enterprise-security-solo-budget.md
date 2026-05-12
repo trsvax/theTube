@@ -4,6 +4,7 @@ date: 2026-05-12
 tags: [tech]
 audience: user
 summary: Dependabot, Copilot Autofix, scheduled scans, and supply chain protection — zero ongoing manual work.
+issueNumber: 6
 ---
 
 Supply chain attacks are the growth industry of software security. A malicious package lands in your dependency tree, gets installed, exfiltrates credentials or mines crypto. It happened to thousands of projects via `event-stream` in 2018. It keeps happening.
