@@ -4,6 +4,8 @@ date: 2026-05-12
 tags: [tech]
 audience: user
 summary: Before TCP/IP, you asked to join a network. After it, speaking the protocol was enough.
+issueNumber: 16
+discussionNumber: 18
 ---
 
 Before TCP/IP, networks were proprietary. IBM had SNA. DEC had DECnet. CompuServe had CompuServe. You joined someone's network on their terms, with their hardware, under their rules. And ARPANET — the government research network that predated the internet — required institutional approval. You petitioned to connect. Someone decided if you were in.
