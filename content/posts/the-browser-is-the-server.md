@@ -46,6 +46,8 @@ Pages linked to pages. The server sent documents. The browser rendered them. Mos
 
 This site has real authentication and role-based content and it's still just files. That used to be the default.
 
+It also works in Lynx. Public posts render as static HTML at build time — no JS required. Add JS and you get tag filtering and role-based content on top. Add auth and you get members-only posts. Each layer degrades cleanly to the one below. That's not a feature that was added. It's what you get when you don't fight the web.
+
 ## The cost
 
 At 1 million requests a month, this architecture costs about $1. S3 and CloudFront pricing. The edge function only runs on protected paths — public content has zero auth overhead, same as any static site.
