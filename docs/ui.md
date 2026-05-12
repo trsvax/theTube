@@ -9,6 +9,7 @@
 | Blog    | `/blog`         | `app/blog/page.tsx`         | Blog post index (alias)      |
 | About   | `/about`        | `app/about/page.tsx`        | About page                   |
 | Contact | `/contact`      | `app/contact/page.tsx`      | Contact page                 |
+| Links   | `/links`        | `app/links/page.tsx`        | Curated links (blogroll)     |
 
 ## Slot Order — Index Page
 

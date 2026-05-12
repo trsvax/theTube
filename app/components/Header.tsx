@@ -44,6 +44,7 @@ export default function Header() {
       </Link>
       <nav>
         <Link href="/blog">Blog</Link>
+        <Link href="/links">Links</Link>
         <Link href="/about">About</Link>
         <Link href="/contact">Contact</Link>
         <a
