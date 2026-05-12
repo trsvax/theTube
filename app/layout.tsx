@@ -7,6 +7,20 @@ export const metadata: Metadata = {
   title: "theTube",
   description: "Tech and travel writing.",
   icons: { icon: "/favicon.svg" },
+  openGraph: {
+    title: "theTube",
+    description: "Tech and travel writing.",
+    url: "https://thetube.today",
+    siteName: "theTube",
+    images: [
+      { url: "https://thetube.today/og-image.png", width: 1200, height: 630 },
+    ],
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: ["https://thetube.today/og-image.png"],
+  },
 };
 
 export default function RootLayout({
