@@ -62,7 +62,7 @@ jobs:
               const labels = [slugLabel, audienceLabel, ...tagLabels];
 
               // Ensure all labels exist
-              for (const label of [...labels, "post-tracking", "discussion"]) {
+              for (const label of [...labels, "post-tracking", "discussion", "design"]) {
                 try {
                   await github.rest.issues.getLabel({
                     owner: context.repo.owner,
@@ -171,8 +171,36 @@ jobs:
                 const discussionNumber = discussion.data.number;
                 console.log(`Created discussion issue #${discussionNumber}`);
 
+                // Parse [design]: brief lines from post body
+                const postBody = content.replace(/^---\n[\s\S]*?\n---\n/, "");
+                const designLines = [...postBody.matchAll(/^\[design\]:\s*(.+)$/gm)].map(m => m[1].trim());
+
+                const subNumbers = [tracking.data.number, discussionNumber];
+
+                for (const brief of designLines) {
+                  const designIssue = await github.rest.issues.create({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    title: `[design] ${brief}`,
+                    body: [
+                      `Design request for: #${parentNumber}`,
+                      "",
+                      "## Brief",
+                      brief,
+                      "",
+                      "## Delivery",
+                      "Attach the file to this issue as a comment. It will be committed to the repo.",
+                      "",
+                      "Close this issue when the file is attached and committed.",
+                    ].join("\n"),
+                    labels: [slugLabel, "design", ...tagLabels],
+                  });
+                  subNumbers.push(designIssue.data.number);
+                  console.log(`Created design issue #${designIssue.data.number}: ${brief}`);
+                }
+
                 // Link sub-issues to parent via GitHub sub-issues API
-                for (const subNumber of [tracking.data.number, discussionNumber]) {
+                for (const subNumber of subNumbers) {
                   try {
                     await github.request("POST /repos/{owner}/{repo}/issues/{issue_number}/sub_issues", {
                       owner: context.repo.owner,
