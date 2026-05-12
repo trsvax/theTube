@@ -172,26 +172,36 @@ jobs:
                 console.log(`Created discussion issue #${discussionNumber}`);
 
                 // Parse [design]: brief lines from post body
+                // Format: [design]: filename.ext — description
                 const postBody = content.replace(/^---\n[\s\S]*?\n---\n/, "");
                 const designLines = [...postBody.matchAll(/^\[design\]:\s*(.+)$/gm)].map(m => m[1].trim());
 
                 const subNumbers = [tracking.data.number, discussionNumber];
 
                 for (const brief of designLines) {
+                  // Extract optional filename — first token if it contains a dot, else undefined
+                  const firstToken = brief.split(/[\s—–-]/)[0];
+                  const filename = firstToken.includes(".") ? firstToken : null;
+                  const description = filename ? brief.slice(filename.length).replace(/^\s*[—–-]\s*/, "") : brief;
+                  const deliveryPath = filename
+                    ? `public/images/posts/${slug}/${filename}`
+                    : `public/images/posts/${slug}/`;
+
                   const designIssue = await github.rest.issues.create({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
-                    title: `[design] ${brief}`,
+                    title: `[design] ${filename || description}`,
                     body: [
                       `Design request for: #${parentNumber}`,
                       "",
                       "## Brief",
-                      brief,
+                      description,
                       "",
                       "## Delivery",
-                      "Attach the file to this issue as a comment. It will be committed to the repo.",
+                      "Attach the file to this issue as a comment. Commit it to:",
+                      `\`${deliveryPath}\``,
                       "",
-                      "Close this issue when the file is attached and committed.",
+                      "Close this issue when the file is committed.",
                     ].join("\n"),
                     labels: [slugLabel, "design", ...tagLabels],
                   });
