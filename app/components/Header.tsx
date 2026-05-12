@@ -35,7 +35,11 @@ export default function Header() {
             srcSet="/logo-primary-dark.svg"
             media="(prefers-color-scheme: dark)"
           />
-          <img src="/logo-primary-light.svg" alt="The Tube — a stream of thoughts" height={80} />
+          <img
+            src="/logo-primary-light.svg"
+            alt="The Tube — a stream of thoughts"
+            height={80}
+          />
         </picture>
       </Link>
       <nav>

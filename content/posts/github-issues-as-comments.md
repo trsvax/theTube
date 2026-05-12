@@ -18,7 +18,7 @@ Fetch open issues at build time. Bake them into the HTML. No JavaScript needed t
 
 ```ts
 const res = await fetch(
-  "https://api.github.com/repos/trsvax/theTube/issues?labels=published&state=open"
+  "https://api.github.com/repos/trsvax/theTube/issues?labels=published&state=open",
 );
 const issues = await res.json();
 ```
@@ -67,7 +67,7 @@ GitHub reactions on the issue body are votes. The 👍 count is exposed in the A
 
 ```ts
 const res = await fetch(
-  "https://api.github.com/repos/trsvax/theTube/issues?labels=post-idea&sort=reactions-%2B1&direction=desc"
+  "https://api.github.com/repos/trsvax/theTube/issues?labels=post-idea&sort=reactions-%2B1&direction=desc",
 );
 ```
 

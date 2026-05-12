@@ -44,12 +44,12 @@ New tags can be added freely — just use them in frontmatter. They appear autom
 
 ## Audience / Roles
 
-| Value   | JSON index file        | Visible to                                              |
-| ------- | ---------------------- | ------------------------------------------------------- |
-| public  | `/public/content.json` | Everyone, no login required. Search-engine indexable.   |
-| user    | `/user/content.json`   | Anyone with a Cognito account (Google or email signup). Self-signup is open — treat `user` as basically public, just with a door handle. |
-| kids    | `/kids/content.json`   | Cognito `kids` group — manually assigned.               |
-| friends | `/friends/content.json`| Cognito `friends` group — manually assigned.            |
+| Value   | JSON index file         | Visible to                                                                                                                               |
+| ------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| public  | `/public/content.json`  | Everyone, no login required. Search-engine indexable.                                                                                    |
+| user    | `/user/content.json`    | Anyone with a Cognito account (Google or email signup). Self-signup is open — treat `user` as basically public, just with a door handle. |
+| kids    | `/kids/content.json`    | Cognito `kids` group — manually assigned.                                                                                                |
+| friends | `/friends/content.json` | Cognito `friends` group — manually assigned.                                                                                             |
 
 `public` = shareable anywhere. `user` = self-selected by willingness to sign up, not a vetted list. `kids` and `friends` are the actually private tiers.
 

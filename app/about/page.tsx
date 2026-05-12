@@ -8,10 +8,15 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
-  const raw = fs.readFileSync(path.join(process.cwd(), "content/about.md"), "utf8");
+  const raw = fs.readFileSync(
+    path.join(process.cwd(), "content/about.md"),
+    "utf8",
+  );
   const html = await marked(raw);
   return (
-    <div className="page-content post-body" dangerouslySetInnerHTML={{ __html: html }} />
+    <div
+      className="page-content post-body"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
   );
 }
-
