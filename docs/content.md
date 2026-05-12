@@ -44,15 +44,16 @@ New tags can be added freely — just use them in frontmatter. They appear autom
 
 ## Audience / Roles
 
-| Value   | JSON index file      | Visible to                              |
-| ------- | -------------------- | --------------------------------------- |
-| public  | `public-index.json`  | Everyone (default)                      |
-| kids    | `kids-index.json`    | Kids + anyone with CloudFront cookie    |
-| friends | `friends-index.json` | Friends + anyone with CloudFront cookie |
+| Value   | JSON index file        | Visible to                                              |
+| ------- | ---------------------- | ------------------------------------------------------- |
+| public  | `/public/content.json` | Everyone, no login required. Search-engine indexable.   |
+| user    | `/user/content.json`   | Anyone with a Cognito account (Google or email signup). Self-signup is open — treat `user` as basically public, just with a door handle. |
+| kids    | `/kids/content.json`   | Cognito `kids` group — manually assigned.               |
+| friends | `/friends/content.json`| Cognito `friends` group — manually assigned.            |
 
-The index page (`PostList`) fetches whichever JSON files the current visitor can reach. Posts only appear if their index file is accessible. Content files for non-public posts should live in the private repo.
+`public` = shareable anywhere. `user` = self-selected by willingness to sign up, not a vetted list. `kids` and `friends` are the actually private tiers.
 
-> **Note:** Role-based index files are a planned feature — not yet implemented.
+The index page (`PostList`) reads the `thetube_roles` cookie and fetches only the feeds the current visitor can reach. Posts only appear if their index file is accessible.
 
 ---
 
