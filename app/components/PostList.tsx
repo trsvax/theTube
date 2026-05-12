@@ -30,8 +30,8 @@ async function tryFetch(url: string): Promise<PostItem[]> {
   }
 }
 
-export default function PostList() {
-  const [posts, setPosts] = useState<PostItem[]>([]);
+export default function PostList({ initialPosts = [] }: { initialPosts?: PostItem[] }) {
+  const [posts, setPosts] = useState<PostItem[]>(initialPosts);
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
   const fetchPosts = () =>
