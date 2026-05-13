@@ -43,6 +43,7 @@ for (const file of fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"))) {
     date: meta.date ?? "",
     tags: meta.tags ?? [],
     summary: meta.summary ?? "",
+    ...(meta.shortSlug ? { shortSlug: meta.shortSlug } : {}),
   });
 }
 

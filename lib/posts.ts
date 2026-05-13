@@ -10,6 +10,7 @@ export interface PostMeta {
   tags: string[];
   audience: string;
   summary: string;
+  shortSlug?: string;
   issueNumber?: number;
   discussionNumber?: number;
 }
@@ -64,6 +65,7 @@ export function getPosts(): PostMeta[] {
         tags: (meta.tags as string[]) ?? [],
         audience: (meta.audience as string) ?? "public",
         summary: (meta.summary as string) ?? "",
+        shortSlug: (meta.shortSlug as string) ?? undefined,
       };
     })
     .sort((a, b) => (a.date < b.date ? 1 : -1));
@@ -81,6 +83,7 @@ export async function getPost(slug: string): Promise<Post> {
     tags: (meta.tags as string[]) ?? [],
     audience: (meta.audience as string) ?? "public",
     summary: (meta.summary as string) ?? "",
+    shortSlug: (meta.shortSlug as string) ?? undefined,
     issueNumber: meta.issueNumber ? Number(meta.issueNumber) : undefined,
     discussionNumber: meta.discussionNumber
       ? Number(meta.discussionNumber)

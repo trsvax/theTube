@@ -51,6 +51,31 @@ jobs:
         working-directory: public-repo
         run: aws s3 sync out/ s3://${{ secrets.S3_BUCKET }} --delete
 
+      - name: Deploy CloudFront short-URL function
+        working-directory: public-repo
+        run: |
+          ETAG=$(aws cloudfront describe-function \
+            --name short-url-redirects \
+            --query 'ETag' --output text 2>/dev/null || echo "")
+          if [ -z "$ETAG" ]; then
+            aws cloudfront create-function \
+              --name short-url-redirects \
+              --function-config Comment="Short URL redirects",Runtime="cloudfront-js-2.0" \
+              --function-code fileb://cf-short-urls.js
+          else
+            aws cloudfront update-function \
+              --name short-url-redirects \
+              --function-config Comment="Short URL redirects",Runtime="cloudfront-js-2.0" \
+              --function-code fileb://cf-short-urls.js \
+              --if-match "$ETAG"
+          fi
+          ETAG=$(aws cloudfront describe-function \
+            --name short-url-redirects \
+            --query 'ETag' --output text)
+          aws cloudfront publish-function \
+            --name short-url-redirects \
+            --if-match "$ETAG"
+
       - name: Invalidate CloudFront
         run: |
           aws cloudfront create-invalidation \

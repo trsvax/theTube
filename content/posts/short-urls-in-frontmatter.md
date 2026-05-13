@@ -3,12 +3,11 @@ title: Short URLs in the Frontmatter
 date: 2026-05-12
 tags: [tech]
 audience: user
+shortSlug: su
 summary: A short URL in a post's frontmatter, a CloudFront function generated at build time. No Bitly, no database, no link rot.
 ---
 
-Bitly exists because short URLs are useful and nobody wants to manage the redirect infrastructure themselves. You trade your link data and a monthly subscription for a domain you don't own, a service that changes its free tier, and URLs that stop working if you ever stop paying.
-
-There's a simpler version.
+For some reason before 2020 I thought I needed a business card. I made it an odd size so it stuck out in a stack. The front was a JSON object and my vismon on the back. Since it was a smaller card I could only fit `{ name, email, url }` and the URL had to be short. It pointed to a GitHub gist, and if someone could figure that out they could call me. Never got a call.
 
 ## The idea
 
@@ -24,14 +23,13 @@ shortSlug: ep1
 At build time, collect every `shortSlug` across all posts and generate a CloudFront function:
 
 ```js
-// generated at build time — do not edit
 const SLUGS = {
   ep1: "/posts/enterprise-publishing-for-a-dollar",
   bts: "/posts/building-the-tube",
 };
 
 function handler(event) {
-  const uri = event.request.uri.slice(1); // strip leading /
+  const uri = event.request.uri.slice(1);
   const target = SLUGS[uri];
   if (target) {
     return {
@@ -44,13 +42,13 @@ function handler(event) {
 }
 ```
 
-Deploy that function attached to the CloudFront distribution. `thetube.today/ep1` redirects to the full post URL. Done.
+Deploy
 
 ## Why CloudFront functions
 
-CloudFront Functions run at the edge before the request hits S3. No Lambda cold start, no origin request, no database lookup. The redirect happens in under a millisecond, globally, and the free tier covers two million invocations a month.
+CloudFront Functions run at the edge before the request hits S3. The redirect happens in under a millisecond, globally, and the free tier covers two million invocations a month.
 
-The slug map is compiled into the function at deploy time. It's not a dynamic lookup — it's a constant. The tradeoff is that adding a new short URL requires a deploy. For a blog, that's fine; you're already deploying when you publish a post.
+The deploy is the insert.
 
 ## The build step
 
@@ -62,14 +60,12 @@ const slugMap = posts
   .reduce((acc, p) => ({ ...acc, [p.shortSlug]: `/posts/${p.slug}` }), {});
 ```
 
-A JSON object written into a function template. Straightforward.
-
 ## What you get
 
-- Short URLs that belong to your domain, not Bitly's
+- Short URLs that belong to your domain
 - No monthly subscription
 - No link rot — the redirect lives in the same repo as the post
-- The `shortSlug` is in version control, so the history of "when did this URL exist" is the git log
+- The file is the spec — the post declares its own short URL
 - Works in print, on slides, in email — anywhere you want a short URL that's easy to type
 
 The slug is part of the post. The post is source code. The redirect is compiled output. Same model as everything else.
