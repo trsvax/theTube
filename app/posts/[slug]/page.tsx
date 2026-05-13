@@ -1,5 +1,6 @@
 import { getPosts, getPost } from "@/lib/posts";
 import Link from "next/link";
+import CopyShortUrl from "@/app/components/CopyShortUrl";
 
 export async function generateStaticParams() {
   return getPosts().map((p) => ({ slug: p.slug }));
@@ -34,6 +35,7 @@ export default async function PostPage({
               #{t}
             </span>
           ))}
+          {post.shortSlug && <CopyShortUrl shortSlug={post.shortSlug} />}
         </div>
       </div>
       <div

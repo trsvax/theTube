@@ -220,6 +220,23 @@ footer {
   margin-left: 0.5rem;
 }
 
+.short-url-copy {
+  margin-left: 0.75rem;
+  padding: 0.1rem 0.4rem;
+  font-size: 0.8rem;
+  font-family: monospace;
+  background: none;
+  border: 1px solid var(--color-accent);
+  color: var(--color-accent);
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.short-url-copy:hover {
+  background: var(--color-accent);
+  color: #fff;
+}
+
 .post-title {
   font-family: var(--font-display);
   font-weight: 900;

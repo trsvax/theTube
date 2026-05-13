@@ -38,7 +38,7 @@
 │ Header (site title + nav)   │
 ├─────────────────────────────┤
 │ Post title                  │
-│ date · tags                 │
+│ date · tags · [copy /slug]  │
 ├─────────────────────────────┤
 │ Post body (markdown → HTML) │
 ├─────────────────────────────┤
