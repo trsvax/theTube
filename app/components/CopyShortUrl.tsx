@@ -4,9 +4,9 @@ import { useState } from "react";
 
 export default function CopyShortUrl({ shortSlug }: { shortSlug: string }) {
   const [copied, setCopied] = useState(false);
-  const url = `${window.location.origin}/${shortSlug}`;
 
   const copy = () => {
+    const url = `${window.location.origin}/${shortSlug}`;
     navigator.clipboard.writeText(url).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
@@ -14,7 +14,7 @@ export default function CopyShortUrl({ shortSlug }: { shortSlug: string }) {
   };
 
   return (
-    <button className="short-url-copy" onClick={copy} title={url}>
+    <button className="short-url-copy" onClick={copy} title={`/${shortSlug}`}>
       {copied ? "copied" : `/${shortSlug}`}
     </button>
   );
