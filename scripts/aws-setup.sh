@@ -181,6 +181,11 @@ aws iam put-user-policy \
         \"Effect\": \"Allow\",
         \"Action\": \"cloudfront:CreateInvalidation\",
         \"Resource\": \"arn:aws:cloudfront::${ACCOUNT_ID}:distribution/${DISTRIBUTION_ID}\"
+      },
+      {
+        \"Effect\": \"Allow\",
+        \"Action\": [\"cloudfront:CreateFunction\", \"cloudfront:UpdateFunction\", \"cloudfront:PublishFunction\", \"cloudfront:DescribeFunction\"],
+        \"Resource\": \"arn:aws:cloudfront::${ACCOUNT_ID}:function/short-url-redirects\"
       }
     ]
   }"
