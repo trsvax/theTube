@@ -163,9 +163,42 @@ jobs:
                     const issueTitle = `[design] ${filename || description}`;
 
                     if (existingTitles.has(issueTitle)) {
-                      console.log(`Design issue already exists: ${issueTitle}`);
-                      continue;
-                    }
+                      const existingIssue = existingDesign.data.find(i => i.title === issueTitle);
+                      const briefMatch = existingIssue?.body?.match(/## Brief\n([\s\S]*?)\n\n## Delivery/);
+                      const existingBrief = briefMatch ? briefMatch[1].trim() : "";
+                      if (existingBrief === fullBrief) {
+                        console.log(`Design issue unchanged: ${issueTitle}`);
+                        continue;
+                      }
+                      // Brief changed — update issue body
+                      await github.rest.issues.update({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: existingIssue.number,
+                        body: [
+                          `Design request for: #${parentNumber}`,
+                          "",
+                          "## Brief",
+                          fullBrief,
+                          "",
+                          "## Delivery",
+                          "Attach the file to this issue as a comment. Commit it to:",
+                          `\`${deliveryPath}\``,
+                          "",
+                          "Close this issue when the file is committed.",
+                        ].join("\n"),
+                      });
+                      console.log(`Updated design issue #${existingIssue.number} with new brief`);
+                      // Regen SVG only if still a placeholder — real image not yet delivered
+                      if (filename && fs.existsSync(deliveryPath)) {
+                        const current = fs.readFileSync(deliveryPath, "utf8");
+                        if (current.trimStart().startsWith("<svg")) {
+                          fs.unlinkSync(deliveryPath); // remove so regen runs below
+                        } else {
+                          continue; // real image delivered, don't touch it
+                        }
+                      }
+                    } else {
 
                     const designIssue = await github.rest.issues.create({
                       owner: context.repo.owner,
@@ -186,6 +219,7 @@ jobs:
                       labels: [slugLabel, "design", ...tagLabels],
                     });
                     console.log(`Created design issue #${designIssue.data.number}: ${block.firstLine}`);
+                    } // end else (new issue)
 
                     if (filename && !fs.existsSync(deliveryPath)) {
                       const dimMatch = fullBrief.match(/(\d+)[x\u00d7](\d+)/i);
