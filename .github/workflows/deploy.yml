@@ -51,6 +51,18 @@ jobs:
         working-directory: public-repo
         run: aws s3 sync out/ s3://${{ secrets.S3_BUCKET }} --delete
 
+      - name: Fix content-type for SVG placeholders
+        working-directory: public-repo
+        run: |
+          find out/images/posts -name "*.png" 2>/dev/null | while read f; do
+            if head -c 5 "$f" | grep -q "<svg"; then
+              key="${f#out/}"
+              aws s3 cp "$f" "s3://${{ secrets.S3_BUCKET }}/$key" \
+                --content-type "image/svg+xml" --metadata-directive REPLACE
+              echo "Fixed content-type: $key"
+            fi
+          done
+
       - name: Deploy CloudFront short-URL function
         working-directory: public-repo
         run: |
