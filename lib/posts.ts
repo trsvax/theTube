@@ -71,11 +71,29 @@ export function getPosts(): PostMeta[] {
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+// Strip [design]: blocks (workflow markers, not for readers)
+function stripDesignBlocks(body: string): string {
+  return body
+    .split("\n")
+    .reduce<{ lines: string[]; inBlock: boolean }>(
+      (acc, line) => {
+        if (/^\[design\]:\s*.+$/.test(line))
+          return { lines: acc.lines, inBlock: true };
+        if (acc.inBlock && line.trim() === "")
+          return { lines: [...acc.lines, ""], inBlock: false };
+        if (acc.inBlock) return acc;
+        return { lines: [...acc.lines, line], inBlock: false };
+      },
+      { lines: [], inBlock: false },
+    )
+    .lines.join("\n");
+}
+
 export async function getPost(slug: string): Promise<Post> {
   const { marked } = await import("marked");
   const raw = fs.readFileSync(path.join(POSTS_DIR, `${slug}.md`), "utf8");
   const { meta, body } = parseFrontmatter(raw);
-  const html = await marked(body);
+  const html = await marked(stripDesignBlocks(body));
   return {
     slug,
     title: (meta.title as string) ?? slug,
