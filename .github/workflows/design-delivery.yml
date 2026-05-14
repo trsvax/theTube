@@ -1,0 +1,141 @@
+name: Design Delivery Gate
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  validate:
+    # Only run for design issues
+    if: contains(github.event.issue.labels.*.name, 'design')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Validate delivery and write back
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const labels = issue.labels.map(l => l.name);
+
+            // Find post slug from labels (post:slug)
+            const slugLabel = labels.find(l => l.startsWith('post:'));
+            if (!slugLabel) {
+              console.log('No post: label found — skipping');
+              return;
+            }
+            const slug = slugLabel.slice(5);
+
+            // Parse filename from issue title: [design] og-image.png
+            const titleMatch = issue.title.match(/^\[design\]\s+(\S+)$/);
+            if (!titleMatch) {
+              console.log('Issue title does not match [design] pattern — skipping');
+              return;
+            }
+            const filename = titleMatch[1];
+
+            const fs = require('fs');
+            const deliveryPath = `public/images/posts/${slug}/${filename}`;
+
+            // Check 1: real image committed (not missing, not an SVG placeholder)
+            const imageExists = fs.existsSync(deliveryPath);
+            const isPlaceholder = imageExists
+              ? fs.readFileSync(deliveryPath, 'utf8').trimStart().startsWith('<svg')
+              : false;
+            const imageDelivered = imageExists && !isPlaceholder;
+
+            // Check 2: ## Alt section present and filled in
+            const altSection = issue.body?.match(/## Alt\n([\s\S]*?)(?:\n\n|\n##|$)/);
+            const alt = altSection ? altSection[1].trim() : '';
+            const altPresent = alt.length > 0 && alt !== '(add alt text here)';
+
+            if (!imageDelivered || !altPresent) {
+              const problems = [];
+              if (!imageExists) problems.push(`Image not committed to \`${deliveryPath}\``);
+              else if (isPlaceholder) problems.push(`Image at \`${deliveryPath}\` is still the SVG placeholder — commit the real file`);
+              if (!altPresent) problems.push('`## Alt` section is empty or has placeholder text — add a descriptive alt');
+
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'open',
+              });
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Reopened — please fix before closing:\n\n${problems.map(p => `- ${p}`).join('\n')}`,
+              });
+              console.log(`Reopened #${issue.number}: ${problems.join('; ')}`);
+              return;
+            }
+
+            // Valid delivery — write back src: and alt: to the [design]: block in the post
+            const file = `content/posts/${slug}.md`;
+            if (!fs.existsSync(file)) {
+              console.log(`Post file not found: ${file}`);
+              return;
+            }
+
+            const realSrc = `/images/posts/${slug}/${filename}`;
+            let content = fs.readFileSync(file, 'utf8');
+            content = patchSrcAndAlt(content, filename, realSrc, alt);
+            fs.writeFileSync(file, content);
+
+            const { execSync: exec } = require('child_process');
+            exec('git config user.name "github-actions[bot]"');
+            exec('git config user.email "github-actions[bot]@users.noreply.github.com"');
+            exec(`git add ${file}`);
+            exec(`git commit -m "chore: record delivered image and alt for ${filename} in ${slug}"`);
+            exec('git push');
+
+            console.log(`Delivery confirmed: ${filename} in ${slug}, alt="${alt}"`);
+
+            // Updates both src: and alt: fields in the [design]: block for the given filename.
+            function patchSrcAndAlt(content, filename, src, alt) {
+              const lines = content.split('\n');
+              const result = [];
+              let i = 0;
+              while (i < lines.length) {
+                const m = lines[i].match(/^\[design\]:\s*(.+)$/);
+                if (m) {
+                  const firstToken = m[1].split(/[\s\u2014\u2013]/)[0];
+                  const fn = firstToken.includes('.') ? firstToken : null;
+                  result.push(lines[i]);
+                  i++;
+                  if (fn === filename) {
+                    const blockLines = [];
+                    while (i < lines.length && lines[i].trim() !== '') {
+                      blockLines.push(lines[i]);
+                      i++;
+                    }
+                    let hasSrc = false;
+                    let hasAlt = false;
+                    for (const l of blockLines) {
+                      if (l.startsWith('src: ')) { result.push(`src: ${src}`); hasSrc = true; }
+                      else if (l.startsWith('alt: ')) { result.push(`alt: ${alt}`); hasAlt = true; }
+                      else result.push(l);
+                    }
+                    if (!hasSrc) result.push(`src: ${src}`);
+                    if (!hasAlt) result.push(`alt: ${alt}`);
+                  } else {
+                    while (i < lines.length && lines[i].trim() !== '') {
+                      result.push(lines[i]);
+                      i++;
+                    }
+                  }
+                } else {
+                  result.push(lines[i]);
+                  i++;
+                }
+              }
+              return result.join('\n');
+            }

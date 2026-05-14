@@ -71,29 +71,47 @@ export function getPosts(): PostMeta[] {
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-// Strip [design]: blocks (workflow markers, not for readers)
-function stripDesignBlocks(body: string): string {
-  return body
-    .split("\n")
-    .reduce<{ lines: string[]; inBlock: boolean }>(
-      (acc, line) => {
-        if (/^\[design\]:\s*.+$/.test(line))
-          return { lines: acc.lines, inBlock: true };
-        if (acc.inBlock && line.trim() === "")
-          return { lines: [...acc.lines, ""], inBlock: false };
-        if (acc.inBlock) return acc;
-        return { lines: [...acc.lines, line], inBlock: false };
-      },
-      { lines: [], inBlock: false },
-    )
-    .lines.join("\n");
+// Render [design]: blocks as <img> tags (src/alt from block fields; strip if no src yet)
+// Skips blocks inside code fences so code examples render correctly.
+function renderDesignBlocks(body: string): string {
+  const lines = body.split("\n");
+  const result: string[] = [];
+  let i = 0;
+  let inFence = false;
+  while (i < lines.length) {
+    if (lines[i].startsWith("```") || lines[i].startsWith("~~~")) {
+      inFence = !inFence;
+      result.push(lines[i]);
+      i++;
+    } else if (!inFence && /^\[design\]:\s*.+$/.test(lines[i])) {
+      let alt = "";
+      let src = "";
+      i++;
+      while (i < lines.length && lines[i].trim() !== "") {
+        if (lines[i].startsWith("alt: ")) alt = lines[i].slice(5).trim();
+        else if (lines[i].startsWith("src: ")) src = lines[i].slice(5).trim();
+        i++;
+      }
+      // Consume blank line terminator
+      if (i < lines.length) i++;
+      if (src) {
+        const escapedAlt = alt.replace(/"/g, "&quot;");
+        result.push(`<img src="${src}" alt="${escapedAlt}">`);
+        result.push("");
+      }
+    } else {
+      result.push(lines[i]);
+      i++;
+    }
+  }
+  return result.join("\n");
 }
 
 export async function getPost(slug: string): Promise<Post> {
   const { marked } = await import("marked");
   const raw = fs.readFileSync(path.join(POSTS_DIR, `${slug}.md`), "utf8");
   const { meta, body } = parseFrontmatter(raw);
-  const html = await marked(stripDesignBlocks(body));
+  const html = await marked(renderDesignBlocks(body));
   return {
     slug,
     title: (meta.title as string) ?? slug,

@@ -44,6 +44,52 @@ jobs:
               return fm;
             }
 
+            // Patch or insert src: field in a [design]: block for the given filename.
+            // Inserts src: after alt: (if present) or before the first brief line.
+            function patchSrcInBlock(content, filename, src) {
+              const lines = content.split('\n');
+              const result = [];
+              let i = 0;
+              while (i < lines.length) {
+                const m = lines[i].match(/^\[design\]:\s*(.+)$/);
+                if (m) {
+                  const firstToken = m[1].split(/[\s\u2014\u2013]/)[0];
+                  const fn = firstToken.includes('.') ? firstToken : null;
+                  result.push(lines[i]);
+                  i++;
+                  if (fn === filename) {
+                    const blockLines = [];
+                    while (i < lines.length && lines[i].trim() !== '') {
+                      blockLines.push(lines[i]);
+                      i++;
+                    }
+                    let hasSrc = false;
+                    let inserted = false;
+                    for (const l of blockLines) {
+                      if (l.startsWith('src: ')) { result.push(`src: ${src}`); hasSrc = true; }
+                      else {
+                        if (!inserted && !l.startsWith('alt: ') && !hasSrc) {
+                          result.push(`src: ${src}`);
+                          inserted = true;
+                        }
+                        result.push(l);
+                      }
+                    }
+                    if (!hasSrc && !inserted) result.push(`src: ${src}`);
+                  } else {
+                    while (i < lines.length && lines[i].trim() !== '') {
+                      result.push(lines[i]);
+                      i++;
+                    }
+                  }
+                } else {
+                  result.push(lines[i]);
+                  i++;
+                }
+              }
+              return result.join('\n');
+            }
+
             // Files changed in this push
             const changed = execSync("git diff --name-only HEAD~1 HEAD")
               .toString().trim().split("\n")
@@ -128,13 +174,16 @@ jobs:
                   const dm = bodyLines[bi].match(/^\[design\]:\s*(.+)$/);
                   if (dm) {
                     const firstLine = dm[1].trim();
+                    let blockAlt = "";
                     const extra = [];
                     bi++;
                     while (bi < bodyLines.length && bodyLines[bi].trim() !== "") {
-                      extra.push(bodyLines[bi].trim());
+                      const bl = bodyLines[bi].trim();
+                      if (bl.startsWith("alt: ")) blockAlt = bl.slice(5);
+                      else if (!bl.startsWith("src: ")) extra.push(bl);
                       bi++;
                     }
-                    designBlocks.push({ firstLine, extra });
+                    designBlocks.push({ firstLine, alt: blockAlt, extra });
                   } else {
                     bi++;
                   }
@@ -166,7 +215,9 @@ jobs:
                       const existingIssue = existingDesign.data.find(i => i.title === issueTitle);
                       const briefMatch = existingIssue?.body?.match(/## Brief\n([\s\S]*?)\n\n## Delivery/);
                       const existingBrief = briefMatch ? briefMatch[1].trim() : "";
-                      if (existingBrief === fullBrief) {
+                      const altExtract = existingIssue?.body?.match(/## Alt\n([\s\S]*?)\n\n## Brief/);
+                      const existingAlt = altExtract ? altExtract[1].trim() : "";
+                      if (existingBrief === fullBrief && existingAlt === block.alt) {
                         console.log(`Design issue unchanged: ${issueTitle}`);
                         continue;
                       }
@@ -178,14 +229,16 @@ jobs:
                         body: [
                           `Design request for: #${parentNumber}`,
                           "",
+                          "## Alt",
+                          block.alt || "(add alt text here)",
+                          "",
                           "## Brief",
                           fullBrief,
                           "",
                           "## Delivery",
-                          "Attach the file to this issue as a comment. Commit it to:",
-                          `\`${deliveryPath}\``,
+                          `Commit the image to \`${deliveryPath}\`.`,
                           "",
-                          "Close this issue when the file is committed.",
+                          "Close this issue when the image is committed and **## Alt** is filled in.",
                         ].join("\n"),
                       });
                       console.log(`Updated design issue #${existingIssue.number} with new brief`);
@@ -207,14 +260,16 @@ jobs:
                       body: [
                         `Design request for: #${parentNumber}`,
                         "",
+                        "## Alt",
+                        block.alt || "(add alt text here)",
+                        "",
                         "## Brief",
                         fullBrief,
                         "",
                         "## Delivery",
-                        "Attach the file to this issue as a comment. Commit it to:",
-                        `\`${deliveryPath}\``,
+                        `Commit the image to \`${deliveryPath}\`.`,
                         "",
-                        "Close this issue when the file is committed.",
+                        "Close this issue when the image is committed and **## Alt** is filled in.",
                       ].join("\n"),
                       labels: [slugLabel, "design", ...tagLabels],
                     });
@@ -250,12 +305,7 @@ jobs:
                       ].join("\n");
                       const base64 = Buffer.from(svg).toString('base64');
                       const dataUrl = `data:image/svg+xml;base64,${base64}`;
-                      const expectedSrc = `/images/posts/${slug}/${filename}`;
-                      const escapedSrc = expectedSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                      content = content.replace(
-                        new RegExp(`(<img\\b[^>]*\\bsrc=")(?:${escapedSrc}|data:image\\/svg[^"]*)(")`, 'g'),
-                        `$1${dataUrl}$2`
-                      );
+                      content = patchSrcInBlock(content, filename, dataUrl);
                       fs.writeFileSync(file, content);
                       if (!filesToCommit.includes(file)) filesToCommit.push(file);
                       console.log(`Generated base64 SVG placeholder: ${filename}`);
@@ -325,13 +375,16 @@ jobs:
                   const dm = bodyLines[bi].match(/^\[design\]:\s*(.+)$/);
                   if (dm) {
                     const firstLine = dm[1].trim();
+                    let blockAlt = "";
                     const extra = [];
                     bi++;
                     while (bi < bodyLines.length && bodyLines[bi].trim() !== "") {
-                      extra.push(bodyLines[bi].trim());
+                      const bl = bodyLines[bi].trim();
+                      if (bl.startsWith("alt: ")) blockAlt = bl.slice(5);
+                      else if (!bl.startsWith("src: ")) extra.push(bl);
                       bi++;
                     }
-                    designBlocks.push({ firstLine, extra });
+                    designBlocks.push({ firstLine, alt: blockAlt, extra });
                   } else {
                     bi++;
                   }
@@ -357,14 +410,16 @@ jobs:
                     body: [
                       `Design request for: #${parentNumber}`,
                       "",
+                      "## Alt",
+                      block.alt || "(add alt text here)",
+                      "",
                       "## Brief",
                       fullBrief,
                       "",
                       "## Delivery",
-                      "Attach the file to this issue as a comment. Commit it to:",
-                      `\`${deliveryPath}\``,
+                      `Commit the image to \`${deliveryPath}\`.`,
                       "",
-                      "Close this issue when the file is committed.",
+                      "Close this issue when the image is committed and **## Alt** is filled in.",
                     ].join("\n"),
                     labels: [slugLabel, "design", ...tagLabels],
                   });
@@ -401,12 +456,7 @@ jobs:
                     ].join("\n");
                     const base64 = Buffer.from(svg).toString('base64');
                     const dataUrl = `data:image/svg+xml;base64,${base64}`;
-                    const expectedSrc = `/images/posts/${slug}/${filename}`;
-                    const escapedSrc = expectedSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                    content = content.replace(
-                      new RegExp(`(<img\\b[^>]*\\bsrc=")(?:${escapedSrc}|data:image\\/svg[^"]*)(")`, 'g'),
-                      `$1${dataUrl}$2`
-                    );
+                    content = patchSrcInBlock(content, filename, dataUrl);
                     // content written below with frontmatter patch
                     console.log(`Generated base64 SVG placeholder: ${filename}`);
                   }
