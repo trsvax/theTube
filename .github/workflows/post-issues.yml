@@ -53,7 +53,7 @@ jobs:
 
             for (const file of changed) {
               const slug = path.basename(file, ".md");
-              const content = fs.readFileSync(file, "utf8");
+              let content = fs.readFileSync(file, "utf8");
               const fm = parseFrontmatter(content);
 
               const slugLabel = `post:${slug}`;
@@ -248,11 +248,17 @@ jobs:
                         textEls,
                         `</svg>`,
                       ].join("\n");
-                      const dir = path.dirname(deliveryPath);
-                      if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-                      fs.writeFileSync(deliveryPath, svg);
-                      filesToCommit.push(deliveryPath);
-                      console.log(`Generated SVG placeholder: ${deliveryPath}`);
+                      const base64 = Buffer.from(svg).toString('base64');
+                      const dataUrl = `data:image/svg+xml;base64,${base64}`;
+                      const expectedSrc = `/images/posts/${slug}/${filename}`;
+                      const escapedSrc = expectedSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                      content = content.replace(
+                        new RegExp(`(<img\\b[^>]*\\bsrc=")(?:${escapedSrc}|data:image\\/svg[^"]*)(")`, 'g'),
+                        `$1${dataUrl}$2`
+                      );
+                      fs.writeFileSync(file, content);
+                      if (!filesToCommit.includes(file)) filesToCommit.push(file);
+                      console.log(`Generated base64 SVG placeholder: ${filename}`);
                     }
                   }
                 }
@@ -393,11 +399,16 @@ jobs:
                       textEls,
                       `</svg>`,
                     ].join("\n");
-                    const dir = path.dirname(deliveryPath);
-                    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-                    fs.writeFileSync(deliveryPath, svg);
-                    filesToCommit.push(deliveryPath);
-                    console.log(`Generated SVG placeholder: ${deliveryPath}`);
+                    const base64 = Buffer.from(svg).toString('base64');
+                    const dataUrl = `data:image/svg+xml;base64,${base64}`;
+                    const expectedSrc = `/images/posts/${slug}/${filename}`;
+                    const escapedSrc = expectedSrc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    content = content.replace(
+                      new RegExp(`(<img\\b[^>]*\\bsrc=")(?:${escapedSrc}|data:image\\/svg[^"]*)(")`, 'g'),
+                      `$1${dataUrl}$2`
+                    );
+                    // content written below with frontmatter patch
+                    console.log(`Generated base64 SVG placeholder: ${filename}`);
                   }
                 }
 
@@ -440,18 +451,7 @@ jobs:
               exec('git config user.name "github-actions[bot]"');
               exec('git config user.email "github-actions[bot]@users.noreply.github.com"');
 
-              // Frontmatter (issue numbers) — skip ci, no deploy needed
-              const fmFiles = filesToCommit.filter(f => f.endsWith(".md"));
-              // SVG placeholders — no skip, deploy picks them up
-              const svgFiles = filesToCommit.filter(f => !f.endsWith(".md"));
-
-              if (fmFiles.length > 0) {
-                exec(`git add ${fmFiles.join(" ")}`);
-                exec('git commit -m "chore: write issue numbers to frontmatter [skip ci]"');
-              }
-              if (svgFiles.length > 0) {
-                exec(`git add ${svgFiles.join(" ")}`);
-                exec('git commit -m "chore: add SVG placeholders for design issues"');
-              }
+              exec(`git add ${filesToCommit.join(" ")}`);
+              exec('git commit -m "chore: update post issue numbers and placeholders"');
               exec("git push");
             }
