@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech]
 draft: true
 summary: "[name]: is a namespace. Any tool that knows about it can act on it. Tools that don't, ignore it. The file stays valid markdown either way."
+issueNumber: 59
+discussionNumber: 61
 ---
 
 `[design]:` creates a GitHub issue. `[journey]:` renders navigation. `[product]:` could create a Stripe listing. Same file, different readers, no coordination required.
