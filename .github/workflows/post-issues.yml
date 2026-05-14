@@ -151,7 +151,7 @@ jobs:
                   const existingTitles = new Set(existingDesign.data.map(i => i.title));
 
                   for (const block of designBlocks) {
-                    const firstToken = block.firstLine.split(/[\s\u2014\u2013-]/)[0];
+                    const firstToken = block.firstLine.split(/[\s\u2014\u2013]/)[0];
                     const filename = firstToken.includes(".") ? firstToken : null;
                     const description = filename
                       ? block.firstLine.slice(filename.length).replace(/^\s*[\u2014\u2013-]\s*/, "")
@@ -334,7 +334,7 @@ jobs:
                 const subNumbers = [tracking.data.number, discussionNumber];
 
                 for (const block of designBlocks) {
-                  const firstToken = block.firstLine.split(/[\s\u2014\u2013-]/)[0];
+                  const firstToken = block.firstLine.split(/[\s\u2014\u2013]/)[0];
                   const filename = firstToken.includes(".") ? firstToken : null;
                   const description = filename
                     ? block.firstLine.slice(filename.length).replace(/^\s*[\u2014\u2013-]\s*/, "")
