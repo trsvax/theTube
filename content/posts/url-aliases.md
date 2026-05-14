@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech]
 draft: true
 summary: The post owns its URL surface. shortSlug and redirectFrom are just alias types — the filename is canonical, everything else is a name the post also answers to.
+issueNumber: 40
+discussionNumber: 42
 ---
 
 A post has one canonical slug — the filename. Everything else is an alias.

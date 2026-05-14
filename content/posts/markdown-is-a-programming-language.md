@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech]
 draft: true
 summary: The Actions are the compiler. The markdown is the source. The syntax you define is the language.
+issueNumber: 34
+discussionNumber: 36
 ---
 
 Every format that humans write and machines read eventually gets execution semantics pushed into it.
