@@ -9,7 +9,7 @@ discussionNumber: 9
 ---
 
 [design]: og-image.png — 1200×630, brand colors, title prominent
-Post title large, tagline "Desingers don't know git!" below in lighter weight.
+Post title large, tagline "Designers don't know git!" below in lighter weight.
 
 <img src="/images/posts/the-post-is-the-spec/og-image.png" alt="The Post Is the Spec" />
 
