@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f5f5"/>
+  <rect x="4" y="4" width="1192" height="622" fill="none" stroke="#ccc" stroke-width="2" stroke-dasharray="8 4"/>
+  <text x="600" y="40" text-anchor="middle" font-family="monospace" font-size="31" fill="#bbb">og-image.png</text>
+  <text x="600" y="280" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#888">1200x630, brand colors, title prominent</text>
+  <text x="600" y="315" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#888">Post title large, tagline &quot;the markdown file is the</text>
+  <text x="600" y="350" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#888">spec&quot; below in lighter weight.</text>
+</svg>
