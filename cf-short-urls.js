@@ -1,5 +1,5 @@
 var SLUGS = {
-  "su": "/posts/short-urls-in-frontmatter"
+  su: "/posts/short-urls-in-frontmatter",
 };
 
 function handler(event) {
@@ -19,7 +19,8 @@ function handler(event) {
 
   // Rewrite extensionless URLs to .html
   if (!uri.includes(".")) {
-    request.uri = uri.replace(/\/?$/, ".html");
+    var clean = uri.replace(/\/$/, "");
+    request.uri = (clean || "/index") + ".html";
   }
 
   return request;
