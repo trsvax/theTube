@@ -9,7 +9,7 @@ discussionNumber: 9
 ---
 
 [design]: og-image.png — 1200×630, brand colors, title prominent
-Post title large, tagline "the markdown file is the spec" below in lighter weight.
+Post title large, tagline "Desingers don't know git" below in lighter weight.
 
 <img src="/images/posts/the-post-is-the-spec/og-image.png" alt="The Post Is the Spec" />
 
@@ -77,4 +77,3 @@ Most tools own the data. The app holds the content, and everything else has to a
 The spec is precise enough to brief a designer. Precise enough that AI wrote the code to do it.
 
 One file. Many readers.
-
