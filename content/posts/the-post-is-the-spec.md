@@ -77,3 +77,4 @@ Most tools own the data. The app holds the content, and everything else has to a
 The spec is precise enough to brief a designer. Precise enough that AI wrote the code to do it.
 
 One file. Many readers.
+
