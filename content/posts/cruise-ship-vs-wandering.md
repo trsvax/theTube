@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech, travel]
 draft: true
 summary: Two development styles. One has a Gantt chart. One finds URL aliases by renaming a file.
+issueNumber: 56
+discussionNumber: 58
 ---
 
 The cruise ship has an itinerary. Every port scheduled, excursions booked, deviation is failure. You know where you're going before you leave. Waterfall. The plan is the product.

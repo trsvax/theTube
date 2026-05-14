@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech]
 draft: true
 summary: The methodology nobody writes about because it doesn't make for a clean conference talk. Real development is continuous reconciliation, not plan execution.
+issueNumber: 53
+discussionNumber: 55
 ---
 
 The editor resurrects your deleted file. The bot commits over your push. The designer delivers `logo-FINAL-v2-USE-THIS.png`. The DNS TTL means the redirect you just deployed won't work for another hour.
