@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech]
 draft: true
 summary: Short thoughts that don't need to be posts. A timeline, not a blog index. The feed and the blog are two outputs from the same journal.
+issueNumber: 50
+discussionNumber: 52
 ---
 
 Not every thought becomes a post. Some are two sentences. Some stay two sentences.
