@@ -2,6 +2,14 @@
 
 Writing voice and code style for Barry Books / trsvax. Use when drafting posts, editing copy, or writing code for theTube.
 
+## What theTube is
+
+A journal. Not a blog. Travel and tech are categories of the same thing — entries in a running record of work and life, not separate modes with separate voices.
+
+Tech posts need a person in them: the specific frustration that started it, the dead end, the thing that finally worked. "I had to dig through 50 images trying to find the right one" is the post. A tutorial on file naming conventions is not. The posts that age are the ones with a person in them. Documentation is obsolete when the API changes.
+
+The `[journey]:` block exists for this reason — the making-of belongs in the post, not in a separate write-up nobody reads.
+
 ## On using AI
 
 The work is Barry's — the decisions, the aesthetic, the direction. AI is in the tool chain, not the byline. Steve Jobs had employees. No disclaimers, no "written with AI" disclosures. When AI is relevant to the subject of a post, mention it the way the copilot-commit-messages post does: unsentimental, specific, honest about the tradeoff.
@@ -52,6 +60,7 @@ The work is Barry's — the decisions, the aesthetic, the direction. AI is in th
 ### Examples
 
 **Good:**
+
 > The constraint: **permissions enforced at the CDN layer, content gated by role, browser does the rest.**
 
 > That's it. No CloudFront signed cookies, no key pairs, no Secrets Manager. Just a JWT.
@@ -59,6 +68,7 @@ The work is Barry's — the decisions, the aesthetic, the direction. AI is in th
 > It's worth it just for commit messages. It's not going to replace programmers yet but it's better than Google and Stack Overflow.
 
 **Avoid:**
+
 > In conclusion, we can see that this approach offers many benefits for developers looking to build scalable, cost-effective solutions.
 
 ---
@@ -130,7 +140,6 @@ Short, lowercase. Accurate enough to find the change later. Barry can't be bothe
 - Good: `browser post edits`, `add slashdot section`, `fix auth cookie expiry`
 - Bad: `Revise browser-is-the-server: Slashdot, underpants gnomes, web-as-app section`
 - Never: conventional commits format (`feat:`, `fix:`, `chore:`)
-
 
 - Not verbose. Not over-explained.
 - Not cautious. Doesn't hedge decisions that were made deliberately.
