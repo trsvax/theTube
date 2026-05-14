@@ -405,7 +405,19 @@ jobs:
               const { execSync: exec } = require("child_process");
               exec('git config user.name "github-actions[bot]"');
               exec('git config user.email "github-actions[bot]@users.noreply.github.com"');
-              exec(`git add ${filesToCommit.join(" ")}`);
-              exec('git commit -m "add issue numbers to frontmatter [skip ci]"');
+
+              // Frontmatter (issue numbers) — skip ci, no deploy needed
+              const fmFiles = filesToCommit.filter(f => f.endsWith(".md"));
+              // SVG placeholders — no skip, deploy picks them up
+              const svgFiles = filesToCommit.filter(f => !f.endsWith(".md"));
+
+              if (fmFiles.length > 0) {
+                exec(`git add ${fmFiles.join(" ")}`);
+                exec('git commit -m "chore: write issue numbers to frontmatter [skip ci]"');
+              }
+              if (svgFiles.length > 0) {
+                exec(`git add ${svgFiles.join(" ")}`);
+                exec('git commit -m "chore: add SVG placeholders for design issues"');
+              }
               exec("git push");
             }
