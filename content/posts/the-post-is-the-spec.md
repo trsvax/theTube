@@ -1,6 +1,6 @@
 ---
 title: The Post Is the Spec
-date: 2026-05-13
+date: 2026-05-14
 tags: [tech]
 audience: user
 summary: The markdown file drives the workflow. What you write in the post determines what gets built around it.
