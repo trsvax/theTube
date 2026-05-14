@@ -9,6 +9,7 @@ export interface PostMeta {
   date: string;
   tags: string[];
   audience: string;
+  draft?: boolean;
   summary: string;
   shortSlug?: string;
   issueNumber?: number;
@@ -64,10 +65,12 @@ export function getPosts(): PostMeta[] {
         date: (meta.date as string) ?? "",
         tags: (meta.tags as string[]) ?? [],
         audience: (meta.audience as string) ?? "public",
+        draft: meta.draft === "true" || meta.draft === true,
         summary: (meta.summary as string) ?? "",
         shortSlug: (meta.shortSlug as string) ?? undefined,
       };
     })
+    .filter((p) => !p.draft)
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
