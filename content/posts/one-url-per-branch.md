@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [tech]
 draft: true
 summary: Every branch gets a real deployment. Not a build artifact — a URL you can click. The bot writes back to the branch it was triggered from, not main.
+issueNumber: 62
+discussionNumber: 64
 ---
 
 The minimal CI/CD model is: push to main, deploy to production. It works until you push a broken CloudFront function and the site 502s for everyone.
