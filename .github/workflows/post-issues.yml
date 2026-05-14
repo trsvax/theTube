@@ -130,17 +130,29 @@ jobs:
                 }
               }
 
-              // Check if an issue already exists for this slug
-              const existing = await github.rest.issues.listForRepo({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                labels: slugLabel,
-                state: "all",
-              });
+              // If issueNumber is already in frontmatter, skip the API lookup — issue exists
+              let existingIssueData = null;
+              if (fm.issueNumber) {
+                existingIssueData = { number: parseInt(fm.issueNumber) };
+              } else {
+                const existing = await github.rest.issues.listForRepo({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  labels: slugLabel,
+                  state: "all",
+                });
+                existingIssueData = existing.data.length > 0 ? existing.data[0] : null;
+              }
 
-              if (existing.data.length > 0) {
+              if (existingIssueData) {
                 // Update labels (audience may have changed draft→published)
-                const issue = existing.data[0];
+                const issue = existingIssueData.labels
+                  ? existingIssueData
+                  : (await github.rest.issues.get({
+                      owner: context.repo.owner,
+                      repo: context.repo.repo,
+                      issue_number: existingIssueData.number,
+                    })).data;
                 const currentLabels = issue.labels.map(l => l.name);
                 const toAdd = labels.filter(l => !currentLabels.includes(l));
                 const toRemove = currentLabels.filter(
