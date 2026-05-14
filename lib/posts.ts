@@ -99,6 +99,23 @@ function renderDesignBlocks(body: string): string {
         result.push(`<img src="${src}" alt="${escapedAlt}">`);
         result.push("");
       }
+    } else if (!inFence && /^\[journey\]:/.test(lines[i])) {
+      const summaryRaw = lines[i].slice(10).trim();
+      const summary = summaryRaw || "The journey";
+      const bodyLines: string[] = [];
+      i++;
+      while (i < lines.length && lines[i].trim() !== "") {
+        bodyLines.push(lines[i].trim());
+        i++;
+      }
+      // Consume blank line terminator
+      if (i < lines.length) i++;
+      const esc = (s: string) =>
+        s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      result.push(
+        `<details>\n<summary>${esc(summary)}</summary>\n<p>${esc(bodyLines.join(" "))}</p>\n</details>`,
+      );
+      result.push("");
     } else {
       result.push(lines[i]);
       i++;

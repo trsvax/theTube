@@ -80,3 +80,6 @@ Most tools own the data. The app holds the content, and everything else has to a
 The spec is precise enough to brief a designer. Precise enough that AI wrote the code to do it.
 
 One file. Many readers.
+
+[journey]:
+Started by writing the SVG placeholder to a file in `public/` — obvious, simple. Hit the S3 content-type bug: the bucket serves by extension, so SVG content named `.png` came back wrong. Switched to base64 data URLs embedded in the `<img>` src — no file, no content-type problem. Then the bigger realization: `[design]:` is already the image. It has the filename, the dimensions, the alt. No separate `<img>` tag needed — the block IS the tag. The workflow patches `src:` in. Then: why write back at all until the designer delivers? The issue tracks the work. The file updates once, when the real image arrives.
