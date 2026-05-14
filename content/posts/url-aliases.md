@@ -28,3 +28,8 @@ redirectFrom:
 ```
 
 One pass at build time. One CloudFront function. All aliases resolved.
+
+[journey]:
+prev: designers-dont-know-git, short-urls-in-frontmatter
+next: site-map-is-a-graph
+Came directly from renaming designers-dont-know-git the same day it was written. The slug changed, the old URL needed to keep working, and the fix turned out to be the same mechanism as shortSlug — just pointing backward instead of sideways. short-urls-in-frontmatter started the alias idea; this post generalizes it.

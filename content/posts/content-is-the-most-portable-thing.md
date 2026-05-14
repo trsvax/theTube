@@ -15,3 +15,7 @@ The hosting is interchangeable. S3 + CloudFront today, Azure Blob + CDN tomorrow
 The one real GitHub dependency is Issues and Discussions — the `[design]:` workflow, the `issueNumber` and `discussionNumber` in frontmatter. That's API calls, not content. Rewrite them for GitLab's API and the frontmatter stays identical. The posts don't know they're on GitHub. They know their issue number.
 
 Own the content in git. Everything else is wiring.
+
+[journey]:
+prev: markdown-is-a-programming-language
+Came from a casual question about moving to Azure. Two hours of workflow changes — that's it. The POSIX/X/Open background is the reason the answer came quickly: thirty years of watching what happens when you don't own the spec. The content is the spec. The hosting is an implementation.

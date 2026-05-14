@@ -21,3 +21,7 @@ The implementation is light: new frontmatter flag, new page, no new infrastructu
 Each thought gets a GitHub discussion, same as a full post. The feed entry links to it. Readers comment. The ones that get engagement become posts — `redirectFrom` on the thought's URL, `discussionNumber` carries over. The ones that don't stay as thoughts.
 
 The readers are helping decide what to write next. The discussion is the editorial queue. The engagement is the signal.
+
+[journey]:
+prev: designers-dont-know-git
+Came from asking whether the draft backlog should be visible. The answer was: not as drafts, but as a feed — short, complete, datestamped. The thought about "what to write next" being driven by reader engagement came immediately after. GitHub discussions already exist for every post; the feed is just a new surface for the same signal.

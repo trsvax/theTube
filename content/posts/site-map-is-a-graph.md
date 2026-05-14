@@ -22,3 +22,7 @@ src: data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zd
 ```
 
 The post that describes the structure of the site, built by the same workflow the site runs on.
+
+[journey]:
+prev: url-aliases
+Came from the observation that prev/next in the journey block is already a graph. If every post knows its neighbors, the build has enough to draw the whole thing. The [design]: block specs the output image — recursive in the right way.

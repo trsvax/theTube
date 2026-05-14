@@ -37,3 +37,7 @@ Postel's law was baked into HTML from the start — be liberal in what you accep
 Markdown with a GitHub Action compiler has the HTML property: write something close enough and it works. The parser skips what it doesn't recognize. The posts that exist keep working as the language evolves.
 
 The git log is the spec history. You can see when `[design]:` gained the `alt:` field. The markdown files are the archaeological record of the language's evolution — same as looking at early HTML and finding `<blink>`.
+
+[journey]:
+next: package-managers, content-is-the-most-portable-thing
+Started as a conversation question: is markdown the new programming language? The answer was: the Actions are the compiler, the markdown is source. Maven came up as the counterexample — XML strict enough to be a runtime, miserable to write. Package managers followed naturally: same trust/dependency problems, different format.

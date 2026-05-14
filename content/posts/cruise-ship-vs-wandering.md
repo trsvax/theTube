@@ -19,3 +19,7 @@ The wandering style produces better journals. The cruise ship produces better Ga
 The work today: rename a post, discover the slug is permanent, invent `redirectFrom`, generalize it to aliases, realize the journey block needs `prev`/`next`, sketch an SVG sitemap. None of it planned. All of it connected.
 
 That's not a bug in the process. That's the process.
+
+[journey]:
+prev: chaos-development
+The work today was the example. Renamed a post, discovered the slug problem, invented redirectFrom, generalized it to aliases, sketched a sitemap graph — none of it planned. The itinerary didn't exist. The wandering produced more than a cruise would have.

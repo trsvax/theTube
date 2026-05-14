@@ -31,3 +31,7 @@ It's still live. Last commit 2013.
 I also built a lot of the modules it was trying to catalog. You feel the weight of it — the dependencies, the version pinning, the moment an author abandons their package and you're the one holding the bug. I was that author. Now theTube runs on 4 runtime deps by design.
 
 That's not minimalism as religion. It's knowing what the other end looks like.
+
+[journey]:
+prev: markdown-is-a-programming-language
+The Maven/XML discussion led here. Maven Central has a more curated trust model than npm — that's why the pom.xml tax was tolerated. tapestry-modules was a 2013 attempt at the same thing for a different ecosystem: aggregate metadata from GitHub and POM files, make the dependency graph legible. Still live, last commit 2013.
