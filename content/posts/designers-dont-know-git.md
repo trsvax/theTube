@@ -83,7 +83,7 @@ The spec is precise enough to brief a designer. Precise enough that AI wrote the
 One file. Many readers.
 
 [journey]:
-next: url-aliases, chaos-development
+next: url-aliases, chaos-development, the-block-is-the-api
 Started by writing the SVG placeholder to a file in `public/` — obvious, simple. Hit the S3 content-type bug: the bucket serves by extension, so SVG content named `.png` came back wrong. Switched to base64 data URLs embedded in the `<img>` src — no file, no content-type problem. Then the bigger realization: `[design]:` is already the image. It has the filename, the dimensions, the alt. No separate `<img>` tag needed — the block IS the tag. The workflow patches `src:` in. Then: why write back at all until the designer delivers? The issue tracks the work. The file updates once, when the real image arrives.
 The post was originally titled "The Post Is the Spec" — slug `the-post-is-the-spec`. Renamed to "Designers Don't Know Git" the same day it was written. VS Code resurrected the deleted file from a ghost editor tab, so the commit history shows both: a delete and a rename, detected at 63% similarity. The `redirectFrom` field in the frontmatter is the record. The git log is the rest.
 The section about referencing the image with a raw `<img>` tag is a leftover from before the bigger realization. Once `[design]:` IS the img tag — the block renders directly, `src:` patched in by the workflow — there's no separate tag to write in the post body. The filename is still the contract. The `<img>` example is the old world.
