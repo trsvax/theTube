@@ -32,6 +32,7 @@ jobs:
 
       - name: Merge content and private assets
         run: |
+          rm public-repo/content
           cp -r content-repo/content public-repo/content
           cp -r private-repo/public/fonts public-repo/public/fonts
           cp -r private-repo/public/protected public-repo/public/protected
