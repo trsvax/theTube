@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import BuildWatcher from "./components/BuildWatcher";
 
 export const metadata: Metadata = {
   title: "theTube",
@@ -36,6 +37,7 @@ export default function RootLayout({
       <body>
         <div className="site-wrapper">
           <Header />
+          <BuildWatcher />
           <main className="site-content">{children}</main>
           <Footer />
         </div>

@@ -9,7 +9,9 @@ export default function Footer() {
       <div className="build-sha">
         <a href={`https://github.com/trsvax/theTube/commit/${app}`}>{app}</a>
         {" · "}
-        <a href={`https://github.com/trsvax/theTube-content/commit/${content}`}>{content}</a>
+        <a href={`https://github.com/trsvax/theTube-content/commit/${content}`}>
+          {content}
+        </a>
         {" · "}
         <span title="private">{priv}</span>
         {" · "}

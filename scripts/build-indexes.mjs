@@ -59,3 +59,10 @@ for (const role of ROLES) {
   );
   console.log(`${role}/content.json: ${items.length} item(s)`);
 }
+
+const buildTime = new Date().toISOString();
+fs.writeFileSync(
+  path.join(OUT_DIR, "build.json"),
+  JSON.stringify({ buildTime }, null, 2),
+);
+console.log(`build.json: ${buildTime}`);
