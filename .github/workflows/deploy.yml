@@ -17,6 +17,12 @@ jobs:
         with:
           path: public-repo
 
+      - name: Checkout public content
+        uses: actions/checkout@v4
+        with:
+          repository: trsvax/theTube-content
+          path: content-repo
+
       - name: Checkout private content
         uses: actions/checkout@v4
         with:
@@ -24,8 +30,9 @@ jobs:
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
           path: private-repo
 
-      - name: Merge private assets
+      - name: Merge content and private assets
         run: |
+          cp -r content-repo/content public-repo/content
           cp -r private-repo/public/fonts public-repo/public/fonts
           cp -r private-repo/public/protected public-repo/public/protected
           cp -r private-repo/content/posts/. public-repo/content/posts/
