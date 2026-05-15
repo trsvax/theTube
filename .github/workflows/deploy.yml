@@ -47,6 +47,12 @@ jobs:
         run: npm ci
         working-directory: public-repo
 
+      - name: Capture commit SHAs
+        run: |
+          echo "COMMIT_APP=$(git -C public-repo rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "COMMIT_CONTENT=$(git -C content-repo rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "COMMIT_PRIVATE=$(git -C private-repo rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
