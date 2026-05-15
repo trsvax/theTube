@@ -46,7 +46,6 @@ export default function Header() {
         <Link href="/journal">Journal</Link>
         <Link href="/links">Links</Link>
         <Link href="/about">About</Link>
-        <Link href="/contact">Contact</Link>
         <a
           href="https://github.com/trsvax/theTube"
           aria-label="GitHub"
