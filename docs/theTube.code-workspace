@@ -4,6 +4,9 @@
 			"path": ".."
 		},
 		{
+			"path": "../../theTube-content"
+		},
+		{
 			"path": "../../thetube-private"
 		}
 	],
