@@ -70,27 +70,43 @@ jobs:
       - name: Deploy CloudFront short-URL function
         working-directory: public-repo
         run: |
-          ETAG=$(aws cloudfront describe-function \
+          set -euo pipefail
+          echo "=== Deploying cf-short-urls.js ==="
+          cat cf-short-urls.js
+
+          DEV_ETAG=$(aws cloudfront describe-function \
             --name short-url-redirects \
+            --stage DEVELOPMENT \
             --query 'ETag' --output text 2>/dev/null || echo "")
-          if [ -z "$ETAG" ]; then
+
+          if [ -z "$DEV_ETAG" ]; then
+            echo "Creating new function..."
             aws cloudfront create-function \
               --name short-url-redirects \
               --function-config Comment="Short URL redirects",Runtime="cloudfront-js-2.0" \
               --function-code fileb://cf-short-urls.js
+            DEV_ETAG=$(aws cloudfront describe-function \
+              --name short-url-redirects \
+              --stage DEVELOPMENT \
+              --query 'ETag' --output text)
           else
+            echo "Updating existing function (ETAG: $DEV_ETAG)..."
             aws cloudfront update-function \
               --name short-url-redirects \
               --function-config Comment="Short URL redirects",Runtime="cloudfront-js-2.0" \
               --function-code fileb://cf-short-urls.js \
-              --if-match "$ETAG"
+              --if-match "$DEV_ETAG"
+            DEV_ETAG=$(aws cloudfront describe-function \
+              --name short-url-redirects \
+              --stage DEVELOPMENT \
+              --query 'ETag' --output text)
           fi
-          ETAG=$(aws cloudfront describe-function \
-            --name short-url-redirects \
-            --query 'ETag' --output text)
+
+          echo "Publishing to LIVE (ETAG: $DEV_ETAG)..."
           aws cloudfront publish-function \
             --name short-url-redirects \
-            --if-match "$ETAG"
+            --if-match "$DEV_ETAG"
+          echo "=== Function deployed ==="
 
       - name: Invalidate CloudFront
         run: |
