@@ -64,6 +64,10 @@
     --color-border: #3d0003;
     --color-code-bg: #1a0001;
   }
+
+  #site-logo .cls-logo-accent {
+    fill: #f0e2d5;
+  }
 }
 
 * {

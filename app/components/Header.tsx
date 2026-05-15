@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Logo from "./Logo";
 const LOGIN_URL =
   "https://thetube.auth.us-east-1.amazoncognito.com/oauth2/authorize" +
   "?client_id=6ml2ns0ra2rdsjlaiov1hmankt" +
@@ -29,18 +30,8 @@ export default function Header() {
 
   return (
     <header>
-      <Link href="/" className="site-logo">
-        <picture>
-          <source
-            srcSet="/logo-primary-dark.svg"
-            media="(prefers-color-scheme: dark)"
-          />
-          <img
-            src="/logo-primary-light.svg"
-            alt="The Tube — a stream of thoughts"
-            height={80}
-          />
-        </picture>
+      <Link href="/" className="site-logo" aria-label="The Tube — home">
+        <Logo />
       </Link>
       <nav>
         <Link href="/journal">Journal</Link>
