@@ -2,9 +2,23 @@ var SLUGS = {
   su: "/posts/short-urls-in-frontmatter",
 };
 
+var REDIRECTS = {
+  "/blog": "/journal",
+};
+
 function handler(event) {
   var request = event.request;
   var uri = request.uri;
+
+  // Path redirect (e.g. /blog → /journal)
+  var redirect = REDIRECTS[uri];
+  if (redirect) {
+    return {
+      statusCode: 301,
+      statusDescription: "Moved Permanently",
+      headers: { location: { value: redirect } },
+    };
+  }
 
   // Short URL redirect
   var slug = uri.slice(1);
