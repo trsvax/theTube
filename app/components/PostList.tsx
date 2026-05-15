@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface PostItem {
-  type: "post";
+  type: "post" | "thought";
   slug: string;
   title: string;
   date: string;
@@ -33,7 +33,9 @@ async function tryFetch(url: string): Promise<PostItem[]> {
     const res = await fetch(url);
     if (!res.ok) return [];
     const data = await res.json();
-    return (data.items ?? []).filter((i: PostItem) => i.type === "post");
+    return (data.items ?? []).filter(
+      (i: PostItem) => i.type === "post" || i.type === "thought",
+    );
   } catch {
     return [];
   }
@@ -92,6 +94,9 @@ export default function PostList({
           <li key={post.slug} className="post-card">
             <Link href={`/posts/${post.slug}`}>
               <div className="post-meta">
+                {post.type === "thought" && (
+                  <span className="type-badge">thought</span>
+                )}
                 {post.date}
                 {post.tags.map((t) => (
                   <span key={t} className="tag">

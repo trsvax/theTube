@@ -262,6 +262,18 @@ footer {
   margin-left: 0.5rem;
 }
 
+.type-badge {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.05rem 0.35rem;
+  font-size: 0.75rem;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: 3px;
+}
+
 .short-url-copy {
   margin-left: 0.75rem;
   padding: 0.1rem 0.4rem;
