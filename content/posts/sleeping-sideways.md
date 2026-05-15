@@ -4,6 +4,8 @@ date: 2026-05-14
 tags: [travel, gear]
 summary: Ordered a Radica Rover for the F-150. The lower 48 national parks don't plan themselves.
 bsky: false
+issueNumber: 71
+discussionNumber: 73
 ---
 
 > [!TLDR]
