@@ -36,7 +36,8 @@ for (const file of fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"))) {
   );
   const role = meta.audience ?? "public";
   if (!byRole[role]) continue;
-  if (meta.draft === "true" || meta.draft === true || meta.type === "draft") continue;
+  if (meta.draft === "true" || meta.draft === true || meta.type === "draft")
+    continue;
   byRole[role].push({
     type: meta.type ?? "post",
     slug: file.replace(/\.md$/, ""),

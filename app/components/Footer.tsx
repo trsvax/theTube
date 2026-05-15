@@ -2,6 +2,7 @@ export default function Footer() {
   const app = process.env.COMMIT_APP;
   const content = process.env.COMMIT_CONTENT;
   const priv = process.env.COMMIT_PRIVATE;
+  const built = process.env.BUILD_TIME;
   return (
     <footer>
       <div>© {new Date().getFullYear()}</div>
@@ -11,6 +12,8 @@ export default function Footer() {
         <a href={`https://github.com/trsvax/theTube-content/commit/${content}`}>{content}</a>
         {" · "}
         <span title="private">{priv}</span>
+        {" · "}
+        <span title="build time">{built}</span>
       </div>
     </footer>
   );

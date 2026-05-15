@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     COMMIT_APP: process.env.COMMIT_APP ?? "dev",
     COMMIT_CONTENT: process.env.COMMIT_CONTENT ?? "dev",
     COMMIT_PRIVATE: process.env.COMMIT_PRIVATE ?? "dev",
+    BUILD_TIME: new Date().toISOString(),
   },
 };
 

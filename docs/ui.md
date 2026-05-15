@@ -2,13 +2,13 @@
 
 ## Page Inventory
 
-| Page    | Route           | Component                   | Description                  |
-| ------- | --------------- | --------------------------- | ---------------------------- |
-| Index   | `/`             | `app/page.tsx`              | All posts, filterable by tag |
-| Post    | `/posts/[slug]` | `app/posts/[slug]/page.tsx` | Individual post              |
-| Blog    | `/blog`         | `app/blog/page.tsx`         | Blog post index (alias)      |
-| About   | `/about`        | `app/about/page.tsx`        | About page — me/site tabs    |
-| Links   | `/links`        | `app/links/page.tsx`        | Curated links (blogroll)     |
+| Page  | Route           | Component                   | Description                  |
+| ----- | --------------- | --------------------------- | ---------------------------- |
+| Index | `/`             | `app/page.tsx`              | All posts, filterable by tag |
+| Post  | `/posts/[slug]` | `app/posts/[slug]/page.tsx` | Individual post              |
+| Blog  | `/blog`         | `app/blog/page.tsx`         | Blog post index (alias)      |
+| About | `/about`        | `app/about/page.tsx`        | About page — me/site tabs    |
+| Links | `/links`        | `app/links/page.tsx`        | Curated links (blogroll)     |
 
 ## Slot Order — Index Page
 
