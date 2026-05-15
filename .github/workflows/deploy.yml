@@ -60,9 +60,15 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Set build time
+        id: build-time
+        run: echo "time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+
       - name: Build
         working-directory: public-repo
         run: npm run build
+        env:
+          BUILD_TIME: ${{ steps.build-time.outputs.time }}
 
       - name: Sync to S3
         working-directory: public-repo
