@@ -4,6 +4,8 @@ date: 2026-05-15
 tags: [tech]
 draft: true
 summary: The content and the renderer started in the same repo because that was convenient. When the separation became obvious, the tool for making it was git fork. Same operation as extract class, just at repo scale.
+issueNumber: 74
+discussionNumber: 76
 ---
 
 The content and the renderer started in the same repo because it was convenient. One push deployed everything. No coordination between repos, no multi-checkout workflows, no token management. It worked.
