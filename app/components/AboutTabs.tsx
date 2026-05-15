@@ -15,12 +15,12 @@ export default function AboutTabs({
 
   useEffect(() => {
     const hash = window.location.hash.slice(1);
-    if (hash === "site" || hash === "me") setTab(hash);
+    if (hash === "site" || hash === "me") setTab(hash as Tab);
   }, []);
 
   const switchTab = (t: Tab) => {
     setTab(t);
-    window.history.replaceState(null, "", t === "me" ? "#me" : "#site");
+    window.history.replaceState(null, "", `#${t}`);
   };
 
   return (
@@ -38,8 +38,14 @@ export default function AboutTabs({
         </button>
       </div>
       <div
-        className="page-content post-body"
-        dangerouslySetInnerHTML={{ __html: tab === "me" ? meHtml : siteHtml }}
+        id="me"
+        className={`page-content post-body about-panel${tab === "me" ? " active" : ""}`}
+        dangerouslySetInnerHTML={{ __html: meHtml }}
+      />
+      <div
+        id="site"
+        className={`page-content post-body about-panel${tab === "site" ? " active" : ""}`}
+        dangerouslySetInnerHTML={{ __html: siteHtml }}
       />
     </>
   );
