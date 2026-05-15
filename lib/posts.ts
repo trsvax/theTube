@@ -115,8 +115,19 @@ function renderDesignBlocks(body: string): string {
       if (i < lines.length) i++;
       const esc = (s: string) =>
         s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      const repoBase = "https://github.com/trsvax/theTube/commit/";
+      // Render inline [commit sha] references as GitHub links
+      const bodyHtml = bodyLines
+        .join(" ")
+        .split(/\[commit ([0-9a-f]+)\]/g)
+        .map((part, idx) =>
+          idx % 2 === 0
+            ? esc(part)
+            : `<a href="${repoBase}${part}">${part.slice(0, 7)}</a>`,
+        )
+        .join("");
       result.push(
-        `<details>\n<summary>${esc(summary)}</summary>\n<p>${esc(bodyLines.join(" "))}</p>\n</details>`,
+        `<details>\n<summary>${esc(summary)}</summary>\n<p>${bodyHtml}</p>\n</details>`,
       );
       result.push("");
     } else {

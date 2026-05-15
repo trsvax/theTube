@@ -87,6 +87,27 @@ Args render as small badges inside the callout header.
 
 ---
 
+## Journey Block
+
+Appears at the end of a post. Renders as a `<details>` accordion — the making-of, hidden by default.
+
+```markdown
+[journey]: The journey
+prev: previous-slug
+next: next-slug
+Narrative text. The regex looked right but LIVE still had old code [commit bd3c218].
+The race condition fix came later [commit 940bae0].
+```
+
+| Field   | Description                                                        |
+| ------- | ------------------------------------------------------------------ |
+| `prev:` | Slug of the previous post in the thread (stored, not yet linked)   |
+| `next:` | Slug(s) of the next post(s) in the thread (stored, not yet linked) |
+
+Inline commit references: `[commit sha]` anywhere in the narrative text renders as a link to `github.com/trsvax/theTube/commit/<sha>`. Use short (7-char) or full SHAs.
+
+---
+
 ## Shortcode Inventory
 
 Inline shortcodes using `[!SHORTCODE args]` syntax (not inside a blockquote).
