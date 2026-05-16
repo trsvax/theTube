@@ -12,6 +12,11 @@
     {
       "path": "../../tapestry-nocode",
     },
+    {
+      "path": "../../tapestry-nocode-site",
+    },
   ],
-  "settings": {},
+  "settings": {
+    ,
+  },
 }

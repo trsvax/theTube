@@ -2,16 +2,16 @@
 
 ## Frontmatter Spec
 
-| Field    | Required | Type       | Default | Description                                             |
-| -------- | -------- | ---------- | ------- | ------------------------------------------------------- |
-| title    | yes      | string     | —       | Display title — post page, PostCard, `<title>`, Bluesky |
-| date     | yes      | YYYY-MM-DD | —       | Sort order and display date                             |
+| Field    | Required | Type       | Default | Description                                                      |
+| -------- | -------- | ---------- | ------- | ---------------------------------------------------------------- |
+| title    | yes      | string     | —       | Display title — post page, PostCard, `<title>`, Bluesky          |
+| date     | yes      | YYYY-MM-DD | —       | Sort order and display date                                      |
 | tags     | yes      | array      | —       | e.g. `[tt:tech, tt:travel]` — namespaced; see Tag Registry below |
-| summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card        |
-| image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail             |
-| bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions         |
-| draft    | no       | boolean    | false   | Exclude from index; URL still builds and works          |
-| audience | no       | string     | public  | Role gate — routes into JSON index files (see Roles)    |
+| summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card                 |
+| image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail                      |
+| bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions                  |
+| draft    | no       | boolean    | false   | Exclude from index; URL still builds and works                   |
+| audience | no       | string     | public  | Role gate — routes into JSON index files (see Roles)             |
 
 ### Example
 
@@ -34,11 +34,11 @@ audience: public
 
 Tags are namespaced with a `prefix:name` convention. The `tt:` prefix is the theTube namespace. If content from other sources is ever aggregated into `site.json`, their tags use a different prefix to avoid collisions.
 
-| Tag         | Use                     |
-| ----------- | ----------------------- |
-| tt:tech     | Technical / programming |
-| tt:travel   | Travel writing          |
-| tt:tg       | TxGang related          |
+| Tag       | Use                     |
+| --------- | ----------------------- |
+| tt:tech   | Technical / programming |
+| tt:travel | Travel writing          |
+| tt:tg     | TxGang related          |
 
 New tags can be added freely — just use `tt:` prefix in frontmatter. They appear automatically in the index tag filter with no code change.
 

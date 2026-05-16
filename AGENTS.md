@@ -64,13 +64,13 @@ skills/
 
 ### Multi-repo structure
 
-| Repo                          | Visibility | Contains                                                                                           |
-| ----------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
-| `trsvax/theTube`              | Public     | App code, public post content, docs, `site.json`                                                   |
-| `trsvax/theTube-content`      | Public     | Public posts, about/links pages                                                                    |
+| Repo                          | Visibility | Contains                                                                                          |
+| ----------------------------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| `trsvax/theTube`              | Public     | App code, public post content, docs, `site.json`                                                  |
+| `trsvax/theTube-content`      | Public     | Public posts, about/links pages                                                                   |
 | `trsvax/thetube-private`      | Private    | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
-| `trsvax/tapestry-nocode-site` | Public     | Tapestry NoCode book builder — deploys to `/books/tapestry-nocode/`                                |
-| `trsvax/tapestry-nocode`      | Public     | Tapestry NoCode book content (11 chapters, no code)                                                |
+| `trsvax/tapestry-nocode-site` | Public     | Tapestry NoCode book builder — deploys to `/books/tapestry-nocode/`                               |
+| `trsvax/tapestry-nocode`      | Public     | Tapestry NoCode book content (11 chapters, no code)                                               |
 
 The deploy workflow checks out theTube, theTube-content, and thetube-private, merges private assets into the public build tree, then runs `next build`. Private content never touches the public repo.
 
