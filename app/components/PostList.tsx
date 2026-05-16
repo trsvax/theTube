@@ -85,7 +85,7 @@ export default function PostList({
             key={tag}
             className={`tag-btn${activeTag === tag ? " active" : ""}`}
             onClick={() => setActiveTag(activeTag === tag ? null : tag)}>
-            {tag}
+            #{tag}
           </button>
         ))}
       </div>
