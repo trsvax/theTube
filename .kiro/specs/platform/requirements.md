@@ -8,7 +8,19 @@ The architecture is the argument. Every decision demonstrates that the web doesn
 
 ---
 
-## The core contract
+## Design principles
+
+**Build as you go.** The platform grows incrementally. Each journal entry is a feature or idea. Each spec is scoped to one thing. Nothing is designed upfront that hasn't been needed yet.
+
+**Static HTML first.** The site works in Lynx. CSS is for presentation, JS is for enhancement, auth is for gating. Each layer is optional — removing it doesn't break the layer below. The HTML stands on its own.
+
+**The constraint is the point.** Every architectural decision is an argument that the web doesn't need to be as complicated as it usually is. No server, no database, no CMS — not because they're bad, but because they're not needed here. The absence is deliberate.
+
+**One dollar a month.** Infrastructure cost is a design constraint. S3 + CloudFront at personal-site scale costs almost nothing. Complexity that adds cost without adding value doesn't belong here.
+
+**Own what you write.** Content is plain Markdown in git. No proprietary format, no export button, no lock-in. If the site disappears, the writing doesn't.
+
+---
 
 Any content source that wants to participate in the platform must produce two things:
 
@@ -220,7 +232,7 @@ A markdown file is both the human-readable document and the instruction set for 
 
 New `[tt:tag]` types can be added by defining their render behavior in `lib/posts.ts` and their action behavior in the relevant workflow or skill. Third-party namespaces are possible without touching theTube code — the namespace URL resolves to the thing that knows how to handle it.
 
-> **Note:** The current `[journey]:` and `[design]:` syntax in `lib/posts.ts` are unnamespaced — migration to `[tt:journey]:` and `[tt:design]:` is a future cleanup.
+> **Default namespace:** If no prefix is given, `tt:` is assumed. `[journey]:` and `[design]:` are valid shorthand for `[tt:journey]:` and `[tt:design]:` — no migration needed. Explicit prefixes are used when the namespace matters (third-party blocks, or when clarity requires it).
 
 Specific features and problems are handled as journal entries. A journal entry is a finished, polished piece — the distilled account of what was built and why. The `[journey]:` block inside it is the raw log: the chat history, the dead ends, the approaches that didn't work. The journey doesn't need to be polished.
 
