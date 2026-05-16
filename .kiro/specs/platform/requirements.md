@@ -12,6 +12,8 @@ The architecture is the argument. Every decision demonstrates that the web doesn
 
 **AI collaboration is the workflow.** This is designed to be built with AI, not just assisted by it. The human role is direction, judgment, and writing. The AI role is code, debugging, and implementation. The journal entry is the interface between them — you write what you want, AI builds it. The skills and specs exist to give AI enough context to do that without constant correction. Suggestions are welcome — if there's a better approach or a missing piece, say so.
 
+**The development flow is: vague idea → journal → spec → code, where the last three are a loop.** The idea is the only one-way gate. After that: write in the journal, produce a spec, write code, learn something, update the journal, update the spec, write more code. The loop runs until it's shipped. You can enter at any stage and skip stages for small changes — a one-liner doesn't need a spec. But the journal entry is always the persistent record of the whole loop.
+
 **Build as you go, refactor freely.** The platform grows incrementally. Each journal entry is a feature or idea. Each spec is scoped to one thing. Nothing is designed upfront that hasn't been needed yet. The interface between components is kept thin so the internals can move freely — iterate toward the right structure instead of predicting it. See: [a-fork-is-a-refactor](/posts/a-fork-is-a-refactor).
 
 **Static HTML first.** The site works in Lynx. CSS is for presentation, JS is for enhancement, auth is for gating. Each layer is optional — removing it doesn't break the layer below. The HTML stands on its own.
