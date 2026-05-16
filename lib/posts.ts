@@ -80,7 +80,7 @@ export function getPosts(): PostMeta[] {
 // Skips blocks inside code fences so code examples render correctly.
 async function renderDesignBlocks(
   body: string,
-  marked: (src: string) => Promise<string>,
+  marked: (src: string, ...args: unknown[]) => Promise<string>,
 ): Promise<string> {
   const lines = body.split("\n");
   const result: string[] = [];
