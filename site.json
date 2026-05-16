@@ -1,0 +1,25 @@
+{
+  "updated": "2026-05-16T17:13:46.736Z",
+  "sections": [
+    {
+      "slug": "public",
+      "contentUrl": "/public/content.json",
+      "role": "public"
+    },
+    {
+      "slug": "user",
+      "contentUrl": "/user/content.json",
+      "role": "user"
+    },
+    {
+      "slug": "kids",
+      "contentUrl": "/kids/content.json",
+      "role": "kids"
+    },
+    {
+      "slug": "friends",
+      "contentUrl": "/friends/content.json",
+      "role": "friends"
+    }
+  ]
+}
