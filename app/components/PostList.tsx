@@ -49,6 +49,11 @@ export default function PostList({
   const [posts, setPosts] = useState<PostItem[]>(initialPosts);
   const [activeTag, setActiveTag] = useState<string | null>(null);
 
+  const selectTag = (tag: string | null) => {
+    setActiveTag(tag);
+    window.history.replaceState(null, "", tag ? `#${tag}` : location.pathname);
+  };
+
   const fetchPosts = () =>
     Promise.all(getFeeds().map(tryFetch)).then((results) => {
       const seen = new Set<string>();
@@ -60,6 +65,8 @@ export default function PostList({
     });
 
   useEffect(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) setActiveTag(hash);
     fetchPosts();
     const onVisible = () =>
       document.visibilityState === "visible" && fetchPosts();
@@ -77,14 +84,14 @@ export default function PostList({
       <div className="tag-filter">
         <button
           className={`tag-btn${activeTag === null ? " active" : ""}`}
-          onClick={() => setActiveTag(null)}>
+          onClick={() => selectTag(null)}>
           All
         </button>
         {allTags.map((tag) => (
           <button
             key={tag}
             className={`tag-btn${activeTag === tag ? " active" : ""}`}
-            onClick={() => setActiveTag(activeTag === tag ? null : tag)}>
+            onClick={() => selectTag(activeTag === tag ? null : tag)}>
             #{tag}
           </button>
         ))}
