@@ -9,8 +9,11 @@ const SECTIONS = [
   { slug: "user", contentUrl: "/user/content.json", role: "user" },
   { slug: "kids", contentUrl: "/kids/content.json", role: "kids" },
   { slug: "friends", contentUrl: "/friends/content.json", role: "friends" },
-  // books will be added here once tapestry-nocode-site is deployed
-  // { slug: "books", contentUrl: "/books/content.json", role: "public" },
+  {
+    slug: "tapestry-nocode",
+    contentUrl: "/books/tapestry-nocode/content.json",
+    role: "public",
+  },
 ];
 
 const site = {
