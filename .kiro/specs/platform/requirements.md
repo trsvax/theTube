@@ -210,6 +210,8 @@ The file lives in git. Every change is versioned. The `[commit sha]` inline refe
 
 Five years later you can open the file and reconstruct the whole thing — what you were thinking, what you tried, why you made the call you made, which commit broke it, which commit fixed it. Most codebases lose the reasoning. This keeps it.
 
+Docs go stale because they're written separately from the work. The journal stays current because it _is_ the work — you can't build something without writing about it first. The journal is the source of truth by construction.
+
 The goal is frictionless writing. You write in the file. You don't send emails to request images, you don't open GitHub to create issues, you don't switch to a different tool to generate a spec. You add a block and the tooling handles it.
 
 A markdown file is both the human-readable document and the instruction set for tooling. The same file that renders as a journal entry on the site also drives GitHub issue creation, Kiro spec generation, and Bluesky publishing — depending on which blocks it contains and which tools process it.
