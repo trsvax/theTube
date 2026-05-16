@@ -78,10 +78,7 @@ export function getPosts(): PostMeta[] {
 
 // Render [design]: blocks as <img> tags (src/alt from block fields; strip if no src yet)
 // Skips blocks inside code fences so code examples render correctly.
-async function renderDesignBlocks(
-  body: string,
-  marked: (src: string, ...args: unknown[]) => Promise<string>,
-): Promise<string> {
+async function renderDesignBlocks(body: string): Promise<string> {
   const lines = body.split("\n");
   const result: string[] = [];
   let i = 0;
@@ -128,7 +125,8 @@ async function renderDesignBlocks(
           idx % 2 === 0 ? part : `[${part.slice(0, 7)}](${repoBase}${part})`,
         )
         .join("");
-      const bodyHtml = await marked(bodyMd);
+      const { marked: markedInner } = await import("marked");
+      const bodyHtml = await markedInner(bodyMd);
       result.push(
         `<details>\n<summary>${esc(summary)}</summary>\n${bodyHtml}</details>`,
       );
@@ -145,7 +143,7 @@ export async function getPost(slug: string): Promise<Post> {
   const { marked } = await import("marked");
   const raw = fs.readFileSync(path.join(POSTS_DIR, `${slug}.md`), "utf8");
   const { meta, body } = parseFrontmatter(raw);
-  const html = await marked(await renderDesignBlocks(body, marked));
+  const html = await marked(await renderDesignBlocks(body));
   return {
     slug,
     title: (meta.title as string) ?? slug,
