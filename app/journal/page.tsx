@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 export default function JournalPage() {
   return (
     <div className="page-content">
-      <h1>Blog</h1>
+      <h1>Journal</h1>
       <PostList />
     </div>
   );
