@@ -91,3 +91,9 @@ The journal entry is the requirements source. A good spec derived from it:
 - Is small enough to implement in one session
 
 If the journal entry is too vague to spec, capture the clarifying conversation in a `[tt:spec]:` block in the journal entry itself — ask one question, get the answer, add it to the block, then produce the spec. The `[tt:spec]` block is the record of how the idea got sharpened.
+
+---
+
+## Suggestions welcome
+
+Don't just execute. If you see a better approach, a missing piece, or something that doesn't fit the platform principles, say so. The collaboration works best when AI brings judgment, not just implementation.
