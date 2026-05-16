@@ -107,29 +107,28 @@ function renderDesignBlocks(body: string): string {
     } else if (!inFence && /^\[journey\]:/.test(lines[i])) {
       const summaryRaw = lines[i].slice(10).trim();
       const summary = summaryRaw || "The journey";
-      const bodyLines: string[] = [];
       i++;
-      while (i < lines.length && lines[i].trim() !== "") {
-        bodyLines.push(lines[i].trim());
+      // Journey is always last — consume all remaining lines
+      const bodyLines: string[] = [];
+      while (i < lines.length) {
+        bodyLines.push(lines[i]);
         i++;
       }
-      // Consume blank line terminator
-      if (i < lines.length) i++;
       const esc = (s: string) =>
         s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
       const repoBase = "https://github.com/trsvax/theTube/commit/";
-      // Render inline [commit sha] references as GitHub links
-      const bodyHtml = bodyLines
-        .join(" ")
+      // Render inline [commit sha] references as GitHub links, then pass through marked
+      const bodyMd = bodyLines
+        .join("\n")
         .split(/\[commit ([0-9a-f]+)\]/g)
         .map((part, idx) =>
-          idx % 2 === 0
-            ? esc(part)
-            : `<a href="${repoBase}${part}">${part.slice(0, 7)}</a>`,
+          idx % 2 === 0 ? part : `[${part.slice(0, 7)}](${repoBase}${part})`,
         )
         .join("");
+      const { marked: markedInner } = await import("marked");
+      const bodyHtml = await markedInner(bodyMd);
       result.push(
-        `<details>\n<summary>${esc(summary)}</summary>\n<p>${bodyHtml}</p>\n</details>`,
+        `<details>\n<summary>${esc(summary)}</summary>\n${bodyHtml}</details>`,
       );
       result.push("");
     } else {
