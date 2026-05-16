@@ -30,7 +30,7 @@ app/
   components/
     Header.tsx
     Footer.tsx
-    PostList.tsx      "use client" — tag filter UI
+    PostList.tsx      "use client" — tag filter UI (hash-based URL state)
     PostCard.tsx
 
 lib/
@@ -38,6 +38,13 @@ lib/
 
 content/
   posts/              *.md files — public posts only
+
+site.json             Master content manifest — committed artifact, synced to S3 root
+
+scripts/
+  aggregate-site.mjs  Regenerates site.json from the SECTIONS registry
+  aws-setup.sh        One-time AWS infrastructure provisioning script
+  build-indexes.mjs   Generates out/content.json for the public section after build
 
 docs/
   architecture.md     Stack decisions, hosting, deploy pipeline
@@ -51,20 +58,38 @@ skills/
 
 .github/
   workflows/
-    deploy.yml        Build + S3 sync + CloudFront invalidation
-
-scripts/
-  aws-setup.sh        One-time AWS infrastructure provisioning script
+    deploy.yml        Build + S3 sync + CloudFront invalidation (skips site.json-only commits)
+    aggregate.yml     Manual workflow — regenerates site.json and syncs to S3
 ```
 
-### Two-repo structure
+### Multi-repo structure
 
-| Repo                     | Visibility | Contains                                                                                          |
-| ------------------------ | ---------- | ------------------------------------------------------------------------------------------------- |
-| `trsvax/theTube`         | Public     | App code, public post content, docs                                                               |
-| `trsvax/theTube-private` | Private    | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
+| Repo                          | Visibility | Contains                                                                                           |
+| ----------------------------- | ---------- | -------------------------------------------------------------------------------------------------- |
+| `trsvax/theTube`              | Public     | App code, public post content, docs, `site.json`                                                   |
+| `trsvax/theTube-content`      | Public     | Public posts, about/links pages                                                                    |
+| `trsvax/thetube-private`      | Private    | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
+| `trsvax/tapestry-nocode-site` | Public     | Tapestry NoCode book builder — deploys to `/books/tapestry-nocode/`                                |
+| `trsvax/tapestry-nocode`      | Public     | Tapestry NoCode book content (11 chapters, no code)                                                |
 
-The deploy workflow checks out both repos, merges private assets into the public build tree, then runs `next build`. Private content never touches the public repo.
+The deploy workflow checks out theTube, theTube-content, and thetube-private, merges private assets into the public build tree, then runs `next build`. Private content never touches the public repo.
+
+---
+
+## site.json Content Contract
+
+`site.json` at the S3 root is the master content manifest. Every content source (blog section, book, etc.) produces a `content.json` at its S3 path. `site.json` lists all sections with their `contentUrl` and required `role`.
+
+```json
+{
+  "updated": "ISO timestamp",
+  "sections": [
+    { "slug": "public", "contentUrl": "/public/content.json", "role": "public" }
+  ]
+}
+```
+
+To add a new content source: deploy it first, then add its entry to `SECTIONS` in `scripts/aggregate-site.mjs` and run the **aggregate** workflow.
 
 ---
 
@@ -121,12 +146,16 @@ Slug = filename without `.md`.
 
 ## Deploy
 
-Push to `main` → GitHub Actions:
+Push to `main` → GitHub Actions (`deploy.yml`):
 
 1. `npm ci`
 2. `npm run build` (generates `out/`)
 3. `aws s3 sync out/ s3://<bucket> --delete`
 4. CloudFront invalidation
+
+`deploy.yml` has `paths-ignore: ['site.json']` — site.json-only commits do not trigger a full build.
+
+To update `site.json` (e.g. after a new content source deploys), run the **aggregate** workflow manually from the Actions tab. It regenerates `site.json`, syncs it to S3, and commits the update.
 
 AWS credentials stored as GitHub Actions secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`.
 
@@ -143,4 +172,4 @@ AWS credentials stored as GitHub Actions secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECR
 
 ---
 
-_Last updated: 2026-05-08_
+_Last updated: 2026-05-16_
