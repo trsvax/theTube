@@ -22,7 +22,7 @@ tags: [tt:tech]
 type: journal
 audience: user
 summary: One-line description of the idea.
-status: idea
+status: vague-thought
 specLink:
 ---
 ```
@@ -32,9 +32,9 @@ specLink:
 
 **`status` values:**
 
-- `idea` — thinking out loud, no spec yet (default)
-- `specced` — spec exists at `specLink`
-- `in-progress` — implementation underway
+- `vague-thought` — a title, maybe a sentence. Not ready to write about yet, just don't want to lose it.
+- `thought` — more formed but not yet being actively worked
+- `journaling` — actively in the loop (journal → spec → code)
 - `shipped` — done, post written
 
 **`specLink`** — path to the Kiro spec directory once created, e.g. `.kiro/specs/feature-name`
@@ -67,7 +67,7 @@ When the user says `journal: <path-to-entry>` or `spec this journal entry` with 
 4. **Read any referenced posts** — if the entry mentions slugs, read those files from `content/posts/`
 5. **Read relevant skills** — `skills/ui/SKILL.md` if it's a UI change, `skills/post/SKILL.md` if it's a content model change
 6. **Produce or update a Kiro spec** — use the requirements-first workflow, scoped tightly to what the journal entry describes. The feature name comes from the journal entry's slug. If a spec already exists at `specLink`, update it rather than creating a new one.
-7. **Update the journal entry frontmatter** — set `status: specced` and `specLink: .kiro/specs/<feature-name>`
+7. **Update the journal entry frontmatter** — set `status: journaling` and `specLink: .kiro/specs/<feature-name>`
 
 The spec is iterative. Prototyping will reveal things the journal entry didn't anticipate. When that happens: update the journal entry with what was learned, update the spec to reflect the new understanding, continue. The journey block accumulates the history of those turns.
 

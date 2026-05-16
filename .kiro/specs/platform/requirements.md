@@ -164,6 +164,13 @@ Posts are `.md` files with YAML frontmatter. The slug is the filename without `.
 
 `type` controls how the post is treated: `post` (default), `thought`, `draft` (excluded from index). `journal` is reserved for in-progress thinking — excluded from `content.json`, rendered at `/journal`.
 
+**Journal status lifecycle:** `vague-thought` → `thought` → `journaling` → `shipped`
+
+- `vague-thought` — a title, maybe a sentence. Not ready to write about yet.
+- `thought` — more formed but not yet being actively worked.
+- `journaling` — actively in the loop (journal → spec → code).
+- `shipped` — done.
+
 Posts start at `audience: user` while in progress, flipped to `audience: public` when ready.
 
 ---
