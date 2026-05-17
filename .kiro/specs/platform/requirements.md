@@ -217,13 +217,16 @@ Markdown files are extended with `[tag]:` blocks. The design is inspired by XML 
 
 A block is an action declaration, not just a display hint. The namespace defines who handles it; the tag defines what to do.
 
-| Block           | Render                | Action                                                      |
-| --------------- | --------------------- | ----------------------------------------------------------- |
-| `[tt:journey]:` | `<details>` accordion | Running log — accumulates over time, unpolished             |
-| `[tt:spec]:`    | `<details>` accordion | Spec conversation — clarifying questions, link to Kiro spec |
-| `[tt:design]:`  | `<details>` accordion | Creates a GitHub issue with the block content as the body   |
+| Block           | Render                                                    | Action                                                      |
+| --------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
+| `[tt:journey]:` | `<details>` accordion                                     | Running log — accumulates over time, unpolished             |
+| `[tt:spec]:`    | `<details>` accordion                                     | Spec conversation — clarifying questions, link to Kiro spec |
+| `[tt:design]:`  | `<img>` when `src:` present; SVG placeholder when missing | Creates a GitHub issue in the design repo with the brief    |
 
-The `[tt:design]` block is already implemented in `lib/posts.ts` as `[design]:` (unnamespaced). It renders as an `<img>` tag when a `src:` is present, and creates a GitHub sub-issue from the block content during the build/publish workflow.
+The `[design]` block spans two concerns across repos:
+
+- **Action** — owned by the design repo. A GitHub issue is created there with the block content as the brief so the designer sees it.
+- **Render** — owned by the app repo (`lib/posts.ts`). Shows an SVG placeholder until the asset exists, then the real image once `src:` is populated and checked in. The placeholder-to-image transition happens on next build with no manual intervention.
 
 ### The file is the unit
 
