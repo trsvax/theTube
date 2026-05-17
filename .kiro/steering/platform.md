@@ -24,6 +24,8 @@ If a solution doesn't fit these four, question whether the problem is being fram
 
 A dollar a month at personal scale. Linear cost at any scale. If a suggestion adds fixed monthly cost, flag it.
 
+Scale and fault tolerance are baked in — CloudFront is globally distributed, S3 is eleven 9s durable, Lambda scales to thousands of concurrent invocations. Don't add infrastructure for scale or reliability. It's already there.
+
 ## When all else fails
 
 Plan 9. Everything is a file. The namespace is composable. The protocol is universal. If the solution feels complicated, ask: how would Plan 9 do this?
