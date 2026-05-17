@@ -4,9 +4,7 @@ A feature-rich, expandable, serverless publishing system written completely by A
 
 ## The constraint
 
-Static HTML first, everything else optional. No server, no database, no CMS. CSS for presentation, JS for enhancement, auth for gating. Each layer optional — none required for the one below. Works in Lynx. Costs about a dollar a month.
-
-The architecture is the argument. Every decision demonstrates that the web doesn't need to be as complicated as it usually is.
+No server. No database. Everything is a file and a URL. The CDN is the platform — it serves content, handles auth, ingests events, and scales globally. What looks like a static site supports user input, real-time writes, and role-based access. Works in Lynx. Costs about a dollar a month.
 
 ## Journal-driven development
 
