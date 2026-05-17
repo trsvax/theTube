@@ -117,9 +117,18 @@ specLink: .kiro/specs/feature-name
 ```
 
 **Required:** `title`, `date`, `tags`, `summary`, `type: journal`
-**Optional:** `audience` (default: `user`), `status` (default: `vague-thought`), `specLink`, `draft`
+**Optional:** `audience` (default: `user`), `status` (default: `vague-thought`), `specLink`, `draft`, `issueNumber`, `discussionNumber`
 
-Entries start at `audience: user` and flip to `audience: public` when ready.
+Entries default to the public content repo (`theTube-content`) unless specified otherwise. Use `thetube-private` only for entries that shouldn't be visible to anyone.
+
+Entries start at `audience: user` and flip to `audience: public` when ready. Creating a GitHub issue on creation lets people comment while the entry is in progress — store the issue number in `issueNumber` frontmatter.
+
+### Slug rules
+
+- Slug = filename without `.md`. It's the URL.
+- **Slugs are permanent once published** (`audience: public`). Renaming after publish requires adding an alias for the old slug (CloudFront redirect).
+- While at `audience: user`, the slug can change freely — it hasn't been shared.
+- Slug should match the title: `you-cant-argue-with-the-second-law.md` for title "You Can't Argue With the Second Law".
 
 ---
 

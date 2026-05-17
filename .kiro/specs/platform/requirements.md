@@ -97,6 +97,10 @@ Adding a new content source = deploy it first, then add its entry to `SECTIONS` 
 
 Each content source has its own repo, its own build, its own deploy. The format agreement — Markdown, `content.json`, S3 path — is the only coupling.
 
+### Repos as access boundaries
+
+A repo is like a Unix directory — it gates access at the top, everything inside inherits. Permissions are set at the repo level; issues, PRs, and files all inherit that access. That's why "what earns a repo" is an access control decision, not a code organization decision. The designer gets write access to the design repo. They can't accidentally break the app code because it's a different directory with different permissions. Issues go in the repo where the work happens — content issues in the content repo, design issues in the design repo, code issues in the code repo.
+
 ---
 
 ## The build pipeline
