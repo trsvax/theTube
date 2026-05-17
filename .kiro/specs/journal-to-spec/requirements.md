@@ -139,3 +139,11 @@ The platform spec (`.kiro/specs/platform/requirements.md`) describes what gets b
 This spec describes how things get built — the journal entry as the unit of work, the development loop, the thought graph, the conversion workflow.
 
 They reference each other but serve different purposes. The platform spec is stable. This spec evolves as the methodology evolves.
+
+---
+
+## Why this works
+
+The journal is the only thing you write. Everything else — the spec, the code, the docs, the history — is derived from it. The documentation is complete because it's a byproduct of the process, not a separate task. You never sit down to "write docs." You write the journal. The docs happen.
+
+That's why it can't go stale. It's not documentation about the work. It is the work.
