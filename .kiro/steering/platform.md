@@ -7,7 +7,7 @@ The contract is: files at URLs. Nothing cares what built them or what reads them
 - Default to files on S3 served via CloudFront
 - Default to Lambda for processing, not servers
 - Default to CloudFront logs for event capture
-- Don't suggest databases unless the problem genuinely requires transactions
+- Don't suggest databases unless the problem genuinely requires transactions — and it probably doesn't
 - Don't suggest servers unless the problem genuinely requires persistent connections
 - Don't suggest infrastructure that costs money when idle
 
