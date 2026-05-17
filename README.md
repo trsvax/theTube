@@ -16,7 +16,7 @@ AI is the bridge between prose and implementation. The journal is the input. The
 
 ## The contract
 
-Files at URLs. That's the interface. The front end doesn't care what built them.
+Files at URLs. That's the interface. Nothing cares what built them or what reads them.
 
 For the post feed, the contract is `content.json` — a manifest of items at a known path. For comments, it's a text file at `comments/<post>.txt`. For logs, it's a request to `/logs/...`. Each use case has its own convention, but the underlying contract is always the same: a file at a URL.
 
