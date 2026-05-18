@@ -20,6 +20,16 @@ Files at URLs. That's the interface. Nothing cares what built them or what reads
 
 For the post feed, the contract is `content.json` — a manifest of items at a known path. For comments, it's a text file at `comments/<post>.txt`. For logs, it's a request to `/logs/...`. Each use case has its own convention, but the underlying contract is always the same: a file at a URL.
 
+## Use this methodology
+
+The specs and skills in this repo are files at URLs. Point any AI at them and say "use that workflow." No fork needed. No installation. Just a reference.
+
+- Want journal-driven development? Read `.kiro/specs/journal-to-spec/requirements.md`
+- Want the platform architecture? Read `.kiro/specs/platform/requirements.md`
+- Want the design principles? Read `.kiro/steering/platform.md`
+
+Methodologies, architectures, coding standards — all files that AI reads and applies. The barrier to adopting a workflow drops to zero. The methodology is the product.
+
 ## Links
 
 - Live site: [thetube.today](https://thetube.today)
