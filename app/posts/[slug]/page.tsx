@@ -36,6 +36,7 @@ export default async function PostPage({
             </span>
           ))}
           {post.shortSlug && <CopyShortUrl shortSlug={post.shortSlug} />}
+          {post.coffee && <span className="coffee">☕ {post.coffee}</span>}
         </div>
       </div>
       <div

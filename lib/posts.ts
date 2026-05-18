@@ -15,6 +15,7 @@ export interface PostMeta {
   shortSlug?: string;
   issueNumber?: number;
   discussionNumber?: number;
+  coffee?: number;
 }
 
 export interface Post extends PostMeta {
@@ -70,6 +71,7 @@ export function getPosts(): PostMeta[] {
         type: ((meta.type as string) ?? "post") as "draft" | "thought" | "post",
         summary: (meta.summary as string) ?? "",
         shortSlug: (meta.shortSlug as string) ?? undefined,
+        coffee: meta.coffee ? Number(meta.coffee) : undefined,
       };
     })
     .filter((p) => !p.draft && p.type !== "draft")
@@ -156,6 +158,7 @@ export async function getPost(slug: string): Promise<Post> {
     discussionNumber: meta.discussionNumber
       ? Number(meta.discussionNumber)
       : undefined,
+    coffee: meta.coffee ? Number(meta.coffee) : undefined,
     html,
   };
 }
