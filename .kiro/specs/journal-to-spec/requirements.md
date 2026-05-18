@@ -107,17 +107,20 @@ If the entry is too vague to spec, the clarifying conversation goes in the `[spe
 ---
 title: You Can't Argue With the Second Law
 date: 2026-05-17
-tags: [tt:tech]
+tags: [tech]
 type: journal
 audience: user
 status: vague-thought
+coffee: 1
 summary: One-line description.
 specLink: .kiro/specs/feature-name
 ---
 ```
 
 **Required:** `title`, `date`, `tags`, `summary`, `type: journal`
-**Optional:** `audience` (default: `user`), `status` (default: `vague-thought`), `specLink`, `draft`, `issueNumber`, `discussionNumber`
+**Optional:** `audience` (default: `user`), `status` (default: `vague-thought`), `specLink`, `coffee`, `draft`, `issueNumber`, `discussionNumber`
+
+**`coffee`** — estimated number of coffees (≈ 30-45 min each) the topic took from idea to shipped. AI estimates this based on session length. The real complexity metric.
 
 Entries default to the public content repo (`theTube-content`) unless specified otherwise. Use `thetube-private` only for entries that shouldn't be visible to anyone.
 
