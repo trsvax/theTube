@@ -1,0 +1,5 @@
+Verify:
+- curl https://thetube.today/events/test/hello?msg=it-works → 202 Accepted
+- x-cache: FunctionGeneratedResponse from cloudfront
+- access-control-allow-origin: https://thetube.today
+- cache-control: no-store
