@@ -38,6 +38,18 @@ function handler(event) {
   var request = event.request;
   var uri = request.uri;
 
+  // Event ingestion — return 202, CloudFront logs the request
+  if (uri.startsWith("/events/")) {
+    return {
+      statusCode: 202,
+      statusDescription: "Accepted",
+      headers: {
+        "access-control-allow-origin": { value: "https://thetube.today" },
+        "cache-control": { value: "no-store" },
+      },
+    };
+  }
+
   // Path redirect (e.g. /blog → /journal)
   var redirect = REDIRECTS[uri];
   if (redirect) {

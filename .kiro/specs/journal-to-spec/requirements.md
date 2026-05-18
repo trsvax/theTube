@@ -147,3 +147,5 @@ They reference each other but serve different purposes. The platform spec is sta
 The journal is the only thing you write. Everything else — the spec, the code, the docs, the history — is derived from it. The documentation is complete because it's a byproduct of the process, not a separate task. You never sit down to "write docs." You write the journal. The docs happen.
 
 That's why it can't go stale. It's not documentation about the work. It is the work.
+
+The format constrains the scope automatically. A journal entry is naturally short because you're writing about one idea. One idea = one spec = one small code change. You can't accidentally spec a 5000-line change because you'd never write a 50-page journal entry about a single feature. The methodology prevents big-bang changes by construction — not by a rule, but by the fact that a human won't write that much about one thing in one sitting.

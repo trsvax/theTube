@@ -205,27 +205,17 @@ The front end picks it up automatically on next load.
 
 ## Block extensions
 
-Markdown files are extended with `[tag]:` blocks. The design is inspired by XML namespaces.
-
-### Namespace convention
-
-`[namespace:tag]` where the namespace maps to a URL — the owner of that tag's definition and action semantics. `tt:` maps to `thetube.today`. Other namespaces can be defined independently without coordination.
-
-```
-[tt:journey]:   →  thetube.today owns the definition of "journey"
-[tt:spec]:      →  thetube.today owns the definition of "spec"
-[tt:design]:    →  thetube.today owns the definition of "design"
-```
+Markdown files are extended with `[tag]:` blocks.
 
 ### Blocks have actions, not just rendering
 
-A block is an action declaration, not just a display hint. The namespace defines who handles it; the tag defines what to do.
+A block is an action declaration, not just a display hint. Different tools read the same block and do different things with it.
 
-| Block           | Render                                                    | Action                                                      |
-| --------------- | --------------------------------------------------------- | ----------------------------------------------------------- |
-| `[tt:journey]:` | `<details>` accordion                                     | Running log — accumulates over time, unpolished             |
-| `[tt:spec]:`    | `<details>` accordion                                     | Spec conversation — clarifying questions, link to Kiro spec |
-| `[tt:design]:`  | `<img>` when `src:` present; SVG placeholder when missing | Creates a GitHub issue in the design repo with the brief    |
+| Block        | Render                                                    | Action                                                   |
+| ------------ | --------------------------------------------------------- | -------------------------------------------------------- |
+| `[journey]:` | `<details>` accordion                                     | Running log — accumulates over time, unpolished          |
+| `[spec]:`    | `<details>` accordion                                     | Spec conversation — clarifying questions, link to spec   |
+| `[design]:`  | `<img>` when `src:` present; SVG placeholder when missing | Creates a GitHub issue in the design repo with the brief |
 
 The `[design]` block spans two concerns across repos:
 
@@ -236,7 +226,7 @@ The `[design]` block spans two concerns across repos:
 
 One file, whole story. The idea, the spec conversation, the implementation log, the dead ends, the finished writing. Whatever the process was — short or long, clean or messy — it's all in one file. The blocks capture the stages. The file is the record.
 
-The file lives in git. Every change is versioned. The `[commit sha]` inline reference in `[tt:journey]:` blocks links specific moments in the narrative to specific commits. The whole history of an idea is traceable: when it was written, when the spec was added, when the implementation landed, which commits did what. Git is the audit trail.
+The file lives in git. Every change is versioned. The `[commit sha]` inline reference in `[journey]:` blocks links specific moments in the narrative to specific commits. The whole history of an idea is traceable: when it was written, when the spec was added, when the implementation landed, which commits did what. Git is the audit trail.
 
 Five years later you can open the file and reconstruct the whole thing — what you were thinking, what you tried, why you made the call you made, which commit broke it, which commit fixed it. Most codebases lose the reasoning. This keeps it.
 
@@ -248,9 +238,7 @@ A markdown file is both the human-readable document and the instruction set for 
 
 ### Extensibility
 
-New `[tt:tag]` types can be added by defining their render behavior in `lib/posts.ts` and their action behavior in the relevant workflow or skill. Third-party namespaces are possible without touching theTube code — the namespace URL resolves to the thing that knows how to handle it.
-
-> **Default namespace:** If no prefix is given, `tt:` is assumed. `[journey]:` and `[design]:` are valid shorthand for `[tt:journey]:` and `[tt:design]:` — no migration needed. Explicit prefixes are used when the namespace matters (third-party blocks, or when clarity requires it).
+New `[tag]:` types can be added by defining their render behavior in `lib/posts.ts` and their action behavior in the relevant workflow or skill. No registration, no prefix, no coordination. Add a block, add a reader. Tools that don't know about a block skip it — the file stays valid markdown either way.
 
 Specific features and problems are handled as journal entries. A journal entry is a finished, polished piece — the distilled account of what was built and why. The `[journey]:` block inside it is the raw log: the chat history, the dead ends, the approaches that didn't work. The journey doesn't need to be polished.
 
