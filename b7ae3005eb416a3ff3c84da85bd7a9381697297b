@@ -1,0 +1,33 @@
+Session 2026-05-18 (continued):
+
+Methodology:
+- Journal vs just-do-it rule: ambiguity is the signal
+- Journey updates in real time during the loop, not just at end
+- Coffee count as complexity metric (AI estimates)
+- Stay in thinking mode until asked to build
+- agentStop hook writes session summary as git note
+- AGENTS.md reads last 10 notes at session start
+
+Built:
+- blocks.md registry (usage first, spec URL for implementation)
+- thetube-comments repo (GraphQL schema, AGENTS.md, README)
+- GraphQL transport section in platform spec
+- Backward compatibility note for tagged snapshots
+- Per-user namespaces post (time travel via tags)
+
+Journal entries:
+- plugins-are-specs-not-code (updated with blocks registry journey)
+- the-graphql-contract (async graphql, no server to attack, async isnt a compromise)
+- moderated-comments
+- realtime-comments
+- methodology-as-a-url
+- time-travel-via-tags
+- architecture-diagram (queued for next session)
+- free-metadata
+
+Key decisions:
+- Dropped tag namespaces (tt:tech -> tech)
+- blocks.md is the plugin manifest
+- GraphQL schema is the plugin interface (backward compatible by design)
+- Multiple readers per block = collaboration not collision
+- Per-user namespaces replace subdomains for branch previews
