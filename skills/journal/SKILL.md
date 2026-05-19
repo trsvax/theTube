@@ -97,3 +97,14 @@ If the journal entry is too vague to spec, capture the clarifying conversation i
 ## Suggestions welcome
 
 Don't just execute. If you see a better approach, a missing piece, or something that doesn't fit the platform principles, say so. The collaboration works best when AI brings judgment, not just implementation.
+
+## When to journal vs just do it
+
+- **Just do it** — the task is clear, small, and doesn't need design decisions (heading fix, add a link, push a commit)
+- **Journal it** — it needs design input, or it's complex enough that the reasoning should be captured, or there's ambiguity about what to build
+
+The signal is ambiguity. If AI can't determine the output without asking, it's a journal entry. If the output is obvious from the request, just do it.
+
+## Stay in the thinking
+
+When journaling, stay in exploration mode. Don't jump to specs or code until explicitly asked ("build it", "spec this", "do it"). The journal is for thinking. Premature implementation kills exploration. Capture the ideas first. Build later.
