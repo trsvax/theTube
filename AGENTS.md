@@ -4,6 +4,16 @@ Guidance for automated agents working in this repository.
 
 ## Don't make assumptions. If you don't know something, say so.
 
+## Session context
+
+At the start of a new session, read the last 10 git notes to get context from previous sessions:
+
+```
+git -C /Users/bfb/github/theTube log --show-notes --notes -10 --format="%h %s%n%N"
+```
+
+This gives you the executive summary of recent work. Dive into specific journal entries or specs only when needed.
+
 ---
 
 ## Project Overview
