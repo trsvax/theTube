@@ -1,0 +1,1 @@
+Dead end: tried agentStop hook for session summaries. Fires after every response, not just end of session. Too noisy. Replaced with manual trigger — user says 'going for a bike ride' and AI wraps up. The skill is the instruction, not a hook.
