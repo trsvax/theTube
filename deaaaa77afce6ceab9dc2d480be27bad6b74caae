@@ -20,3 +20,18 @@ Bike thoughts for future:
 - Copilot agents reviewing against specs
 - Book auto-generated from journal graph
 - Tag v1.0 for first edition
+
+Session 2 final: bike thoughts continued
+
+Created:
+- thoughts-from-the-bike (origin metadata, spec repo, AI blog, book, copilot agents)
+- same-hooks-no-server (React hooks with same API as Apollo, no server behind them)
+- test-in-prod (append-only architecture makes prod testing safe and free)
+
+Key insights:
+- origin field for where thoughts come from (bike, walk, shower)
+- React hooks hide the serverless infrastructure — same DX as a server
+- No pros to a server that aren't solvable or unnecessary
+- Serverless is AI-native — small stateless functions are what AI writes best
+- Test in prod because append-only + stateless = safe by construction
+- The pi costs more than the test run
