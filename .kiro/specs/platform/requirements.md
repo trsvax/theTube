@@ -196,6 +196,20 @@ The browser does the dynamic work. The build produces static assets. No server n
 
 ---
 
+## GraphQL as the plugin contract
+
+Plugins communicate via GraphQL operations. The schema lives in the plugin repo. The client sends `operationName` + `data`. The platform handles transport based on directives.
+
+| Directive | Transport | Behavior |
+|---|---|---|
+| `@moderate` | `GET /events/{operation}?{data as key=value}` | Logged by CloudFront, processed in batch |
+| `@realtime` | `POST /fastevent/{operation}` with JSON body | Lambda processes immediately, returns `202 + Location` |
+| `@auth(role)` | JWT validated by Lambda@Edge | Reject if user lacks the required role |
+
+The client doesn't know the transport. It sends an operation name and data. The platform maps directives to paths. Plugin repos just declare what operations exist and which directives apply. The platform handles the rest.
+
+---
+
 ## Adding a new content source
 
 1. Create a repo with a build that produces `out/` and `out/content.json`
