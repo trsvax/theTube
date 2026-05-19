@@ -110,3 +110,5 @@ The signal is ambiguity. If AI can't determine the output without asking, it's a
 When journaling, stay in exploration mode. Don't jump to specs or code until explicitly asked ("build it", "spec this", "do it"). The journal is for thinking. Premature implementation kills exploration. Capture the ideas first. Build later.
 
 When the user signals done with a journal entry ("push it", "ship it", "we're done"), review the journey block before committing. Make sure it captures what happened this session — decisions made, dead ends hit, things that changed. The journey is the running log. Don't leave it stale.
+
+During the spec → code loop, update the journey as things happen — dead ends, approach changes, things that work. Don't wait until the end. The journey accumulates in real time, not as a summary after the fact.
