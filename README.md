@@ -2,6 +2,8 @@
 
 A feature-rich, expandable, serverless publishing system written completely by AI, hosted on AWS, and inspired by Plan 9. Complete overkill for a personal blog — but that's the point. The blog drives the platform.
 
+Every post, every spec, every line of code — created via chat with AI. Not a single character typed directly into a source file. The interface is conversation. The details are hidden.
+
 ## The constraint
 
 No server. No database. Everything is a file and a URL. The CDN is the platform — it serves content, handles auth, ingests events, and scales globally. What looks like a static site supports user input, real-time writes, and role-based access. Works in Lynx. Costs about a dollar a month.
