@@ -2,7 +2,7 @@
 
 A feature-rich, expandable, serverless publishing system written completely by AI, hosted on AWS, and inspired by Plan 9. Complete overkill for a personal blog — but that's the point. The blog drives the platform.
 
-Every post, every spec, every line of code — created via chat with AI. Not a single character typed directly into a source file. The interface is conversation. The details are hidden.
+Every post, every spec, every line of code — created via chat with AI. Not a single character typed directly into a source file. The interface is conversation. The details are hidden. "Thoughts from the bike" is a prompt.
 
 ## The constraint
 
