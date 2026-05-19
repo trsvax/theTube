@@ -18,7 +18,7 @@ Journal entries live in `content/posts/` alongside regular posts. The difference
 ---
 title: A GitHub App as the Publishing Layer
 date: 2026-05-12
-tags: [tt:tech]
+tags: [tech]
 type: journal
 audience: user
 summary: One-line description of the idea.

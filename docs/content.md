@@ -6,7 +6,7 @@
 | -------- | -------- | ---------- | ------- | ---------------------------------------------------------------- |
 | title    | yes      | string     | —       | Display title — post page, PostCard, `<title>`, Bluesky          |
 | date     | yes      | YYYY-MM-DD | —       | Sort order and display date                                      |
-| tags     | yes      | array      | —       | e.g. `[tt:tech, tt:travel]` — namespaced; see Tag Registry below |
+| tags     | yes      | array      | —       | e.g. `[tech, travel]` — namespaced; see Tag Registry below |
 | summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card                 |
 | image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail                      |
 | bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions                  |
@@ -19,7 +19,7 @@
 ---
 title: Tokyo on a Budget
 date: 2026-05-08
-tags: [tt:travel]
+tags: [travel]
 summary: Three weeks, one carry-on, very little money.
 image: https://cdn.thetube.today/posts/tokyo/cover.jpg
 bsky: true
@@ -36,9 +36,9 @@ Tags are namespaced with a `prefix:name` convention. The `tt:` prefix is the the
 
 | Tag       | Use                     |
 | --------- | ----------------------- |
-| tt:tech   | Technical / programming |
-| tt:travel | Travel writing          |
-| tt:tg     | TxGang related          |
+| tech   | Technical / programming |
+| travel | Travel writing          |
+| tg     | TxGang related          |
 
 New tags can be added freely — just use `tt:` prefix in frontmatter. They appear automatically in the index tag filter with no code change.
 
