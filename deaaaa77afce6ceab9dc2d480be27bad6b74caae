@@ -1,0 +1,22 @@
+Session 2 continued: bike thoughts + plugin post finalized
+
+Published: plugins-are-specs-not-code (public)
+Created: thoughts-from-the-bike (origin metadata, spec repo, AI blog, book that writes itself)
+
+Key additions:
+- origin field in frontmatter (where the thought came from)
+- blocks.md documented as: mount table, build filesystem, version lock, document not just table
+- Plugin isolation via per-repo IAM
+- Versioned specs via git tags
+- Schema diff for upgrades
+- Discovery = semantic web via markdown
+- Two file servers (git + S3) merged namespace
+- Zero lines closing on plugin post
+- 'Thoughts from the bike' is a prompt — added to README
+
+Bike thoughts for future:
+- Spec repo owned by AI
+- AI blog publishing specs
+- Copilot agents reviewing against specs
+- Book auto-generated from journal graph
+- Tag v1.0 for first edition
