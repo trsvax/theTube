@@ -1,0 +1,17 @@
+Session: journal-driven development methodology refined.
+
+Key additions to the process:
+- Journal vs just-do-it: ambiguity is the signal
+- Stay in thinking mode until explicitly asked to build
+- Journey updates in real time, not just at the end
+- Review journey block before final commit
+- Coffee count as complexity metric (AI estimates)
+- blocks.md as plugin registry (usage first, spec URL for implementation)
+- Two levels of knowledge: how to use vs how it works
+- The methodology is the product — portable via URL
+
+Built: /events/ endpoint (10 lines, 202 response, deployed and verified)
+Built: blocks.md registry
+Built: thetube-comments spec repo (GraphQL schema, no code)
+
+Posts created: ~20 journal entries covering entropy, logging, plugins, GraphQL, architecture
