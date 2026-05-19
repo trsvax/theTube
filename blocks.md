@@ -2,6 +2,10 @@
 
 Registry of `[block]:` extensions. How to use them and where their specs live.
 
+Multiple entries for the same block merge — like Plan 9's `bind`. The order in the table is the priority. Move a line up or down to change precedence.
+
+This file is not just a table — it's a document. Add notes, rules, explanations anywhere. AI reads it all.
+
 | Block | Usage | Spec |
 |---|---|---|
 | `[journey]:` | Running log. Add to it as work progresses. Renders as `<details>`. | built-in (`lib/posts.ts`) |
