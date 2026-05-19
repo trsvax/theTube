@@ -208,6 +208,8 @@ Plugins communicate via GraphQL operations. The schema lives in the plugin repo.
 
 The client doesn't know the transport. It sends an operation name and data. The platform maps directives to paths. Plugin repos just declare what operations exist and which directives apply. The platform handles the rest.
 
+GraphQL schemas are backward compatible by design — add fields, don't remove them. Deprecate with `@deprecated`, don't delete. Old clients keep working because they only ask for fields they know about. This makes the plugin interface stable across tagged snapshots and time-traveled versions.
+
 ---
 
 ## Adding a new content source
