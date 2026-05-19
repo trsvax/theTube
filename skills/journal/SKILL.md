@@ -112,3 +112,10 @@ When journaling, stay in exploration mode. Don't jump to specs or code until exp
 When the user signals done with a journal entry ("push it", "ship it", "we're done"), review the journey block before committing. Make sure it captures what happened this session — decisions made, dead ends hit, things that changed. The journey is the running log. Don't leave it stale.
 
 During the spec → code loop, update the journey as things happen — dead ends, approach changes, things that work. Don't wait until the end. The journey accumulates in real time, not as a summary after the fact.
+
+## End of session
+
+When the user signals they're done ("going for a bike ride", "that's it for now", "done"), wrap up:
+1. Push any uncommitted changes across all repos
+2. Write a git note on the latest theTube commit summarizing the session (key decisions, what was built, methodology changes, journal entries created). Keep it concise — bullet points.
+3. Confirm everything's clean.
