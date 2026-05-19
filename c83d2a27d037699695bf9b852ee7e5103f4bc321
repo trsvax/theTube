@@ -1,0 +1,35 @@
+Session 2: Plugin architecture and methodology refinement
+
+Built:
+- /events/ endpoint (10 lines, 202 response, deployed and verified via curl)
+- blocks.md registry (plugin manifest, mount table, build filesystem)
+- thetube-comments spec repo (GraphQL schema, AGENTS.md, no code)
+- Deploy logging (curl to /events/deploy/done in deploy.yml)
+- Coffee count display on post pages
+
+Published:
+- plugins-are-specs-not-code (the plugin manifesto)
+- the-url-is-the-log-entry
+
+Journal entries created: ~25 (logging, event bus, comments, plugins, graphql, monitoring, scaling, entropy, architecture diagram, methodology-as-url, per-user-namespaces, time-travel-via-tags, free-metadata, hotel-booking, and more)
+
+Methodology refinements:
+- Journal vs just-do-it: ambiguity is the signal
+- Stay in thinking mode until asked to build
+- Journey updates in real time during the loop
+- End of session ritual (bike ride = wrap up)
+- Coffee count as complexity metric
+- Dropped tag namespaces (tt:) — premature structure
+- blocks.md as plugin manifest + mount table + build filesystem + version lock
+- agentStop hook was a dead end (fires too often) — manual trigger instead
+- Read session notes via AGENTS.md, write via manual trigger
+
+Key ideas:
+- Plugins are specs not code — AI generates implementation from schema
+- GraphQL as plugin contract (operationName + data, schema in repo)
+- blocks.md is Plan 9 mount table with bind-order semantics
+- Discovery via AI reading specs (semantic web via markdown)
+- Plugin isolation via per-repo IAM
+- The methodology is the product — portable via URL
+- Two file servers (git + S3), merged namespace
+- Zero lines of code for a complete plugin architecture
