@@ -27,6 +27,19 @@ const posts = readdirSync(CONTENT_DIR)
   .filter(f => f.endsWith('.md'))
   .map(f => f.replace('.md', ''))
 
+function parseFrontmatter(filepath) {
+  const raw = readFileSync(filepath, 'utf-8')
+  const match = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+  if (!match) return {}
+  const meta = {}
+  for (const line of match[1].split('\n')) {
+    const colon = line.indexOf(':')
+    if (colon === -1) continue
+    meta[line.slice(0, colon).trim()] = line.slice(colon + 1).trim()
+  }
+  return meta
+}
+
 function renderPng(svg) {
   const resvg = new Resvg(svg, {
     fitTo: { mode: 'width', value: 1200 },
@@ -36,7 +49,10 @@ function renderPng(svg) {
 }
 
 for (const slug of posts) {
-  const url = `thetube.today/posts/${slug}`
+  const meta = parseFrontmatter(join(CONTENT_DIR, `${slug}.md`))
+  const url = meta.shortSlug
+    ? `tt.tube/${meta.shortSlug}`
+    : `thetube.today/posts/${slug}`
   const svg = TEMPLATE.replace(
     /<text class="url-text"[^>]*>.*?<\/text>/,
     `<text class="url-text" x="420" y="170" text-anchor="middle">${url}</text>`
