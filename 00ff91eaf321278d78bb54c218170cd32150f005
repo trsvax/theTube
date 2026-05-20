@@ -10,8 +10,11 @@ Key ideas:
 - QED status for journal entries — proof complete, implementation optional (□)
 - Schema-filtered reads: @pii stripped by reader, not storage. Prior art published.
 - MCP roles: user + mcp. /proc-style capability list enforced by 404 at edge.
-- GraphQL @defer for progressive rendering without a server
-- Compose fragments from different repos into one query
+- GraphQL fragments compose into one query, @defer for progressive rendering
+- Per-repo vault: openssl + shell script, one encrypted file per repo
+- jmux: Python terminal mux, two panes, state is in git
+- Siri thought capture: Action Button → URL → log. Watch as input device.
+- Contact form: same pattern as comments, log is the inbox
 
 Posts created:
 - 9p-at-internet-scale
@@ -20,21 +23,20 @@ Posts created:
 - cleanup (running backlog)
 - contact-form (qed)
 - per-repo-vault (qed)
-- jmux (vague-thought)
-- siri-thought-capture (vague-thought)
-- compose-queries (vague-thought)
+- jmux
+- siri-thought-capture
+- compose-queries
 
 Posts updated:
 - same-hooks-no-server (role routing, useQuery is just fetch)
 - realtime-comments (two-layer enforcement, client picks path)
 - moderated-comments (grep not athena)
-- mcp-log-reader (IAM/namespace, structured for free, roles, /proc capabilities)
+- mcp-log-reader (structured for free, roles, /proc capabilities)
 
 Code:
 - Added journal type to PostList filter and lib/posts.ts
-- workflow.md steering (links to thetube.today, minimal format after push)
-- Added agentic last mile identity video to links
 
-Workflow:
-- 'done then close' habit — git notes carry state between sessions
-- Walk thoughts captured as journal entries with origin: walk
+Other:
+- workflow.md steering: links to thetube.today, minimal format after push
+- Added agentic last mile identity video to links
+- Habit: done then close, git notes carry state
