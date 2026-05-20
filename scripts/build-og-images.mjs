@@ -49,53 +49,20 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js produces horizontally mirrored paths for this font
-  // Fix: only negate X, keep Y as-is, then reposition
+  // opentype.js lays out this font right-to-left
+  // Generate path normally, then mirror the whole thing with SVG transform
   const measurePath = font.getPath(text, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
   const startX = x - textWidth / 2
 
-  const path = font.getPath(text, startX, 0, fontSize)
+  const path = font.getPath(text, startX, y, fontSize)
+  const pathData = path.toPathData()
+  const pathBbox = path.getBoundingBox()
+  const cx = (pathBbox.x1 + pathBbox.x2) / 2
 
-  // Negate only X in all path commands (horizontal mirror fix)
-  const flipped = path.commands.map(cmd => {
-    const c = { ...cmd }
-    if ('x' in c) c.x = -c.x
-    if ('x1' in c) c.x1 = -c.x1
-    if ('x2' in c) c.x2 = -c.x2
-    return c
-  })
-
-  // Get bbox of flipped path
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
-  for (const cmd of flipped) {
-    if ('x' in cmd) { minX = Math.min(minX, cmd.x); maxX = Math.max(maxX, cmd.x) }
-    if ('y' in cmd) { minY = Math.min(minY, cmd.y); maxY = Math.max(maxY, cmd.y) }
-    if ('x1' in cmd) { minX = Math.min(minX, cmd.x1); maxX = Math.max(maxX, cmd.x1) }
-    if ('y1' in cmd) { minY = Math.min(minY, cmd.y1); maxY = Math.max(maxY, cmd.y1) }
-    if ('x2' in cmd) { minX = Math.min(minX, cmd.x2); maxX = Math.max(maxX, cmd.x2) }
-    if ('y2' in cmd) { minY = Math.min(minY, cmd.y2); maxY = Math.max(maxY, cmd.y2) }
-  }
-
-  // Center horizontally at x, position at y
-  const flippedWidth = maxX - minX
-  const offsetX = x - (minX + flippedWidth / 2)
-  const offsetY = y - maxY
-
-  // Build path data string with offsets applied
-  let d = ''
-  for (const cmd of flipped) {
-    switch (cmd.type) {
-      case 'M': d += `M${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'L': d += `L${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'Q': d += `Q${(cmd.x1 + offsetX).toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'C': d += `C${(cmd.x1 + offsetX).toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${(cmd.x2 + offsetX).toFixed(2)} ${(cmd.y2 + offsetY).toFixed(2)} ${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'Z': d += 'Z'; break
-    }
-  }
-
-  return `<path d="${d}"/>`
+  // Mirror horizontally around center x
+  return `<path d="${pathData}" transform="scale(-1,1) translate(${-cx * 2}, 0)"/>`
 }
 
 function buildSvg(url) {
