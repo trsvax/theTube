@@ -40,10 +40,28 @@ function parseFrontmatter(filepath) {
   return meta
 }
 
+// Find a serif font — macOS or Linux
+const FONT_PATHS = [
+  '/System/Library/Fonts/Supplemental/Georgia.ttf',           // macOS
+  '/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf',         // Ubuntu/Debian
+  '/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf', // Ubuntu alt
+]
+const fontFile = FONT_PATHS.find(p => existsSync(p))
+if (!fontFile) {
+  console.warn('Warning: no serif font found, URL text may not render')
+}
+
 function renderPng(svg) {
-  const resvg = new Resvg(svg, {
+  const opts = {
     fitTo: { mode: 'width', value: 1200 },
-  })
+  }
+  if (fontFile) {
+    opts.font = {
+      fontFiles: [fontFile],
+      defaultFontFamily: 'serif',
+    }
+  }
+  const resvg = new Resvg(svg, opts)
   const rendered = resvg.render()
   return rendered.asPng()
 }
