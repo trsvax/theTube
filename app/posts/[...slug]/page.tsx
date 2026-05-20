@@ -15,7 +15,17 @@ export async function generateMetadata({
   const { slug: slugParts } = await params;
   const slug = slugParts.join("/");
   const post = await getPost(slug);
-  return { title: `${post.title} — theTube` };
+  const ogImage = `https://thetube.today/og/${slug}.svg`;
+  return {
+    title: `${post.title} — theTube`,
+    description: post.summary || "",
+    openGraph: {
+      title: post.title,
+      description: post.summary || "",
+      url: `https://thetube.today/posts/${slug}`,
+      images: [{ url: ogImage }],
+    },
+  };
 }
 
 export default async function PostPage({
