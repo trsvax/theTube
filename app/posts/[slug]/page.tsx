@@ -1,6 +1,7 @@
 import { getPosts, getPost } from "@/lib/posts";
 import Link from "next/link";
 import CopyShortUrl from "@/app/components/CopyShortUrl";
+import CommentForm from "@/app/components/CommentForm";
 
 export async function generateStaticParams() {
   return getPosts().map((p) => ({ slug: p.slug }));
@@ -43,6 +44,7 @@ export default async function PostPage({
         className="post-body"
         dangerouslySetInnerHTML={{ __html: post.html }}
       />
+            {post.comments && <CommentForm post={post.slug} />}
       <div className="post-footer">
         <Link href="/" className="back-link">
           ← All posts

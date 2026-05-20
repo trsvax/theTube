@@ -20,6 +20,7 @@ export interface PostMeta {
 
 export interface Post extends PostMeta {
   html: string;
+  comments?: boolean;
 }
 
 // Vendored frontmatter parser — reads YAML block between --- delimiters.
@@ -145,6 +146,7 @@ export async function getPost(slug: string): Promise<Post> {
   const { marked } = await import("marked");
   const raw = fs.readFileSync(path.join(POSTS_DIR, `${slug}.md`), "utf8");
   const { meta, body } = parseFrontmatter(raw);
+  const comments = /^\[comment\]:/m.test(body);
   const html = await marked(await renderDesignBlocks(body));
   return {
     slug,
@@ -159,6 +161,7 @@ export async function getPost(slug: string): Promise<Post> {
       ? Number(meta.discussionNumber)
       : undefined,
     coffee: meta.coffee ? Number(meta.coffee) : undefined,
+    comments,
     html,
   };
 }
