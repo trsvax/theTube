@@ -1,0 +1,40 @@
+Session 2026-05-20:
+
+Key ideas:
+- Client picks comment type based on role (JWT = routing hint + enforcement)
+- Two-layer auth: CloudFront Function (no JWT → 403) + Lambda@Edge (validates signature/role)
+- 202 = committed. The response is the commit acknowledgment.
+- useQuery is just fetch with ergonomics — same URL, progressive enhancement
+- 9P at internet scale: HTTPS is 9P, S3+git is the file server, JWT is the namespace, Lambda is cpu
+- Duck filesystem — walks like one, quacks like one, no POSIX baggage
+- QED status for journal entries — proof complete, implementation optional (□)
+- Schema-filtered reads: @pii stripped by reader, not storage. Prior art published.
+- MCP roles: user + mcp. /proc-style capability list enforced by 404 at edge.
+- GraphQL @defer for progressive rendering without a server
+- Compose fragments from different repos into one query
+
+Posts created:
+- 9p-at-internet-scale
+- github-as-cms (qed)
+- schema-filtered-reads (draft, prior art)
+- cleanup (running backlog)
+- contact-form (qed)
+- per-repo-vault (qed)
+- jmux (vague-thought)
+- siri-thought-capture (vague-thought)
+- compose-queries (vague-thought)
+
+Posts updated:
+- same-hooks-no-server (role routing, useQuery is just fetch)
+- realtime-comments (two-layer enforcement, client picks path)
+- moderated-comments (grep not athena)
+- mcp-log-reader (IAM/namespace, structured for free, roles, /proc capabilities)
+
+Code:
+- Added journal type to PostList filter and lib/posts.ts
+- workflow.md steering (links to thetube.today, minimal format after push)
+- Added agentic last mile identity video to links
+
+Workflow:
+- 'done then close' habit — git notes carry state between sessions
+- Walk thoughts captured as journal entries with origin: walk
