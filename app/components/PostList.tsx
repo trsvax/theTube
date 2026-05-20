@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface PostItem {
-  type: "post" | "thought";
+  type: "post" | "thought" | "journal";
   slug: string;
   title: string;
   date: string;
@@ -34,7 +34,7 @@ async function tryFetch(url: string): Promise<PostItem[]> {
     if (!res.ok) return [];
     const data = await res.json();
     return (data.items ?? []).filter(
-      (i: PostItem) => i.type === "post" || i.type === "thought",
+      (i: PostItem) => i.type === "post" || i.type === "thought" || i.type === "journal",
     );
   } catch {
     return [];

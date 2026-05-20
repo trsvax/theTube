@@ -10,7 +10,7 @@ export interface PostMeta {
   tags: string[];
   audience: string;
   draft?: boolean;
-  type?: "draft" | "thought" | "post";
+  type?: "draft" | "thought" | "post" | "journal";
   summary: string;
   shortSlug?: string;
   issueNumber?: number;
@@ -83,7 +83,7 @@ export function getPosts(): PostMeta[] {
         tags: (meta.tags as string[]) ?? [],
         audience: (meta.audience as string) ?? "public",
         draft: meta.draft === "true" || meta.draft === true,
-        type: ((meta.type as string) ?? "post") as "draft" | "thought" | "post",
+        type: ((meta.type as string) ?? "post") as "draft" | "thought" | "post" | "journal",
         summary: (meta.summary as string) ?? "",
         shortSlug: (meta.shortSlug as string) ?? undefined,
         coffee: meta.coffee ? Number(meta.coffee) : undefined,
