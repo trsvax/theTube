@@ -91,6 +91,9 @@ async function renderDesignBlocks(body: string): Promise<string> {
       inFence = !inFence;
       result.push(lines[i]);
       i++;
+    } else if (!inFence && /^\[comment\]:/.test(lines[i])) {
+      // Strip [comment]: lines — they're handled as a flag, not rendered
+      i++;
     } else if (!inFence && /^\[design\]:\s*.+$/.test(lines[i])) {
       let alt = "";
       let src = "";
