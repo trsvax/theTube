@@ -1,25 +1,26 @@
-Session 3: Comments working end-to-end
+Session 2026-05-20:
 
-Built:
-- CommentForm component (useMutation hook + form UI)
-- [comment]: block detection in lib/posts.ts (strips from render, sets flag)
-- Wired comment form into post page (renders when [comment]: present)
-- Subdirectory support in post loader (recursive readdir, catch-all route)
-- Verified comment event in CloudFront logs (202, 1ms, authenticated user)
+Key ideas:
+- Client picks comment type based on role (JWT = routing hint + enforcement)
+- Two-layer auth: CloudFront Function (no JWT → 403) + Lambda@Edge (validates signature/role)
+- 202 = committed. The response is the commit acknowledgment.
+- useQuery is just fetch with ergonomics — same URL, progressive enhancement
+- 9P at internet scale: HTTPS is 9P, S3+git is the file server, JWT is the namespace, Lambda is cpu
+- Statelessness isn't a compromise from 9P — it's an improvement
+- Duck filesystem (DFS taken, theirs is named wrong)
+- QED status for journal entries — proof complete, implementation optional (□)
+- GitHub as CMS: GitHub App + Contents API + static frontend = WordPress without WordPress
 
-Key insights:
-- The logs are the backlog — events with no processor = the todo list
-- UI ships first, backend catches up, no coordination needed
-- Real-time comments = same thing + one Lambda. Three sentence post.
-- grep the logs like the 90s — the tools haven't changed because they didn't need to
-- MCP log reader journaled for later
-- Start new chat every morning (context window crashes after long sessions)
+Posts created:
+- 9p-at-internet-scale
+- github-as-cms (first qed status)
+- cleanup (running backlog)
 
 Posts updated:
-- moderated-comments: verified in logs
-- realtime-comments: logs are the backlog
-- the-url-is-the-log-entry: grepping like the 90s, updated field
+- same-hooks-no-server (role routing, useQuery is just fetch)
+- realtime-comments (two-layer enforcement, client picks path)
+- moderated-comments (grep not athena)
 
-Created:
-- mcp-log-reader journal entry
-- the-schema-is-the-privacy-policy (@PII directive, JS Proxy)
+Other:
+- workflow.md steering: links to thetube.today not github, minimal format after push
+- Added agentic last mile identity video to links
