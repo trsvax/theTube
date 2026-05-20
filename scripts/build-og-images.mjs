@@ -49,8 +49,8 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js with this font produces mirrored paths (X reversed, Y flipped)
-  // Fix: negate both X and Y, then reposition
+  // opentype.js produces horizontally mirrored paths for this font
+  // Fix: only negate X, keep Y as-is, then reposition
   const measurePath = font.getPath(text, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
@@ -58,15 +58,12 @@ function textToPath(text, fontSize, x, y) {
 
   const path = font.getPath(text, startX, 0, fontSize)
 
-  // Negate both X and Y in all path commands
+  // Negate only X in all path commands (horizontal mirror fix)
   const flipped = path.commands.map(cmd => {
     const c = { ...cmd }
     if ('x' in c) c.x = -c.x
-    if ('y' in c) c.y = -c.y
     if ('x1' in c) c.x1 = -c.x1
-    if ('y1' in c) c.y1 = -c.y1
     if ('x2' in c) c.x2 = -c.x2
-    if ('y2' in c) c.y2 = -c.y2
     return c
   })
 
@@ -81,7 +78,7 @@ function textToPath(text, fontSize, x, y) {
     if ('y2' in cmd) { minY = Math.min(minY, cmd.y2); maxY = Math.max(maxY, cmd.y2) }
   }
 
-  // Center horizontally at x, position baseline at y
+  // Center horizontally at x, position at y
   const flippedWidth = maxX - minX
   const offsetX = x - (minX + flippedWidth / 2)
   const offsetY = y - maxY
