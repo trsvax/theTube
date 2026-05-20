@@ -49,20 +49,16 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js lays out this font right-to-left
-  // Generate path normally, then mirror the whole thing with SVG transform
-  const measurePath = font.getPath(text, 0, 0, fontSize)
+  // opentype.js lays out glyphs right-to-left with this font
+  // Workaround: reverse the string so RTL layout produces LTR result
+  const reversed = text.split('').reverse().join('')
+  const measurePath = font.getPath(reversed, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
   const startX = x - textWidth / 2
 
-  const path = font.getPath(text, startX, y, fontSize)
-  const pathData = path.toPathData()
-  const pathBbox = path.getBoundingBox()
-  const cx = (pathBbox.x1 + pathBbox.x2) / 2
-
-  // Mirror horizontally around center x
-  return `<path d="${pathData}" transform="scale(-1,1) translate(${-cx * 2}, 0)"/>`
+  const path = font.getPath(reversed, startX, y, fontSize)
+  return `<path d="${path.toPathData()}"/>`
 }
 
 function buildSvg(url) {
