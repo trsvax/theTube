@@ -49,16 +49,46 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js lays out glyphs right-to-left with this font
-  // Workaround: reverse the string so RTL layout produces LTR result
+  // opentype.js with this font: RTL layout + Y-up coordinates
+  // Fix: reverse string (fixes RTL) + negate Y (fixes upside-down)
   const reversed = text.split('').reverse().join('')
   const measurePath = font.getPath(reversed, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
   const startX = x - textWidth / 2
 
-  const path = font.getPath(reversed, startX, y, fontSize)
-  return `<path d="${path.toPathData()}"/>`
+  const path = font.getPath(reversed, startX, 0, fontSize)
+
+  // Flip Y and reposition
+  const commands = path.commands.map(cmd => {
+    const c = { ...cmd }
+    if ('y' in c) c.y = -c.y
+    if ('y1' in c) c.y1 = -c.y1
+    if ('y2' in c) c.y2 = -c.y2
+    return c
+  })
+
+  // Find new vertical bounds
+  let minY = Infinity, maxY = -Infinity
+  for (const cmd of commands) {
+    if ('y' in cmd) { minY = Math.min(minY, cmd.y); maxY = Math.max(maxY, cmd.y) }
+    if ('y1' in cmd) { minY = Math.min(minY, cmd.y1); maxY = Math.max(maxY, cmd.y1) }
+    if ('y2' in cmd) { minY = Math.min(minY, cmd.y2); maxY = Math.max(maxY, cmd.y2) }
+  }
+  const offsetY = y - maxY
+
+  let d = ''
+  for (const cmd of commands) {
+    switch (cmd.type) {
+      case 'M': d += `M${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'L': d += `L${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'Q': d += `Q${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'C': d += `C${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x2.toFixed(2)} ${(cmd.y2 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'Z': d += 'Z'; break
+    }
+  }
+
+  return `<path d="${d}"/>`
 }
 
 function buildSvg(url) {
