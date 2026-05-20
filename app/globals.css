@@ -434,3 +434,43 @@ footer {
 .discuss-link:hover {
   color: var(--color-text);
 }
+
+/* Comment form */
+.comment-form {
+  margin-top: 2rem;
+  border-top: 1px solid var(--color-muted, #ccc);
+  padding-top: 1rem;
+}
+
+.comment-form textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  padding: 0.5rem;
+  border: 1px solid var(--color-muted, #ccc);
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.comment-form button {
+  margin-top: 0.5rem;
+  padding: 0.4rem 1rem;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.comment-form button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.comment-error {
+  color: #c00;
+  font-size: 0.9rem;
+}
+
+.comment-thanks {
+  margin-top: 2rem;
+  color: var(--color-accent, #455978);
+  font-style: italic;
+}
