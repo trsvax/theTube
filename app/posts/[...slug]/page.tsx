@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { slug: slugParts } = await params;
   const slug = slugParts.join("/");
   const post = await getPost(slug);
-  const ogImage = `https://thetube.today/og/${slug}.svg`;
+  const ogImage = `https://thetube.today/og/${slug}.png`;
   return {
     title: `${post.title} — theTube`,
     description: post.summary || "",

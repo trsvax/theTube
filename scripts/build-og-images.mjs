@@ -1,24 +1,39 @@
 /**
  * build-og-images.mjs
- * Generates per-post og:image SVGs from the business card template.
+ * Generates per-post og:image PNGs from the business card SVG template.
+ * Uses @resvg/resvg-wasm — Rust SVG renderer compiled to WASM. No native deps.
+ * https://github.com/thx/resvg-js
  * Run after next build: node scripts/build-og-images.mjs
- * Outputs to out/og/{slug}.svg
+ * Outputs to out/og/{slug}.png
  */
 
-import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs'
-import { join, basename } from 'path'
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'fs'
+import { join } from 'path'
+import { initWasm, Resvg } from '@resvg/resvg-wasm'
+
+// Init WASM module
+const wasmPath = join(process.cwd(), 'node_modules/@resvg/resvg-wasm/index_bg.wasm')
+await initWasm(readFileSync(wasmPath))
 
 const TEMPLATE = readFileSync(join(process.cwd(), 'public/images/business-card.svg'), 'utf-8')
-const CONTENT_DIR = join(process.cwd(), 'content/posts')
+const CONTENT_DIR_PRIMARY = join(process.cwd(), 'content/posts')
+const CONTENT_DIR_SIBLING = join(process.cwd(), '../theTube-content/content/posts')
+const CONTENT_DIR = existsSync(CONTENT_DIR_PRIMARY) ? CONTENT_DIR_PRIMARY : CONTENT_DIR_SIBLING
 const OUT_DIR = join(process.cwd(), 'out/og')
 
-// Ensure output dir exists
 mkdirSync(OUT_DIR, { recursive: true })
 
-// Get all post slugs
 const posts = readdirSync(CONTENT_DIR)
   .filter(f => f.endsWith('.md'))
   .map(f => f.replace('.md', ''))
+
+function renderPng(svg) {
+  const resvg = new Resvg(svg, {
+    fitTo: { mode: 'width', value: 1200 },
+  })
+  const rendered = resvg.render()
+  return rendered.asPng()
+}
 
 for (const slug of posts) {
   const url = `thetube.today/posts/${slug}`
@@ -26,14 +41,12 @@ for (const slug of posts) {
     /<text class="url-text"[^>]*>.*?<\/text>/,
     `<text class="url-text" x="420" y="170" text-anchor="middle">${url}</text>`
   )
-  writeFileSync(join(OUT_DIR, `${slug}.svg`), svg)
+  const png = renderPng(svg)
+  writeFileSync(join(OUT_DIR, `${slug}.png`), png)
 }
 
-// Also generate the default site-level og image
-const defaultSvg = TEMPLATE.replace(
-  /<text class="url-text"[^>]*>.*?<\/text>/,
-  `<text class="url-text" x="420" y="170" text-anchor="middle">theTube.today</text>`
-)
-writeFileSync(join(OUT_DIR, 'default.svg'), defaultSvg)
+// Default site-level og image
+const defaultPng = renderPng(TEMPLATE)
+writeFileSync(join(OUT_DIR, 'default.png'), defaultPng)
 
-console.log(`Generated ${posts.length} og:image SVGs in out/og/`)
+console.log(`Generated ${posts.length + 1} og:image PNGs in out/og/`)
