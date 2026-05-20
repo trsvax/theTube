@@ -40,26 +40,16 @@ function parseFrontmatter(filepath) {
   return meta
 }
 
-// Find a serif font — macOS or Linux
-const FONT_PATHS = [
-  '/System/Library/Fonts/Supplemental/Georgia.ttf',           // macOS
-  '/usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf',         // Ubuntu/Debian
-  '/usr/share/fonts/truetype/liberation/LiberationSerif-Regular.ttf', // Ubuntu alt
-]
-const fontFile = FONT_PATHS.find(p => existsSync(p))
-if (!fontFile) {
-  console.warn('Warning: no serif font found, URL text may not render')
-}
+// Bundled font — no system dependency
+const FONT_FILE = join(process.cwd(), 'assets/fonts/Lora.ttf')
 
 function renderPng(svg) {
   const opts = {
     fitTo: { mode: 'width', value: 1200 },
-  }
-  if (fontFile) {
-    opts.font = {
-      fontFiles: [fontFile],
-      defaultFontFamily: 'serif',
-    }
+    font: {
+      fontFiles: [FONT_FILE],
+      defaultFontFamily: 'Lora',
+    },
   }
   const resvg = new Resvg(svg, opts)
   const rendered = resvg.render()
