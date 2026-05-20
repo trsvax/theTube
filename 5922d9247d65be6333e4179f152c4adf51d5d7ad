@@ -1,0 +1,25 @@
+Session 3: Comments working end-to-end
+
+Built:
+- CommentForm component (useMutation hook + form UI)
+- [comment]: block detection in lib/posts.ts (strips from render, sets flag)
+- Wired comment form into post page (renders when [comment]: present)
+- Subdirectory support in post loader (recursive readdir, catch-all route)
+- Verified comment event in CloudFront logs (202, 1ms, authenticated user)
+
+Key insights:
+- The logs are the backlog — events with no processor = the todo list
+- UI ships first, backend catches up, no coordination needed
+- Real-time comments = same thing + one Lambda. Three sentence post.
+- grep the logs like the 90s — the tools haven't changed because they didn't need to
+- MCP log reader journaled for later
+- Start new chat every morning (context window crashes after long sessions)
+
+Posts updated:
+- moderated-comments: verified in logs
+- realtime-comments: logs are the backlog
+- the-url-is-the-log-entry: grepping like the 90s, updated field
+
+Created:
+- mcp-log-reader journal entry
+- the-schema-is-the-privacy-policy (@PII directive, JS Proxy)
