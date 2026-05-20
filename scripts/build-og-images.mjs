@@ -1,8 +1,10 @@
 /**
  * build-og-images.mjs
  * Generates per-post og:image PNGs from the business card SVG template.
- * Uses @resvg/resvg-wasm — Rust SVG renderer compiled to WASM. No native deps.
+ * Text rendered as SVG paths via opentype.js (no font needed at render time).
+ * PNG rendered via @resvg/resvg-wasm.
  * https://github.com/thx/resvg-js
+ * https://github.com/opentypejs/opentype.js
  * Run after next build: node scripts/build-og-images.mjs
  * Outputs to out/og/{slug}.png
  */
@@ -10,10 +12,16 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, existsSync } from 'fs'
 import { join } from 'path'
 import { initWasm, Resvg } from '@resvg/resvg-wasm'
+import opentype from 'opentype.js'
 
 // Init WASM module
 const wasmPath = join(process.cwd(), 'node_modules/@resvg/resvg-wasm/index_bg.wasm')
 await initWasm(readFileSync(wasmPath))
+
+// Load font for text-to-path conversion
+const FONT_FILE = join(process.cwd(), 'assets/fonts/Georgia.ttf')
+const fontBuffer = readFileSync(FONT_FILE)
+const font = opentype.parse(fontBuffer.buffer)
 
 const TEMPLATE = readFileSync(join(process.cwd(), 'public/images/business-card.svg'), 'utf-8')
 const CONTENT_DIR_PRIMARY = join(process.cwd(), 'content/posts')
@@ -40,18 +48,32 @@ function parseFrontmatter(filepath) {
   return meta
 }
 
-// Bundled font — no system dependency
-const FONT_FILE = join(process.cwd(), 'assets/fonts/Lora.ttf')
+function textToPath(text, fontSize, x, y) {
+  // Get path centered at x
+  const path = font.getPath(text, 0, 0, fontSize)
+  const bbox = path.getBoundingBox()
+  const textWidth = bbox.x2 - bbox.x1
+  const offsetX = x - textWidth / 2 - bbox.x1
+  const offsetY = y
+
+  const centered = font.getPath(text, offsetX, offsetY, fontSize)
+  return centered.toSVG()
+}
+
+function buildSvg(url) {
+  // Replace the <text> element with a <path> element
+  const pathD = textToPath(url, 16, 420, 170)
+  const svg = TEMPLATE.replace(
+    /<text class="url-text"[^>]*>.*?<\/text>/,
+    `<g fill="#48597a">${pathD}</g>`
+  )
+  return svg
+}
 
 function renderPng(svg) {
-  const opts = {
+  const resvg = new Resvg(svg, {
     fitTo: { mode: 'width', value: 1200 },
-    font: {
-      fontFiles: [FONT_FILE],
-      defaultFontFamily: 'Lora',
-    },
-  }
-  const resvg = new Resvg(svg, opts)
+  })
   const rendered = resvg.render()
   return rendered.asPng()
 }
@@ -61,16 +83,14 @@ for (const slug of posts) {
   const url = meta.shortSlug
     ? `tt.tube/${meta.shortSlug}`
     : `thetube.today/posts/${slug}`
-  const svg = TEMPLATE.replace(
-    /<text class="url-text"[^>]*>.*?<\/text>/,
-    `<text class="url-text" x="420" y="170" text-anchor="middle">${url}</text>`
-  )
+  const svg = buildSvg(url)
   const png = renderPng(svg)
   writeFileSync(join(OUT_DIR, `${slug}.png`), png)
 }
 
 // Default site-level og image
-const defaultPng = renderPng(TEMPLATE)
+const defaultSvg = buildSvg('theTube.today')
+const defaultPng = renderPng(defaultSvg)
 writeFileSync(join(OUT_DIR, 'default.png'), defaultPng)
 
 console.log(`Generated ${posts.length + 1} og:image PNGs in out/og/`)

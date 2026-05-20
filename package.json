@@ -12,6 +12,7 @@
     "@resvg/resvg-wasm": "^2.6.2",
     "marked": "^15.0.0",
     "next": "^15.0.0",
+    "opentype.js": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
