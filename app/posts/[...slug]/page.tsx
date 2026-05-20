@@ -4,15 +4,16 @@ import CopyShortUrl from "@/app/components/CopyShortUrl";
 import CommentForm from "@/app/components/CommentForm";
 
 export async function generateStaticParams() {
-  return getPosts().map((p) => ({ slug: p.slug }));
+  return getPosts().map((p) => ({ slug: p.slug.split("/") }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }) {
-  const { slug } = await params;
+  const { slug: slugParts } = await params;
+  const slug = slugParts.join("/");
   const post = await getPost(slug);
   return { title: `${post.title} — theTube` };
 }
@@ -20,9 +21,10 @@ export async function generateMetadata({
 export default async function PostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>;
+  params: Promise<{ slug: string[] }>;
 }) {
-  const { slug } = await params;
+  const { slug: slugParts } = await params;
+  const slug = slugParts.join("/");
   const post = await getPost(slug);
 
   return (

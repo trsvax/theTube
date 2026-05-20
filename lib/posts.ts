@@ -56,8 +56,22 @@ function slugify(filename: string): string {
   return filename.replace(/\.md$/, "");
 }
 
+function findMarkdownFiles(dir: string, prefix = ""): string[] {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files: string[] = [];
+  for (const entry of entries) {
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      files.push(...findMarkdownFiles(path.join(dir, entry.name), rel));
+    } else if (entry.name.endsWith(".md")) {
+      files.push(rel);
+    }
+  }
+  return files;
+}
+
 export function getPosts(): PostMeta[] {
-  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"));
+  const files = findMarkdownFiles(POSTS_DIR);
   return files
     .map((filename) => {
       const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
