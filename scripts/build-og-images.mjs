@@ -49,16 +49,23 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js getPath: x,y is the baseline start position, Y goes down (SVG convention)
-  // We want centered text, so calculate width first
+  // opentype.js generates glyphs mirrored horizontally for some fonts
+  // Render at origin, measure, then position with corrective transform
   const measurePath = font.getPath(text, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
+  const textHeight = bbox.y2 - bbox.y1
   const startX = x - textWidth / 2
 
-  // Generate path at correct position
-  const path = font.getPath(text, startX, y, fontSize)
-  return `<path d="${path.toPathData()}"/>`
+  const path = font.getPath(text, startX, 0, fontSize)
+  const pathData = path.toPathData()
+  const pathBbox = path.getBoundingBox()
+  const cx = (pathBbox.x1 + pathBbox.x2) / 2
+  const cy = (pathBbox.y1 + pathBbox.y2) / 2
+
+  // Rotate 180° around center, then shift to target y
+  const dy = y - cy
+  return `<path d="${pathData}" transform="rotate(180, ${cx}, ${cy}) translate(0, ${dy})"/>`
 }
 
 function buildSvg(url) {
