@@ -49,46 +49,18 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js with this font: RTL layout + Y-up coordinates
-  // Fix: reverse string (fixes RTL) + negate Y (fixes upside-down)
-  const reversed = text.split('').reverse().join('')
-  const measurePath = font.getPath(reversed, 0, 0, fontSize)
+  // opentype.js with Georgia: use original string + scale(1,-1) to flip upright
+  const measurePath = font.getPath(text, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
   const startX = x - textWidth / 2
 
-  const path = font.getPath(reversed, startX, 0, fontSize)
+  const path = font.getPath(text, startX, 0, fontSize)
+  const pathData = path.toPathData()
+  const pathBbox = path.getBoundingBox()
+  const cy = (pathBbox.y1 + pathBbox.y2) / 2
 
-  // Flip Y and reposition
-  const commands = path.commands.map(cmd => {
-    const c = { ...cmd }
-    if ('y' in c) c.y = -c.y
-    if ('y1' in c) c.y1 = -c.y1
-    if ('y2' in c) c.y2 = -c.y2
-    return c
-  })
-
-  // Find new vertical bounds
-  let minY = Infinity, maxY = -Infinity
-  for (const cmd of commands) {
-    if ('y' in cmd) { minY = Math.min(minY, cmd.y); maxY = Math.max(maxY, cmd.y) }
-    if ('y1' in cmd) { minY = Math.min(minY, cmd.y1); maxY = Math.max(maxY, cmd.y1) }
-    if ('y2' in cmd) { minY = Math.min(minY, cmd.y2); maxY = Math.max(maxY, cmd.y2) }
-  }
-  const offsetY = y - maxY
-
-  let d = ''
-  for (const cmd of commands) {
-    switch (cmd.type) {
-      case 'M': d += `M${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'L': d += `L${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'Q': d += `Q${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'C': d += `C${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x2.toFixed(2)} ${(cmd.y2 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'Z': d += 'Z'; break
-    }
-  }
-
-  return `<path d="${d}"/>`
+  return `<path d="${pathData}" transform="translate(0, ${y + cy}) scale(1, -1) translate(0, ${-cy})"/>`
 }
 
 function buildSvg(url) {
