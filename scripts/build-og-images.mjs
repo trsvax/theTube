@@ -49,44 +49,51 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js path commands use font coordinates (Y-up)
-  // We need to flip Y to SVG coordinates (Y-down)
-  // Strategy: get path, manually negate Y values, then translate to position
+  // opentype.js with this font produces mirrored paths (X reversed, Y flipped)
+  // Fix: negate both X and Y, then reposition
   const measurePath = font.getPath(text, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
   const startX = x - textWidth / 2
 
   const path = font.getPath(text, startX, 0, fontSize)
-  
-  // Flip Y in all path commands
+
+  // Negate both X and Y in all path commands
   const flipped = path.commands.map(cmd => {
     const c = { ...cmd }
+    if ('x' in c) c.x = -c.x
     if ('y' in c) c.y = -c.y
+    if ('x1' in c) c.x1 = -c.x1
     if ('y1' in c) c.y1 = -c.y1
+    if ('x2' in c) c.x2 = -c.x2
     if ('y2' in c) c.y2 = -c.y2
     return c
   })
 
-  // Get new bbox after flip
-  let minY = Infinity, maxY = -Infinity
+  // Get bbox of flipped path
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
   for (const cmd of flipped) {
+    if ('x' in cmd) { minX = Math.min(minX, cmd.x); maxX = Math.max(maxX, cmd.x) }
     if ('y' in cmd) { minY = Math.min(minY, cmd.y); maxY = Math.max(maxY, cmd.y) }
+    if ('x1' in cmd) { minX = Math.min(minX, cmd.x1); maxX = Math.max(maxX, cmd.x1) }
     if ('y1' in cmd) { minY = Math.min(minY, cmd.y1); maxY = Math.max(maxY, cmd.y1) }
+    if ('x2' in cmd) { minX = Math.min(minX, cmd.x2); maxX = Math.max(maxX, cmd.x2) }
     if ('y2' in cmd) { minY = Math.min(minY, cmd.y2); maxY = Math.max(maxY, cmd.y2) }
   }
-  const textH = maxY - minY
-  // Shift so baseline aligns with target y
+
+  // Center horizontally at x, position baseline at y
+  const flippedWidth = maxX - minX
+  const offsetX = x - (minX + flippedWidth / 2)
   const offsetY = y - maxY
 
-  // Build path data string
+  // Build path data string with offsets applied
   let d = ''
   for (const cmd of flipped) {
     switch (cmd.type) {
-      case 'M': d += `M${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'L': d += `L${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'Q': d += `Q${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
-      case 'C': d += `C${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x2.toFixed(2)} ${(cmd.y2 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'M': d += `M${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'L': d += `L${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'Q': d += `Q${(cmd.x1 + offsetX).toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'C': d += `C${(cmd.x1 + offsetX).toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${(cmd.x2 + offsetX).toFixed(2)} ${(cmd.y2 + offsetY).toFixed(2)} ${(cmd.x + offsetX).toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
       case 'Z': d += 'Z'; break
     }
   }
