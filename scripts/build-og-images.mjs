@@ -49,23 +49,49 @@ function parseFrontmatter(filepath) {
 }
 
 function textToPath(text, fontSize, x, y) {
-  // opentype.js generates glyphs mirrored horizontally for some fonts
-  // Render at origin, measure, then position with corrective transform
+  // opentype.js path commands use font coordinates (Y-up)
+  // We need to flip Y to SVG coordinates (Y-down)
+  // Strategy: get path, manually negate Y values, then translate to position
   const measurePath = font.getPath(text, 0, 0, fontSize)
   const bbox = measurePath.getBoundingBox()
   const textWidth = bbox.x2 - bbox.x1
-  const textHeight = bbox.y2 - bbox.y1
   const startX = x - textWidth / 2
 
   const path = font.getPath(text, startX, 0, fontSize)
-  const pathData = path.toPathData()
-  const pathBbox = path.getBoundingBox()
-  const cx = (pathBbox.x1 + pathBbox.x2) / 2
-  const cy = (pathBbox.y1 + pathBbox.y2) / 2
+  
+  // Flip Y in all path commands
+  const flipped = path.commands.map(cmd => {
+    const c = { ...cmd }
+    if ('y' in c) c.y = -c.y
+    if ('y1' in c) c.y1 = -c.y1
+    if ('y2' in c) c.y2 = -c.y2
+    return c
+  })
 
-  // Rotate 180° around center, then shift to target y
-  const dy = y - cy
-  return `<path d="${pathData}" transform="rotate(180, ${cx}, ${cy}) translate(0, ${dy})"/>`
+  // Get new bbox after flip
+  let minY = Infinity, maxY = -Infinity
+  for (const cmd of flipped) {
+    if ('y' in cmd) { minY = Math.min(minY, cmd.y); maxY = Math.max(maxY, cmd.y) }
+    if ('y1' in cmd) { minY = Math.min(minY, cmd.y1); maxY = Math.max(maxY, cmd.y1) }
+    if ('y2' in cmd) { minY = Math.min(minY, cmd.y2); maxY = Math.max(maxY, cmd.y2) }
+  }
+  const textH = maxY - minY
+  // Shift so baseline aligns with target y
+  const offsetY = y - maxY
+
+  // Build path data string
+  let d = ''
+  for (const cmd of flipped) {
+    switch (cmd.type) {
+      case 'M': d += `M${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'L': d += `L${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'Q': d += `Q${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'C': d += `C${cmd.x1.toFixed(2)} ${(cmd.y1 + offsetY).toFixed(2)} ${cmd.x2.toFixed(2)} ${(cmd.y2 + offsetY).toFixed(2)} ${cmd.x.toFixed(2)} ${(cmd.y + offsetY).toFixed(2)}`; break
+      case 'Z': d += 'Z'; break
+    }
+  }
+
+  return `<path d="${d}"/>`
 }
 
 function buildSvg(url) {
