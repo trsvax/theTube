@@ -8,9 +8,9 @@
 import { readFileSync, writeFileSync, mkdirSync, readdirSync } from 'fs'
 import { join, basename } from 'path'
 
-const TEMPLATE = readFileSync(join(import.meta.dirname, '../public/images/business-card.svg'), 'utf-8')
-const CONTENT_DIR = join(import.meta.dirname, '../../theTube-content/content/posts')
-const OUT_DIR = join(import.meta.dirname, '../out/og')
+const TEMPLATE = readFileSync(join(process.cwd(), 'public/images/business-card.svg'), 'utf-8')
+const CONTENT_DIR = join(process.cwd(), 'content/posts')
+const OUT_DIR = join(process.cwd(), 'out/og')
 
 // Ensure output dir exists
 mkdirSync(OUT_DIR, { recursive: true })
