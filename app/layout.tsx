@@ -14,13 +14,13 @@ export const metadata: Metadata = {
     url: "https://thetube.today",
     siteName: "theTube",
     images: [
-      { url: "https://thetube.today/og-image.png", width: 1200, height: 630 },
+      { url: "https://thetube.today/images/og.png", width: 1200, height: 630 },
     ],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    images: ["https://thetube.today/og-image.png"],
+    images: ["https://thetube.today/images/og.png"],
   },
 };
 
