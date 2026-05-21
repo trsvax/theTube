@@ -196,19 +196,91 @@ The browser does the dynamic work. The build produces static assets. No server n
 
 ---
 
+## The `/w/` write protocol
+
+All writes go through one endpoint:
+
+```
+POST /w/{namespace}/{verb}
+```
+
+**The `?` is the routing signal and data-capture guarantee:**
+
+| Request | Guarantee | Default handler | Reliability |
+|---|---|---|---|
+| `?` present (data in query string) | Data always captured in logs | CloudFront Function, 202 | Data never lost |
+| No `?` (data in body) | Requires compute to capture | Lambda | Might 503 if Lambda is down |
+
+The `?` means "the data is self-contained in the URL." The cheapest handler (log and 202) is sufficient. But nothing stops Lambda from also handling it — the `?` doesn't exclude compute, it just doesn't require it.
+
+**How routing works (default):** The CloudFront Function checks for a query string. Present → return 202 immediately (data is in the URL, logged). Absent → pass through to Lambda@Edge. No body inspection needed — the `?` is the signal.
+
+**Defaults:**
+
+- Data in the query string = batch. Always logged. Always captured. Free. Always works.
+- No query string = "I need compute." Lambda processes the body. Plugin provides the Lambda.
+- POST (not GET) because CloudFront must not cache write requests.
+
+**Client contract:** POST, look at the status code. 2xx = success. 4xx = your fault. 503 = retry later (Lambda is down). If there's a response body, use it. If not, don't.
+
+**CloudFront config:** One behavior for `/w/*` — no cache, run the function. Auth, CORS, rate limiting all in one place.
+
+**Namespace is a convention, not a contract.** The path structure is `/w/{namespace}/{verb}` but nothing enforces that the namespace maps to a repo or that a schema exists. The CloudFront Function doesn't validate — it logs and returns 202. Structure is opt-in.
+
+---
+
 ## GraphQL as the plugin contract
 
-Plugins communicate via GraphQL operations. The schema lives in the plugin repo. The client sends `operationName` + `data`. The platform handles transport based on directives.
+Plugins that want typed operations bring a GraphQL schema. The schema lives in the plugin repo. It declares:
 
-| Directive | Transport | Behavior |
+- What operations exist (the namespace/verb combinations under `/w/`)
+- What parameters each operation accepts (the query string shape)
+- What the output looks like
+- What directives apply
+
+| Directive | Meaning | Client behavior |
 |---|---|---|
-| `@moderate` | `GET /events/{operation}?{data as key=value}` | Logged by CloudFront, processed in batch |
-| `@realtime` | `POST /fastevent/{operation}` with JSON body | Lambda processes immediately, returns `202 + Location` |
-| `@auth(role)` | JWT validated by Lambda@Edge | Reject if user lacks the required role |
+| `@moderate` | Batch processing, no immediate result | Client includes `?` (data in query string) |
+| `@realtime` | Immediate processing, returns result | Client omits `?` (data in body) |
+| `@auth(role)` | JWT required with specified role | Lambda validates before processing |
 
-The client doesn't know the transport. It sends an operation name and data. The platform maps directives to paths. Plugin repos just declare what operations exist and which directives apply. The platform handles the rest.
+The schema is a type system and capability declaration, not a routing table. The operation name tells you the input and output shapes. The directives tell the client hook whether to include a body.
+
+You can also just `POST /w/whatever/thing?x=1` with no schema — it gets logged. Add structure when it earns its keep.
 
 GraphQL schemas are backward compatible by design — add fields, don't remove them. Deprecate with `@deprecated`, don't delete. Old clients keep working because they only ask for fields they know about. This makes the plugin interface stable across tagged snapshots and time-traveled versions.
+
+---
+
+## Plugin isolation
+
+The namespace is the security boundary. Each plugin namespace maps to:
+
+| Layer | Scope |
+|---|---|
+| Repo | Who can deploy code for this namespace |
+| Lambda | What code runs for this namespace |
+| IAM role | What the Lambda can write to |
+| S3 prefix | Where the output lives |
+
+Example:
+
+```
+/w/comment/*  → thetube-comments repo → comment Lambda → IAM: s3://bucket/comments/* only
+/w/contact/*  → contact repo          → contact Lambda → IAM: s3://bucket/contact/* only
+```
+
+The contract repo (schema) declares what the plugin *can* do. IAM enforces the ceiling. A team with write access to one plugin repo cannot:
+
+- Deploy code to another namespace's Lambda
+- Write to another namespace's S3 prefix
+- Modify another namespace's IAM role
+
+Blast radius = repo scope. A bad deploy breaks one namespace. Everything else keeps working. The `?` path still captures data even when a namespace's Lambda is broken — nothing is lost, processing is just delayed until the fix ships.
+
+The platform enforces the boundary (namespace, IAM, S3 prefix) but says nothing about what happens inside it. Process, tooling, language, deploy cadence, code review policy — all internal to the repo. One team vibe codes and ships ten times a day. Another does waterfall with mandatory code reviews. The platform doesn't care. The interface is the schema and the URL. Everything behind it is the team's business.
+
+Opinionated about the contract. Silent about the implementation.
 
 ---
 

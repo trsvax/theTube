@@ -38,8 +38,8 @@ function handler(event) {
   var request = event.request;
   var uri = request.uri;
 
-  // Event ingestion — return 202, CloudFront logs the request
-  if (uri.startsWith("/events/")) {
+  // Write endpoint — return 202, CloudFront logs the request
+  if (uri.startsWith("/w/") && request.querystring) {
     return {
       statusCode: 202,
       statusDescription: "Accepted",
