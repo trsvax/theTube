@@ -1,0 +1,11 @@
+Session 2026-05-21:
+
+Key ideas:
+- Jolt/coffee/prosecco effort tracking system: jolt=estimate (set at thought transition), coffee=effort (agent increments), prosecco=derived celebration (jolt-coffee+1)
+- Prosecco is a reward signal, not binary — the better it went, the more glasses
+- Agent manages the tracking, not the user
+- No hooks needed — steering convention is enough
+
+Files updated:
+- theTube-content: jolt-coffee-prosecco.md (lifecycle, math, icons, spec link)
+- theTube: .kiro/specs/jolt-coffee-prosecco/ (requirements, design, tasks)
