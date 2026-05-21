@@ -42,7 +42,7 @@ Each time the agent works on a post (edits it, discusses it substantively), `cof
 
 ### REQ-3: Prosecco is derived
 
-When a post reaches `published` status, `prosecco` is set to `max(0, jolt - coffee + 1)`. Beat the estimate → more prosecco. Went over → zero.
+When a post reaches `published` status, `prosecco` is set to `(jolt - coffee)² / coffee + 1`. The curve is U-shaped — minimum of 1 when coffee = jolt (nailed the estimate), tending toward infinity as coffee → 0 (celebration) or coffee → ∞ (coping). Both extremes mean more drinking.
 
 ### REQ-4: Zero means not started or not applicable
 
