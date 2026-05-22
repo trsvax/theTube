@@ -31,11 +31,11 @@
   </g>
 
   <!-- "The Tube" wordmark centered below mark -->
-  <!-- Using the vector wordmark paths from the horizontal logo, scaled smaller -->
-  <!-- Original wordmark spans x=411-900 in the horizontal logo (489 units wide) -->
-  <!-- At scale 0.42 that's 205px. But we want it centered and sized for the square -->
-  <!-- Scale the wordmark portion: 489 * 0.35 = 171px wide, center: (500-171)/2 but offset for T start -->
-  <g transform="translate(105, 270) scale(0.35)">
+  <!-- Scale up and center properly -->
+  <!-- Wordmark paths span x=411-900 (489 units), height ~80 units -->
+  <!-- At scale 0.45: 489*0.45=220px wide. Center: (500-220)/2=140, but offset for path start at x=411 -->
+  <!-- Offset X: 140 - 411*0.45 = 140 - 185 = -45 -->
+  <g transform="translate(-45, 265) scale(0.45)">
     <path fill="#280001" d="m458.61,148.11h-46.92v-3.44l6.3-1.66c5.82-1.54,6.06-3.09,6.06-26.96s-.24-31.83-.71-35.4c-4.99,1.54-7.25,5.34-11.64,14.61l-7.01,15.56h-2.85c.95-11.76,1.07-23.88,1.19-33.97h63.79c.12,10.1.24,22.21,1.19,33.97h-2.85l-7.01-15.56c-4.4-9.15-6.89-12.71-11.64-14.61-.36,3.21-.48,9.03-.48,26.61,0,34.21.95,34.68,6.65,35.99l6.06,1.43-.12,3.44Z"/>
     <path fill="#280001" d="m472.04,79.33v-2.85c9.62-1.54,21.02-4.99,26.73-9.74l1.66.59c-.36,7.48-.83,20.79-.95,37.54h.95c2.02-8.08,11.76-17.46,22.92-17.46,8.79,0,14.97,5.11,14.97,14.73,0,7.13-.24,15.32-.24,22.45,0,17.82.12,18.53,4.51,19.6l2.02.48v3.44h-34.33v-3.44l2.14-.59c4.04-.95,3.92-3.09,3.92-22.21,0-16.75-1.9-18.77-8.55-18.77-4.04,0-7.6,1.43-7.6,7.01,0,32.19.12,32.67,4.16,33.73l2.85.83v3.44h-35.16v-3.44l1.9-.59c4.63-1.66,4.63-3.09,4.63-25.18,0-33.85.36-36.11-2.61-37.65l-3.92-1.9Z"/>
     <path fill="#280001" d="m605.19,109.74l-19.36,2.85-15.92-.59v.36c0,17.46,6.06,20.67,15.8,20.67,8.43,0,14.14-2.97,17.82-12.23l1.9,1.9c-3.8,12.35-8.31,26.73-29.1,26.73-16.75,0-29.22-8.91-29.22-30.29s13.66-31.6,35.4-31.6c17.94,0,22.81,8.2,22.69,22.21Zm-35.28,1.31l12.71-2.14c1.78-.24,2.61-1.07,2.61-2.97,0-7.96-4.87-14.25-10.22-14.25-4.28,0-5.11,2.73-5.11,19.36Z"/>
@@ -46,5 +46,5 @@
   </g>
 
   <!-- "a stream of thoughts" tagline -->
-  <text x="250" y="430" text-anchor="middle" font-family="'Poppins', system-ui, sans-serif" font-size="22" font-style="italic" fill="#48597a">a stream of thoughts</text>
+  <text x="250" y="410" text-anchor="middle" font-family="'Poppins', system-ui, sans-serif" font-size="22" font-style="italic" fill="#48597a">a stream of thoughts</text>
 </svg>
