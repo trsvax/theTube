@@ -1,20 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 873 378" width="873" height="378">
-  <!-- MOO Minicard: 873 x 378px full bleed -->
-  <!-- Based on the original OG SVG template, scaled to fit minicard -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <!-- OG image: 1200x630 -->
   <defs>
     <style>
-      .url-text { fill: #48597a; font-family: 'Poppins', system-ui, Helvetica, Arial, sans-serif; font-size: 26px; letter-spacing: 0.5px; }
+      .url-text { fill: #48597a; font-family: 'Poppins', system-ui, Helvetica, Arial, sans-serif; font-size: 28px; letter-spacing: 0.5px; }
     </style>
   </defs>
 
-  <!-- White background -->
-  <rect width="873" height="378" fill="#ffffff"/>
+  <!-- White background with rounded corners -->
+  <rect width="1200" height="630" rx="12" ry="12" fill="#ffffff"/>
 
   <!-- Horizontal logo (mark + wordmark) centered -->
-  <!-- Original was at translate(95,30) scale(0.56) in a 700x200 viewBox -->
-  <!-- Scale 0.7: logo group ~630 wide, ~155 tall -->
-  <!-- Moved down: Y from 80 to 110 to center vertically with room for URL -->
-  <g transform="translate(122, 110) scale(0.7)">
+  <!-- Original logo group in 700x200 viewBox at scale 0.56 -->
+  <!-- For 1200x630: scale ~0.95 gives ~855 wide, ~210 tall -->
+  <!-- Center X: (1200-855)/2=172, Center Y: (630-210)/2 - 30 = ~180 -->
+  <g transform="translate(172, 165) scale(0.95)">
     <!-- Orange sun/starburst -->
     <path fill="#ea8725" d="m297.09,125.31l.57-1.9c.9-3.01,3.96-4.82,7.03-4.15l6.52,1.43c4.06.89,7.77-2.51,7.23-6.63l-.86-6.62c-.4-3.11,1.66-6.01,4.74-6.65l6.54-1.35c4.07-.84,6.07-5.46,3.91-9l-3.48-5.7c-1.64-2.68-.93-6.17,1.62-8l5.42-3.89c3.37-2.42,3.33-7.46-.09-9.81l-5.49-3.79c-2.59-1.78-3.36-5.26-1.77-7.97l3.37-5.76c2.1-3.58,0-8.16-4.07-8.93l-6.56-1.23c-3.09-.58-5.21-3.44-4.86-6.56l.74-6.63c.46-4.13-3.31-7.46-7.35-6.5l-6.49,1.55c-3.06.73-6.16-1.02-7.11-4.02l-2.02-6.36c-1.26-3.96-6.06-5.47-9.36-2.95l-5.3,4.05c-2.5,1.91-6.04,1.57-8.13-.78l-4.44-4.99c-2.76-3.1-7.76-2.53-9.75,1.12l-3.19,5.86c-1.5,2.76-4.88,3.89-7.74,2.59l-6.08-2.75c-3.78-1.71-8.12.84-8.45,4.98l-.54,6.65c-.25,3.13-2.88,5.54-6.02,5.52l-6.67-.04c-2.32-.01-4.25,1.26-5.27,3.07l67.55,77.85,15.86,18.28Z"/>
     <!-- Blue A-frame -->
@@ -36,8 +35,7 @@
     <path fill="#280001" d="m899.76,109.74l-19.36,2.85-15.92-.59v.36c0,17.46,6.06,20.67,15.8,20.67,8.43,0,14.14-2.97,17.82-12.23l1.9,1.9c-3.8,12.35-8.31,26.73-29.1,26.73-16.75,0-29.22-8.91-29.22-30.29s13.66-31.6,35.4-31.6c17.94,0,22.81,8.2,22.69,22.21Zm-35.28,1.31l12.71-2.14c1.78-.24,2.61-1.07,2.61-2.97,0-7.96-4.87-14.25-10.21-14.25-4.28,0-5.11,2.73-5.11,19.36Z"/>
   </g>
 
-  <!-- URL below the wordmark, centered under "The Tube" text portion -->
-  <!-- Wordmark "The Tube" spans roughly x=410-750 in original coords at this scale -->
-  <!-- Center of wordmark text: ~580 -->
-  <text class="url-text" x="580" y="295" text-anchor="middle">thetube.today</text>
+  <!-- Post URL below the wordmark -->
+  <!-- Wordmark center at this scale: 172 + 900*0.95*0.6 = ~685 -->
+  <text class="url-text" x="685" y="420" text-anchor="middle">thetube.today/posts/business-card</text>
 </svg>
