@@ -28,7 +28,7 @@ specLink:
 ```
 
 **Required:** `title`, `date`, `tags`, `summary`, `type: journal`
-**Optional:** `audience` (default: `user`), `status`, `specLink`, `draft`
+**Optional:** `audience` (default: `user`), `status`, `specLink`, `workflow`
 
 **`status` values:**
 

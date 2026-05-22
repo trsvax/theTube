@@ -10,7 +10,8 @@ export interface PostMeta {
   tags: string[];
   audience: string;
   draft?: boolean;
-  type?: "draft" | "thought" | "post" | "journal";
+  workflow?: "draft" | "published";
+  type?: "thought" | "post" | "journal";
   summary: string;
   shortSlug?: string;
   issueNumber?: number;
@@ -83,13 +84,14 @@ export function getPosts(): PostMeta[] {
         tags: (meta.tags as string[]) ?? [],
         audience: (meta.audience as string) ?? "public",
         draft: meta.draft === "true" || meta.draft === true,
-        type: ((meta.type as string) ?? "post") as "draft" | "thought" | "post" | "journal",
+        workflow: ((meta.workflow as string) ?? "draft") as "draft" | "published",
+        type: ((meta.type as string) ?? "post") as "thought" | "post" | "journal",
         summary: (meta.summary as string) ?? "",
         shortSlug: (meta.shortSlug as string) ?? undefined,
         coffee: meta.coffee ? Number(meta.coffee) : undefined,
       };
     })
-    .filter((p) => !p.draft && p.type !== "draft")
+    .filter((p) => p.workflow === "published")
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 

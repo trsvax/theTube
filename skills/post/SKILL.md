@@ -26,8 +26,8 @@ Domain knowledge for creating and editing posts on theTube.
 
 See `docs/content.md` §Frontmatter Spec for all fields, types, and defaults.
 
-Required: `title`, `date`, `tags`, `summary`
-Optional: `image`, `bsky`, `draft`, `audience`
+Required: `title`, `date`, `tags`, `summary`, `workflow`
+Optional: `image`, `bsky`, `audience`
 
 ## Callout syntax
 
@@ -68,7 +68,7 @@ See `docs/content.md` §Shortcode Inventory for all shortcodes and args.
 | tags     | PostCard tag pills, index tag filter (automatic — no code change)   |
 | image    | `og:image` meta tag, Bluesky link card thumbnail, PostCard (future) |
 | bsky     | Whether GitHub Actions posts to Bluesky on deploy (default: false)  |
-| draft    | Excluded from index when true; URL still works for preview          |
+| workflow | Routes post into index.json (`published`) or excludes it (`draft`)  |
 | audience | Routes post metadata into role-based JSON index files               |
 
 ## Tag conventions

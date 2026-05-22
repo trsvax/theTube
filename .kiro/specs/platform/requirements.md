@@ -167,8 +167,10 @@ One S3 bucket, one CloudFront distribution. All content sources share them.
 
 Posts are `.md` files with YAML frontmatter. The slug is the filename without `.md`.
 
-**Required:** `title`, `date`, `tags`, `summary`
-**Optional:** `image`, `bsky`, `draft`, `audience`, `type`, `shortSlug`
+**Required:** `title`, `date`, `tags`, `summary`, `workflow`
+**Optional:** `image`, `bsky`, `audience`, `type`, `shortSlug`
+
+`workflow` controls visibility: `published` = included in index.json feeds, `draft` = builds to a URL but excluded from all feeds. Extensible later (e.g. `review`, `scheduled`).
 
 `audience` routes the post into the right role-scoped `index.json`. Default: `public`.
 

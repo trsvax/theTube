@@ -10,7 +10,7 @@
 | summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card                 |
 | image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail                      |
 | bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions                  |
-| draft    | no       | boolean    | false   | Exclude from index; URL still builds and works                   |
+| workflow | yes      | string     | —       | `draft` or `published` — controls index.json inclusion           |
 | audience | no       | string     | public  | Role gate — routes into JSON index files (see Roles)             |
 
 ### Example
@@ -23,7 +23,7 @@ tags: [travel]
 summary: Three weeks, one carry-on, very little money.
 image: https://cdn.thetube.today/posts/tokyo/cover.jpg
 bsky: true
-draft: false
+workflow: published
 audience: public
 ---
 ```
