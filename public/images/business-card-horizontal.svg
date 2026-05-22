@@ -39,5 +39,5 @@
   <!-- URL below the wordmark, centered under "The Tube" text portion -->
   <!-- Wordmark "The Tube" spans roughly x=410-750 in original coords at this scale -->
   <!-- Center of wordmark text: ~580 -->
-  <text class="url-text" x="580" y="295" text-anchor="middle">thetube.today</text>
+  <text class="url-text" x="580" y="295" text-anchor="middle">thetube.today/posts/business-card</text>
 </svg>

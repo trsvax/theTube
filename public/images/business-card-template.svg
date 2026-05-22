@@ -35,7 +35,7 @@
   </g>
 
   <!-- URL below the wordmark, centered under "The Tube" -->
-  <text class="url-text" x="580" y="295" text-anchor="middle">thetube.today</text>
+  <text class="url-text" x="580" y="295" text-anchor="middle">thetube.today/posts/business-card</text>
 
   <!-- Trim line: ~24px inset (bleed to trim) -->
   <rect class="trim-line" x="24" y="24" width="825" height="330"/>
