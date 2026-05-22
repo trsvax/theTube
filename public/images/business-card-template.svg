@@ -1,9 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 792 317" width="792" height="317">
-  <!-- MOO Minicard: 2.75" x 1.10" at 288dpi = 792 x 317 -->
-  <!-- Bleed: 2.91" x 1.26" = 839 x 363 — this is trim size -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 839 363" width="839" height="363">
+  <!-- MOO Minicard Template -->
+  <!-- Bleed: 2.91" x 1.26" = 839 x 363 @ 288dpi -->
+  <!-- Trim: 2.75" x 1.10" = 792 x 317 — centered in bleed -->
+  <!-- Safe: 2.6" x 0.94" = 749 x 271 — centered in bleed -->
+
   <defs>
     <style>
       .card-bg { fill: #ffffff; }
+      .bleed-bg { fill: #f5f5f5; }
+      .trim-line { fill: none; stroke: #999999; stroke-width: 1; stroke-dasharray: 6 3; }
+      .safe-line { fill: none; stroke: #cc0066; stroke-width: 1; stroke-dasharray: 3 3; }
       .logo-house { fill: #48597a; }
       .logo-dark { fill: #280001; }
       .logo-accent { fill: #ea8725; }
@@ -17,13 +23,22 @@
     </style>
   </defs>
 
-  <!-- White background -->
-  <rect class="card-bg" width="792" height="317" rx="8" ry="8"/>
+  <!-- Bleed area background -->
+  <rect class="bleed-bg" width="839" height="363"/>
 
-  <!-- Logo mark — centered, scaled to ~80px tall -->
+  <!-- Card white fill (extends to bleed) -->
+  <rect class="card-bg" width="839" height="363"/>
+
+  <!-- Trim line: (839-792)/2=23.5 inset each side, (363-317)/2=23 inset top/bottom -->
+  <rect class="trim-line" x="23.5" y="23" width="792" height="317"/>
+
+  <!-- Safe area: (839-749)/2=45 inset each side, (363-271)/2=46 inset top/bottom -->
+  <rect class="safe-line" x="45" y="46" width="749" height="271"/>
+
+  <!-- Logo mark — centered in card, scaled to ~80px tall -->
   <!-- 900*0.145=130.5 wide, 549*0.145=79.6 tall -->
-  <!-- Center X: (792-130.5)/2 = 330.75, Y positioned at ~90 -->
-  <g transform="translate(331, 85) scale(0.145)">
+  <!-- Center in full bleed: (839-130.5)/2=354, Y at ~108 -->
+  <g transform="translate(354, 108) scale(0.145)">
     <path class="logo-house" d="m891.03,489.19l-155.1-178.77-39.29-45.28-167.32-192.86-51.84-59.75c-14.5-16.72-40.45-16.72-54.96,0l-219.16,252.6L8.97,489.19c-20.44,23.55-3.7,60.22,27.48,60.22h83.91v-70.92c0-80.72,65.43-146.15,146.15-146.15h27.86v-3.67c0-9.77,7.92-17.69,17.69-17.69h146.51c9.77,0,17.69,7.92,17.69,17.69v3.67h157.23c43.09,0,81.82,18.65,108.57,48.31,23.36,25.91,37.58,60.21,37.58,97.84v70.92h83.91c31.18,0,47.91-36.66,27.48-60.22Z"/>
     <path class="logo-dark" d="m652.31,490.07c-17.26,0-31.25-13.99-31.25-31.25v-46.92c0-17.26,13.99-31.25,31.25-31.25h89.75c-26.75-29.67-65.48-48.31-108.57-48.31h-157.23v-3.67c0-9.77-7.92-17.69-17.69-17.69h-146.51c-9.77,0-17.69,7.92-17.69,17.69v3.67h-27.86c-80.72,0-146.15,65.44-146.15,146.15v70.92h659.29v-59.34h-127.33Zm-293.25-31.25c0,17.26-13.99,31.25-31.25,31.25h-46.92c-17.26,0-31.25-13.99-31.25-31.25v-46.92c0-17.26,13.99-31.25,31.25-31.25h46.92c17.26,0,31.25,13.99,31.25,31.25v46.92Zm126.47,0c0,17.26-13.99,31.25-31.25,31.25h-46.92c-17.26,0-31.25-13.99-31.25-31.25v-46.92c0-17.26,13.99-31.25,31.25-31.25h46.92c17.26,0,31.25,13.99,31.25,31.25v46.92Z"/>
     <rect class="logo-accent" x="249.64" y="380.65" width="109.42" height="109.42" rx="31.25" ry="31.25"/>
@@ -32,5 +47,5 @@
   </g>
 
   <!-- URL text — centered below logo -->
-  <text class="url-text" x="396" y="230" text-anchor="middle">theTube.today</text>
+  <text class="url-text" x="419.5" y="253" text-anchor="middle">theTube.today</text>
 </svg>
