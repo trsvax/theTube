@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "site.json"
+      - "index.json"
   workflow_dispatch:
 
 concurrency:

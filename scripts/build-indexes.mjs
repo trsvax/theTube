@@ -1,5 +1,5 @@
-// build-indexes.mjs — generates role-scoped content.json files after next build
-// Output: out/<role>/content.json for each role
+// build-indexes.mjs — generates role-scoped index.json files after next build
+// Output: out/<role>/index.json for each role
 import fs from "node:fs";
 import path from "node:path";
 
@@ -54,10 +54,10 @@ for (const role of ROLES) {
   fs.mkdirSync(dir, { recursive: true });
   const items = byRole[role].sort((a, b) => (a.date < b.date ? 1 : -1));
   fs.writeFileSync(
-    path.join(dir, "content.json"),
+    path.join(dir, "index.json"),
     JSON.stringify({ version: 1, role, items }, null, 2),
   );
-  console.log(`${role}/content.json: ${items.length} item(s)`);
+  console.log(`${role}/index.json: ${items.length} item(s)`);
 }
 
 const buildTime = process.env.BUILD_TIME ?? new Date().toISOString();

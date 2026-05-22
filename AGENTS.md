@@ -49,12 +49,12 @@ lib/
 content/
   posts/              *.md files — public posts only
 
-site.json             Master content manifest — committed artifact, synced to S3 root
+index.json            Master content manifest — committed artifact, synced to S3 root
 
 scripts/
-  aggregate-site.mjs  Regenerates site.json from the SECTIONS registry
+  aggregate-site.mjs  Regenerates index.json from the SECTIONS registry
   aws-setup.sh        One-time AWS infrastructure provisioning script
-  build-indexes.mjs   Generates out/content.json for the public section after build
+  build-indexes.mjs   Generates out/{role}/index.json for each role after build
 
 docs/
   architecture.md     Stack decisions, hosting, deploy pipeline
@@ -68,15 +68,15 @@ skills/
 
 .github/
   workflows/
-    deploy.yml        Build + S3 sync + CloudFront invalidation (skips site.json-only commits)
-    aggregate.yml     Manual workflow — regenerates site.json and syncs to S3
+    deploy.yml        Build + S3 sync + CloudFront invalidation (skips index.json-only commits)
+    aggregate.yml     Manual workflow — regenerates index.json and syncs to S3
 ```
 
 ### Multi-repo structure
 
 | Repo                          | Visibility | Contains                                                                                          |
 | ----------------------------- | ---------- | ------------------------------------------------------------------------------------------------- |
-| `trsvax/theTube`              | Public     | App code, public post content, docs, `site.json`                                                  |
+| `trsvax/theTube`              | Public     | App code, public post content, docs, `index.json`                                                 |
 | `trsvax/theTube-content`      | Public     | Public posts, about/links pages                                                                   |
 | `trsvax/thetube-private`      | Private    | Protected post content, licensed fonts (`public/fonts/`), role-gated images (`public/protected/`) |
 | `trsvax/tapestry-nocode-site` | Public     | Tapestry NoCode book builder — deploys to `/books/tapestry-nocode/`                               |
@@ -86,18 +86,20 @@ The deploy workflow checks out theTube, theTube-content, and thetube-private, me
 
 ---
 
-## site.json Content Contract
+## index.json Content Contract
 
-`site.json` at the S3 root is the master content manifest. Every content source (blog section, book, etc.) produces a `content.json` at its S3 path. `site.json` lists all sections with their `contentUrl` and required `role`.
+`index.json` at the S3 root is the master content manifest. Every content source (blog section, book, etc.) produces an `index.json` at its S3 path. The root `index.json` lists all sections with their `contentUrl` and required `role`.
 
 ```json
 {
   "updated": "ISO timestamp",
   "sections": [
-    { "slug": "public", "contentUrl": "/public/content.json", "role": "public" }
+    { "slug": "public", "contentUrl": "/public/index.json", "role": "public" }
   ]
 }
 ```
+
+Convention: every directory has an `index.json`. That's the listing. `index.json` is `ls`.
 
 To add a new content source: deploy it first, then add its entry to `SECTIONS` in `scripts/aggregate-site.mjs` and run the **aggregate** workflow.
 
@@ -163,9 +165,9 @@ Push to `main` → GitHub Actions (`deploy.yml`):
 3. `aws s3 sync out/ s3://<bucket> --delete`
 4. CloudFront invalidation
 
-`deploy.yml` has `paths-ignore: ['site.json']` — site.json-only commits do not trigger a full build.
+`deploy.yml` has `paths-ignore: ['index.json']` — index.json-only commits do not trigger a full build.
 
-To update `site.json` (e.g. after a new content source deploys), run the **aggregate** workflow manually from the Actions tab. It regenerates `site.json`, syncs it to S3, and commits the update.
+To update `index.json` (e.g. after a new content source deploys), run the **aggregate** workflow manually from the Actions tab. It regenerates `index.json`, syncs it to S3, and commits the update.
 
 AWS credentials stored as GitHub Actions secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_REGION`, `S3_BUCKET`, `CLOUDFRONT_DISTRIBUTION_ID`.
 
@@ -182,4 +184,4 @@ AWS credentials stored as GitHub Actions secrets: `AWS_ACCESS_KEY_ID`, `AWS_SECR
 
 ---
 
-_Last updated: 2026-05-16_
+_Last updated: 2026-05-22_

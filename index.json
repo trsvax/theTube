@@ -3,27 +3,27 @@
   "sections": [
     {
       "slug": "public",
-      "contentUrl": "/public/content.json",
+      "contentUrl": "/public/index.json",
       "role": "public"
     },
     {
       "slug": "user",
-      "contentUrl": "/user/content.json",
+      "contentUrl": "/user/index.json",
       "role": "user"
     },
     {
       "slug": "kids",
-      "contentUrl": "/kids/content.json",
+      "contentUrl": "/kids/index.json",
       "role": "kids"
     },
     {
       "slug": "friends",
-      "contentUrl": "/friends/content.json",
+      "contentUrl": "/friends/index.json",
       "role": "friends"
     },
     {
       "slug": "tapestry-nocode",
-      "contentUrl": "/books/tapestry-nocode/content.json",
+      "contentUrl": "/books/tapestry-nocode/index.json",
       "role": "public"
     }
   ]

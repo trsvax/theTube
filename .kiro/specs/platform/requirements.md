@@ -33,7 +33,7 @@ Each layer down the stack is someone else's problem. You care about the journal.
 Any content source that wants to participate in the platform must produce two things:
 
 1. **Static HTML** — built files synced to an S3 path (e.g. `/`, `/books/tapestry-nocode/`)
-2. **`content.json`** — a manifest of items at that path, in this shape:
+2. **`index.json`** — a manifest of items at that path, in this shape:
 
 ```json
 {
@@ -56,9 +56,9 @@ That's the interface. Any tool that speaks this format can participate. The fron
 
 ---
 
-## site.json — the master manifest
+## index.json — the master manifest
 
-`site.json` at the S3 root lists all content sources. The front end fetches it to know what sections exist and what role is required to access each.
+`index.json` at the S3 root lists all content sources. The front end fetches it to know what sections exist and what role is required to access each.
 
 ```json
 {
@@ -66,24 +66,26 @@ That's the interface. Any tool that speaks this format can participate. The fron
   "sections": [
     {
       "slug": "public",
-      "contentUrl": "/public/content.json",
+      "contentUrl": "/public/index.json",
       "role": "public"
     },
-    { "slug": "user", "contentUrl": "/user/content.json", "role": "user" },
-    { "slug": "kids", "contentUrl": "/kids/content.json", "role": "kids" },
+    { "slug": "user", "contentUrl": "/user/index.json", "role": "user" },
+    { "slug": "kids", "contentUrl": "/kids/index.json", "role": "kids" },
     {
       "slug": "friends",
-      "contentUrl": "/friends/content.json",
+      "contentUrl": "/friends/index.json",
       "role": "friends"
     },
     {
       "slug": "tapestry-nocode",
-      "contentUrl": "/books/tapestry-nocode/content.json",
+      "contentUrl": "/books/tapestry-nocode/index.json",
       "role": "public"
     }
   ]
 }
 ```
+
+Convention: every directory has an `index.json`. That's the listing. `index.json` is `ls`.
 
 Adding a new content source = deploy it first, then add its entry to `SECTIONS` in `scripts/aggregate-site.mjs` and run the aggregate workflow.
 
@@ -93,13 +95,13 @@ Adding a new content source = deploy it first, then add its entry to `SECTIONS` 
 
 | Repo                          | Purpose                                     | Deploys to                             |
 | ----------------------------- | ------------------------------------------- | -------------------------------------- |
-| `trsvax/theTube`              | App code, public posts, docs, `site.json`   | `/` (S3 root)                          |
+| `trsvax/theTube`              | App code, public posts, docs, `index.json`  | `/` (S3 root)                          |
 | `trsvax/theTube-content`      | Public post content                         | merged into theTube build              |
 | `trsvax/thetube-private`      | Private content, licensed fonts, Lambda/CDK | merged into theTube build              |
 | `trsvax/tapestry-nocode-site` | Tapestry NoCode book renderer               | `/books/tapestry-nocode/`              |
 | `trsvax/tapestry-nocode`      | Tapestry NoCode book content                | merged into tapestry-nocode-site build |
 
-Each content source has its own repo, its own build, its own deploy. The format agreement — Markdown, `content.json`, S3 path — is the only coupling.
+Each content source has its own repo, its own build, its own deploy. The format agreement — Markdown, `index.json`, S3 path — is the only coupling.
 
 ### Repos as access boundaries
 
@@ -124,7 +126,7 @@ git push main
 The theTube main build additionally:
 
 - Merges private assets (fonts, protected images) from `thetube-private`
-- Runs `scripts/build-indexes.mjs` to generate role-scoped `content.json` files
+- Runs `scripts/build-indexes.mjs` to generate role-scoped `index.json` files
 - Deploys the CloudFront short-URL function
 
 ---
@@ -141,7 +143,7 @@ One S3 bucket, one CloudFront distribution. All content sources share them.
 | ---------------------------------- | ---------------------- | -------------------------------- |
 | `default (*)`                      | Public                 | All static HTML, fonts, images   |
 | `/protected/*`                     | Signed cookie required | Role-gated assets                |
-| `/user/*`, `/kids/*`, `/friends/*` | Lambda@Edge auth       | Role-scoped `content.json` files |
+| `/user/*`, `/kids/*`, `/friends/*` | Lambda@Edge auth       | Role-scoped `index.json` files   |
 
 **Auth stack:**
 
@@ -168,9 +170,9 @@ Posts are `.md` files with YAML frontmatter. The slug is the filename without `.
 **Required:** `title`, `date`, `tags`, `summary`
 **Optional:** `image`, `bsky`, `draft`, `audience`, `type`, `shortSlug`
 
-`audience` routes the post into the right role-scoped `content.json`. Default: `public`.
+`audience` routes the post into the right role-scoped `index.json`. Default: `public`.
 
-`type` controls how the post is treated: `post` (default), `thought`, `draft` (excluded from index). `journal` is reserved for in-progress thinking — excluded from `content.json`, rendered at `/journal`.
+`type` controls how the post is treated: `post` (default), `thought`, `draft` (excluded from index). `journal` is reserved for in-progress thinking — excluded from `index.json`, rendered at `/journal`.
 
 **Journal status lifecycle:** `vague-thought` → `thought` → `journaling` → `shipped`
 
@@ -188,7 +190,7 @@ Posts start at `audience: user` while in progress, flipped to `audience: public`
 `PostList` is a `"use client"` component. On load it:
 
 1. Reads the `thetube_roles` cookie to know which feeds to fetch
-2. Fetches each accessible `content.json` in parallel
+2. Fetches each accessible `index.json` in parallel
 3. Merges, deduplicates, and sorts by date
 4. Renders the list with client-side tag filtering
 
@@ -286,10 +288,10 @@ Opinionated about the contract. Silent about the implementation.
 
 ## Adding a new content source
 
-1. Create a repo with a build that produces `out/` and `out/content.json`
+1. Create a repo with a build that produces `out/` and `out/index.json`
 2. Add a GitHub Actions workflow that syncs `out/` to `s3://<bucket>/<path>`
 3. Add the section to `SECTIONS` in `scripts/aggregate-site.mjs`
-4. Run the aggregate workflow to update `site.json`
+4. Run the aggregate workflow to update `index.json`
 
 The front end picks it up automatically on next load.
 

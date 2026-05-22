@@ -1,4 +1,4 @@
-name: Aggregate site.json
+name: Aggregate index.json
 
 on:
   workflow_dispatch:
@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Generate site.json
+      - name: Generate index.json
         run: node scripts/aggregate-site.mjs
 
       - name: Configure AWS
@@ -23,12 +23,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Sync site.json to S3
-        run: aws s3 cp site.json s3://${{ secrets.S3_BUCKET }}/site.json
+      - name: Sync index.json to S3
+        run: aws s3 cp index.json s3://${{ secrets.S3_BUCKET }}/index.json
 
-      - name: Commit site.json
+      - name: Commit index.json
         run: |
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
-          git add site.json
-          git diff --staged --quiet || git commit -m "release: update site.json" && git push
+          git add index.json
+          git diff --staged --quiet || git commit -m "release: update index.json" && git push
