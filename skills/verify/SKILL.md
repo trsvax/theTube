@@ -48,14 +48,14 @@ git fetch origin refs/notes/*:refs/notes/*
 - HTTPS redirect works (http → https)
 
 ### Phase 2 — Index files
-- /public/content.json returns correct items array
-- /user/content.json, /kids/content.json, /friends/content.json return empty arrays
-- PostList on /blog fetches and renders posts from /public/content.json
+- /public/index.json returns correct items array
+- /user/index.json, /kids/index.json, /friends/index.json return empty arrays
+- PostList on /blog fetches and renders posts from /public/index.json
 - Tag filter works client-side
 
 ### Phase 3 — Auth (future)
 - Login redirects to Cognito Hosted UI
 - After login, signed cookie is set
-- /user/content.json returns items for logged-in user
-- /kids/content.json returns items only for users in kids Cognito group
+- /user/index.json returns items for logged-in user
+- /kids/index.json returns items only for users in kids Cognito group
 - Logout clears cookie, role content disappears from feed

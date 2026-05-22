@@ -13,9 +13,9 @@ interface PostItem {
 }
 
 const ALL_ROLE_FEEDS: Record<string, string> = {
-  user: "/user/content.json",
-  kids: "/kids/content.json",
-  friends: "/friends/content.json",
+  user: "/user/index.json",
+  kids: "/kids/index.json",
+  friends: "/friends/index.json",
 };
 
 // thetube_roles is a hint only — not a security boundary.
@@ -25,7 +25,7 @@ function getFeeds(): string[] {
   const match = document.cookie.match(/(?:^|;\s*)thetube_roles=([^;]*)/);
   const roles = match ? decodeURIComponent(match[1]).split(",") : [];
   const roleFeeds = roles.flatMap((r) => ALL_ROLE_FEEDS[r] ?? []);
-  return ["/public/content.json", ...roleFeeds];
+  return ["/public/index.json", ...roleFeeds];
 }
 
 async function tryFetch(url: string): Promise<PostItem[]> {
