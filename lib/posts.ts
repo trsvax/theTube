@@ -95,6 +95,11 @@ export function getPosts(): PostMeta[] {
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
+// All slugs regardless of workflow — used by generateStaticParams to build all pages
+export function getAllSlugs(): string[] {
+  return findMarkdownFiles(POSTS_DIR).map(slugify);
+}
+
 // Render [design]: blocks as <img> tags (src/alt from block fields; strip if no src yet)
 // Skips blocks inside code fences so code examples render correctly.
 async function renderDesignBlocks(body: string): Promise<string> {

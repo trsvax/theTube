@@ -1,10 +1,10 @@
-import { getPosts, getPost } from "@/lib/posts";
+import { getPost, getAllSlugs } from "@/lib/posts";
 import Link from "next/link";
 import CopyShortUrl from "@/app/components/CopyShortUrl";
 import CommentForm from "@/app/components/CommentForm";
 
 export async function generateStaticParams() {
-  return getPosts().map((p) => ({ slug: p.slug.split("/") }));
+  return getAllSlugs().map((slug) => ({ slug: slug.split("/") }));
 }
 
 export async function generateMetadata({
