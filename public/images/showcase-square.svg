@@ -49,7 +49,7 @@
   <!-- "The Tube" wordmark inside window, centered -->
   <!-- Wordmark paths span x=411-900 (489 units). At scale 0.28: 137px wide -->
   <!-- Center in window: 300 - 137/2 = 231, offset for path start: 231 - 411*0.28 = 231-115 = 116 -->
-  <g transform="translate(116, 340) scale(0.28)">
+  <g transform="translate(116, 320) scale(0.28)">
     <path fill="#280001" d="m458.61,148.11h-46.92v-3.44l6.3-1.66c5.82-1.54,6.06-3.09,6.06-26.96s-.24-31.83-.71-35.4c-4.99,1.54-7.25,5.34-11.64,14.61l-7.01,15.56h-2.85c.95-11.76,1.07-23.88,1.19-33.97h63.79c.12,10.1.24,22.21,1.19,33.97h-2.85l-7.01-15.56c-4.4-9.15-6.89-12.71-11.64-14.61-.36,3.21-.48,9.03-.48,26.61,0,34.21.95,34.68,6.65,35.99l6.06,1.43-.12,3.44Z"/>
     <path fill="#280001" d="m472.04,79.33v-2.85c9.62-1.54,21.02-4.99,26.73-9.74l1.66.59c-.36,7.48-.83,20.79-.95,37.54h.95c2.02-8.08,11.76-17.46,22.92-17.46,8.79,0,14.97,5.11,14.97,14.73,0,7.13-.24,15.32-.24,22.45,0,17.82.12,18.53,4.51,19.6l2.02.48v3.44h-34.33v-3.44l2.14-.59c4.04-.95,3.92-3.09,3.92-22.21,0-16.75-1.9-18.77-8.55-18.77-4.04,0-7.6,1.43-7.6,7.01,0,32.19.12,32.67,4.16,33.73l2.85.83v3.44h-35.16v-3.44l1.9-.59c4.63-1.66,4.63-3.09,4.63-25.18,0-33.85.36-36.11-2.61-37.65l-3.92-1.9Z"/>
     <path fill="#280001" d="m605.19,109.74l-19.36,2.85-15.92-.59v.36c0,17.46,6.06,20.67,15.8,20.67,8.43,0,14.14-2.97,17.82-12.23l1.9,1.9c-3.8,12.35-8.31,26.73-29.1,26.73-16.75,0-29.22-8.91-29.22-30.29s13.66-31.6,35.4-31.6c17.94,0,22.81,8.2,22.69,22.21Zm-35.28,1.31l12.71-2.14c1.78-.24,2.61-1.07,2.61-2.97,0-7.96-4.87-14.25-10.22-14.25-4.28,0-5.11,2.73-5.11,19.36Z"/>
@@ -60,10 +60,10 @@
   </g>
 
   <!-- Tagline centered in window -->
-  <text x="300" y="395" text-anchor="middle" font-family="'Poppins', system-ui, sans-serif" font-size="14" font-style="italic" fill="#48597a">a stream of thoughts</text>
+  <text x="300" y="400" text-anchor="middle" font-family="'Poppins', system-ui, sans-serif" font-size="14" font-style="italic" fill="#48597a">a stream of thoughts</text>
 
   <!-- URL -->
-  <text x="300" y="435" text-anchor="middle" font-family="'Poppins', system-ui, sans-serif" font-size="16" fill="#48597a">thetube.today</text>
+  <text x="300" y="445" text-anchor="middle" font-family="'Poppins', system-ui, sans-serif" font-size="16" fill="#48597a">thetube.today</text>
 
   <!-- Subtle window reflection -->
   <rect x="145" y="155" width="100" height="310" rx="8" ry="8" fill="#ffffff" opacity="0.05"/>
