@@ -117,5 +117,5 @@ During the spec → code loop, update the journey as things happen — dead ends
 
 When the user signals they're done ("going for a bike ride", "that's it for now", "done"), wrap up:
 1. Push any uncommitted changes across all repos
-2. Write a git note on the latest theTube commit summarizing the session (key decisions, what was built, methodology changes, journal entries created). Keep it concise — bullet points.
+2. Write a git note on the latest theTube commit — see `docs/notes.md` for format and conventions
 3. Confirm everything's clean.
