@@ -60,15 +60,17 @@ function handler(event) {
     };
   }
 
-  // Short URL redirect
-  var slug = uri.slice(1);
-  var target = SLUGS[slug];
-  if (target) {
-    return {
-      statusCode: 301,
-      statusDescription: "Moved Permanently",
-      headers: { location: { value: target } },
-    };
+  // Alias redirect — /a/{alias} → target
+  if (uri.startsWith("/a/")) {
+    var alias = uri.slice(3);
+    var target = SLUGS[alias];
+    if (target) {
+      return {
+        statusCode: 301,
+        statusDescription: "Moved Permanently",
+        headers: { location: { value: target } },
+      };
+    }
   }
 
   // Rewrite extensionless URLs to .html
