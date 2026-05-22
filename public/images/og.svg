@@ -37,5 +37,5 @@
 
   <!-- Post URL below the wordmark -->
   <!-- Wordmark center at this scale: 172 + 900*0.95*0.6 = ~685 -->
-  <text class="url-text" x="685" y="420" text-anchor="middle">thetube.today/posts/business-card</text>
+
 </svg>
