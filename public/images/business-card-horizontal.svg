@@ -1,30 +1,34 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 873 378" width="873" height="378">
   <!-- MOO Minicard: 873 x 378px full bleed -->
-  <!-- Horizontal layout: logo mark left, theTube.today right -->
+  <!-- Layout matches OG image: logo mark left, "The Tube" right, URL below in muted -->
   <defs>
     <style>
       .card-bg { fill: #ffffff; }
       .logo-house { fill: #48597a; }
       .logo-dark { fill: #280001; }
       .logo-accent { fill: #ea8725; }
-      .url-text { 
+      .title-text { 
         font-family: 'Swear Display', Georgia, serif;
-        font-size: 40px;
+        font-size: 64px;
         font-weight: 900;
         fill: #2a0002;
+      }
+      .url-text { 
+        font-family: 'Poppins', system-ui, Helvetica, Arial, sans-serif;
+        font-size: 22px;
+        font-weight: 400;
+        fill: #455978;
       }
     </style>
   </defs>
 
   <!-- White background -->
-  <rect class="card-bg" width="873" height="378"/>
+  <rect class="card-bg" width="873" height="378" rx="16" ry="16"/>
 
-  <!-- Logo mark — left of center, scaled to ~70px tall -->
-  <!-- 900*0.127=114 wide, 549*0.127=69.7 tall -->
-  <!-- Horizontal group centered: logo(114) + gap(20) + text(~250) = ~384 total -->
-  <!-- Start X: (873-384)/2 = 244.5 -->
-  <!-- Center Y: (378-70)/2 = 154 -->
-  <g transform="translate(215, 154) scale(0.127)">
+  <!-- Logo mark — left side, vertically centered -->
+  <!-- Scale to ~120px tall: 549*0.218=119.7, 900*0.218=196.2 -->
+  <!-- X: ~100, Y centered: (378-120)/2 = 129 but nudge up for URL below -->
+  <g transform="translate(90, 95) scale(0.218)">
     <path class="logo-house" d="m891.03,489.19l-155.1-178.77-39.29-45.28-167.32-192.86-51.84-59.75c-14.5-16.72-40.45-16.72-54.96,0l-219.16,252.6L8.97,489.19c-20.44,23.55-3.7,60.22,27.48,60.22h83.91v-70.92c0-80.72,65.43-146.15,146.15-146.15h27.86v-3.67c0-9.77,7.92-17.69,17.69-17.69h146.51c9.77,0,17.69,7.92,17.69,17.69v3.67h157.23c43.09,0,81.82,18.65,108.57,48.31,23.36,25.91,37.58,60.21,37.58,97.84v70.92h83.91c31.18,0,47.91-36.66,27.48-60.22Z"/>
     <path class="logo-dark" d="m652.31,490.07c-17.26,0-31.25-13.99-31.25-31.25v-46.92c0-17.26,13.99-31.25,31.25-31.25h89.75c-26.75-29.67-65.48-48.31-108.57-48.31h-157.23v-3.67c0-9.77-7.92-17.69-17.69-17.69h-146.51c-9.77,0-17.69,7.92-17.69,17.69v3.67h-27.86c-80.72,0-146.15,65.44-146.15,146.15v70.92h659.29v-59.34h-127.33Zm-293.25-31.25c0,17.26-13.99,31.25-31.25,31.25h-46.92c-17.26,0-31.25-13.99-31.25-31.25v-46.92c0-17.26,13.99-31.25,31.25-31.25h46.92c17.26,0,31.25,13.99,31.25,31.25v46.92Zm126.47,0c0,17.26-13.99,31.25-31.25,31.25h-46.92c-17.26,0-31.25-13.99-31.25-31.25v-46.92c0-17.26,13.99-31.25,31.25-31.25h46.92c17.26,0,31.25,13.99,31.25,31.25v46.92Z"/>
     <rect class="logo-accent" x="249.64" y="380.65" width="109.42" height="109.42" rx="31.25" ry="31.25"/>
@@ -32,7 +36,10 @@
     <path class="logo-accent" d="m621.06,411.9v46.92c0,17.26,13.99,31.25,31.25,31.25h127.33v-11.58c0-37.63-14.22-71.93-37.58-97.84h-89.75c-17.26,0-31.25,13.99-31.25,31.25Z"/>
   </g>
 
-  <!-- URL text — right of logo, vertically centered -->
-  <!-- Logo ends at ~215+114=329, gap 24px, text starts at 353 -->
-  <text class="url-text" x="353" y="200" text-anchor="start">theTube.today</text>
+  <!-- "The Tube" — right of logo, vertically aligned with logo center -->
+  <!-- Logo ends at ~90+196=286, gap ~40px, text at 326 -->
+  <text class="title-text" x="330" y="195" text-anchor="start">The Tube</text>
+
+  <!-- URL — below title, same left alignment, muted blue -->
+  <text class="url-text" x="332" y="240" text-anchor="start">thetube.today</text>
 </svg>
