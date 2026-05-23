@@ -38,3 +38,18 @@ Methodologies, architectures, coding standards — all files that AI reads and a
 - Platform spec: `.kiro/specs/platform/requirements.md`
 - Journal spec: `.kiro/specs/journal-to-spec/requirements.md`
 - Journal skill: `skills/journal/SKILL.md`
+
+## Repos
+
+| Repo | What it is |
+|------|-----------|
+| [theTube](https://github.com/trsvax/theTube) | Platform — app code, specs, skills, docs |
+| [theTube-content](https://github.com/trsvax/theTube-content) | Public posts, about/links pages |
+| [theTube-share](https://github.com/trsvax/theTube-share) | Share system — schema, auth scripts, crypto design |
+| [theTube-comments](https://github.com/trsvax/theTube-comments) | Comment system — GraphQL schema |
+| [theTube-mcp](https://github.com/trsvax/theTube-mcp) | MCP server — read-only AWS access from your Mac |
+| [tapestry-nocode](https://github.com/trsvax/tapestry-nocode) | Tapestry NoCode book content |
+| [tapestry-nocode-site](https://github.com/trsvax/tapestry-nocode-site) | Book builder — deploys to /books/tapestry-nocode/ |
+| thetube-private | Private — infra, CDK, Lambda source, protected content |
+
+Session notes: `git log --show-notes --notes -10` on this repo.
