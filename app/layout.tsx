@@ -7,7 +7,7 @@ import BuildWatcher from "./components/BuildWatcher";
 export const metadata: Metadata = {
   title: "theTube",
   description: "Tech and travel writing.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/favicon.svg", apple: "/apple-touch-icon.png" },
   openGraph: {
     title: "theTube",
     description: "Tech and travel writing.",
@@ -33,6 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body>
         <div className="site-wrapper">
