@@ -38,6 +38,7 @@ Methodologies, architectures, coding standards — all files that AI reads and a
 - Platform spec: `.kiro/specs/platform/requirements.md`
 - Journal spec: `.kiro/specs/journal-to-spec/requirements.md`
 - Journal skill: `skills/journal/SKILL.md`
+- Session notes convention: [docs/notes.md](./docs/notes.md)
 
 ## Repos
 
