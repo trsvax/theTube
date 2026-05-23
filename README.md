@@ -52,4 +52,4 @@ Methodologies, architectures, coding standards — all files that AI reads and a
 | [tapestry-nocode-site](https://github.com/trsvax/tapestry-nocode-site) | Book builder — deploys to /books/tapestry-nocode/ |
 | thetube-private | Private — infra, CDK, Lambda source, protected content |
 
-Session notes: `git log --show-notes --notes -10` on this repo.
+Session notes: `git log --show-notes --notes -10` on this repo. Convention: [docs/notes.md](./docs/notes.md).
