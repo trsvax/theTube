@@ -55,18 +55,52 @@ Everything that passes through CF Function + Lambda@Edge hits S3.
 
 | Behavior | Path | Function associations |
 |----------|------|----------------------|
-| Default | `*` | CF Function (viewer request) |
-| Protected | `/user/*`, `/kids/*`, `/friends/*` | CF Function (viewer request) + Lambda@Edge (viewer request) |
+| Default | `*` | `cf-short-urls.js` (viewer request) |
+| Share | `/w/share/*` | `cf-share.js` (viewer request) |
+| Protected | `/user/*`, `/kids/*`, `/friends/*` | `cf-short-urls.js` (viewer request) + Lambda@Edge (viewer request) |
+
+## Write endpoint (`/w/`) routing model
+
+`/w/` is the app mount point. Each app owns its namespace under `/w/` and its own routing decisions.
+
+### The pattern
+
+Every app gets a CF function. The function decides what happens at the edge:
+
+- Query string → 202 (data is in the URL, CloudFront logs it, no compute)
+- No query string → pass through to Lambda (body needs processing)
+
+This is the default behavior. An app can override it — route a `?` request to compute, validate params before accepting, return different headers. The app owns the decision.
+
+### Why per-app
+
+CF Functions can't read request bodies. So body = Lambda (technical constraint, not a design choice). But query-string requests *could* also need compute. The per-app function controls that decision without polluting a shared function with app-specific logic.
+
+### The default
+
+`cf-short-urls.js` still catches `/w/*?*` → 202 as a fallback for any path that doesn't have its own behavior. Apps that haven't claimed their namespace yet get log-and-202 for free.
+
+### Current apps
+
+| App | Path | Function | Status |
+|-----|------|----------|--------|
+| Share | `/w/share/*` | `cf-share.js` | Same as default today, will diverge |
+| Comments | `/w/comments/*` | — | On the default for now |
+| Reactions | `/w/react/*` | — | On the default for now |
+
+Apps graduate from the default by getting their own CloudFront behavior + CF function. Share is first because it has both capture (log-only) and publish (compute).
 
 ## What lives where
 
 | Concern | Layer | Why |
 |---------|-------|-----|
 | Short URL redirects | CF Function | URL rewrite, no data needed |
-| `/w/` write protocol | CF Function | Return 202, data is in the URL |
+| `/w/` default (log only) | CF Function | Return 202, data is in the URL |
+| `/w/share/` routing | CF Function (per-app) | Share has both log and compute paths |
 | `.html` rewriting | CF Function | URI manipulation |
 | "No cookie" fast reject | CF Function | Can read cookies, cheap 403 |
 | JWT signature validation | Lambda@Edge | Needs crypto (CF Functions can't) |
 | Group membership check | Lambda@Edge | Needs to parse JWT claims |
+| Body processing (`/w/share/upload`) | Lambda | CF Functions can't read bodies |
 | Serving files | S3 | It's a filesystem |
 | Building files | GitHub Actions | Stateless, triggered by push |
