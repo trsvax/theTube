@@ -115,6 +115,14 @@ async function renderDesignBlocks(body: string): Promise<string> {
     } else if (!inFence && /^\[comment\]:/.test(lines[i])) {
       // Strip [comment]: lines — they're handled as a flag, not rendered
       i++;
+    } else if (!inFence && /^\[(kiro|claude)\]:/.test(lines[i])) {
+      // Strip [kiro]: and [claude]: blocks — AI metadata, not rendered
+      i++;
+      while (i < lines.length && lines[i].trim() !== "") {
+        i++;
+      }
+      // Consume blank line terminator
+      if (i < lines.length && lines[i].trim() === "") i++;
     } else if (!inFence && /^\[design\]:\s*.+$/.test(lines[i])) {
       let alt = "";
       let src = "";
