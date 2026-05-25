@@ -219,7 +219,7 @@ CloudFront logs the URL (path + query string), not the body. That's the whole dr
 
 Two questions drive the choice: do you want the data in the logs, and do you need the body saved? Use `?` for fire-and-forget (metadata, events, captures — data safe to log, no body). Use body when data shouldn't be in the logs (PII, sensitive content), when you have a body to save, or when you need to verify a JWT — CF Functions can check for header presence but can't verify signatures; that requires Lambda.
 
-**How routing works (default):** The CloudFront Function checks for a query string. Present → return 202 immediately (data is in the URL, logged). Absent → pass through to Lambda@Edge. No body inspection needed — the `?` is the signal.
+**How routing works (default):** The CloudFront Function checks for a query string. Present → return 202 immediately (data is in the URL, logged). Absent → pass through to Lambda@Edge. No body inspection needed — the `?` decides where data lands. For JWT-gated endpoints: JWT present → Lambda always runs to verify and decide. No JWT → 404.
 
 **Defaults:**
 

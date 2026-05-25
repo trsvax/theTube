@@ -2,7 +2,7 @@
 
 ## What this is
 
-An Apple Share action that captures intent from any app and routes it to theTube. Two trust tiers: field capture (log-only, no compute) and publish (Lambda, verified upload). The `[share]:` block in a post is the glue between the capture event and the rendered output.
+An Apple Share action that captures intent from any app and routes it to theTube. JWT present → Lambda runs to verify and act. The `?` decides data format: URL (CF logs it) or body (Lambda saves it). The `[share]:` block in a post is the glue between the capture event and the rendered output.
 
 ---
 
@@ -26,7 +26,7 @@ You're out walking. You see something worth writing about. You take a photo. By 
 
 ### REQ-1: Field capture via query string
 
-A POST to `/tube/share/add?type={type}&file={filename}&date={date}&caption={caption}` is logged by CloudFront and returns 202. No compute required. The query string is the data.
+A POST to `/tube/share/add?type={type}&file={filename}&date={date}&caption={caption}` is logged by CloudFront and returns 202. No Lambda invoked. The query string is the data.
 
 The CF function already handles this — any `/tube/*` request with a query string returns 202.
 
