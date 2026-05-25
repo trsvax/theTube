@@ -6,12 +6,18 @@
 | -------- | -------- | ---------- | ------- | ---------------------------------------------------------------- |
 | title    | yes      | string     | —       | Display title — post page, PostCard, `<title>`, Bluesky          |
 | date     | yes      | YYYY-MM-DD | —       | Sort order and display date                                      |
-| tags     | yes      | array      | —       | e.g. `[tech, travel]` — namespaced; see Tag Registry below |
+| tags     | yes      | array      | —       | e.g. `[tech, travel]` — see Tag Registry below                   |
 | summary  | yes      | string     | —       | One-line teaser — PostCard and Bluesky link card                 |
+| type     | yes      | string     | —       | Content type: `journal`, `post`, or `thought` (see Types below)  |
+| workflow | yes      | string     | —       | Publication state: `draft` or `published`                        |
+| audience | yes      | string     | public  | Role gate: `public`, `user`, `kids`, `friends` (see Roles below) |
+| status   | no       | string     | —       | Idea lifecycle — type-specific (see Status below)                |
 | image    | no       | URL        | —       | Cover image — `og:image`, Bluesky thumbnail                      |
 | bsky     | no       | boolean    | false   | Publish to Bluesky on deploy via GitHub Actions                  |
-| workflow | yes      | string     | —       | `draft` or `published` — controls index.json inclusion           |
-| audience | no       | string     | public  | Role gate — routes into JSON index files (see Roles)             |
+| coffee   | no       | number     | —       | Coffees consumed while writing                                   |
+| origin   | no       | string     | —       | Where the idea came from (e.g. `bike`, `walk`, `shower`)         |
+| specLink | no       | string     | —       | Path to Kiro spec directory if one exists                        |
+| shortSlug| no       | string     | —       | Short alias for `/a/{shortSlug}` redirect                        |
 
 ### Example
 
@@ -20,6 +26,7 @@
 title: Tokyo on a Budget
 date: 2026-05-08
 tags: [travel]
+type: post
 summary: Three weeks, one carry-on, very little money.
 image: https://cdn.thetube.today/posts/tokyo/cover.jpg
 bsky: true
@@ -27,6 +34,34 @@ workflow: published
 audience: public
 ---
 ```
+
+---
+
+## Types
+
+| Type      | What it is                                                                 |
+| --------- | -------------------------------------------------------------------------- |
+| `journal` | A thinking-out-loud entry. Has a lifecycle (status). Starts at `user`.     |
+| `post`    | A finished piece of writing. No status — it's either draft or published.   |
+| `thought` | A one-liner or fragment. No status — it exists or it doesn't.              |
+
+Type determines what `status` means and whether it applies.
+
+---
+
+## Status (journal only)
+
+Status tracks where the *idea* is. Workflow tracks where the *file* is. They're orthogonal.
+
+| Status         | Meaning                                                        |
+| -------------- | -------------------------------------------------------------- |
+| `vague-thought`| A title, maybe a sentence. Don't lose it, not ready to work.   |
+| `thought`      | More formed. Not being actively worked.                        |
+| `journaling`   | Actively in the loop — journal → spec → code.                  |
+
+When the work is done, flip `workflow: published`. That's "shipped." No separate status value needed.
+
+Posts and thoughts don't use status. If it's a post, it's either `workflow: draft` (writing it) or `workflow: published` (done). If it's a thought, same — exists or published.
 
 ---
 

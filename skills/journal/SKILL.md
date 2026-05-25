@@ -35,7 +35,8 @@ specLink:
 - `vague-thought` — a title, maybe a sentence. Not ready to write about yet, just don't want to lose it.
 - `thought` — more formed but not yet being actively worked
 - `journaling` — actively in the loop (journal → spec → code)
-- `shipped` — done, post written
+
+When the work is done, flip `workflow: published`. That's shipped — no separate status value needed.
 
 **`specLink`** — path to the Kiro spec directory once created, e.g. `.kiro/specs/feature-name`
 
