@@ -208,21 +208,23 @@ All writes go through one endpoint:
 POST /tube/{namespace}/{verb}
 ```
 
-**The `?` is the routing signal and data-capture guarantee:**
+**The `?` is an app decision — driven by how AWS logging works:**
 
-| Request | Guarantee | Default handler | Reliability |
-|---|---|---|---|
-| `?` present (data in query string) | Data always captured in logs | CloudFront Function, 202 | Data never lost |
-| No `?` (data in body) | Requires compute to capture | Lambda | Might 503 if Lambda is down |
+CloudFront logs the URL (path + query string), not the body. That's the whole driver.
 
-The `?` means "the data is self-contained in the URL." The cheapest handler (log and 202) is sufficient. But nothing stops Lambda from also handling it — the `?` doesn't exclude compute, it just doesn't require it.
+| Request | Where data lands | Who saves it |
+|---|---|---|
+| `?` present (data in query string) | CloudFront access log | CloudFront, automatically |
+| No `?` (data in body) | S3 (via Lambda) | Lambda — `s3.putObject`, nothing more |
+
+Two questions drive the choice: do you want the data in the logs, and do you need the body saved? Use `?` for fire-and-forget (metadata, events, captures — data safe to log, no body). Use body when data shouldn't be in the logs (PII, sensitive content), or when you have a body to save. Lambda receives the body and writes it to S3 — that's the only compute. The pipe Lambda is dumb as `cat`.
 
 **How routing works (default):** The CloudFront Function checks for a query string. Present → return 202 immediately (data is in the URL, logged). Absent → pass through to Lambda@Edge. No body inspection needed — the `?` is the signal.
 
 **Defaults:**
 
-- Data in the query string = batch. Always logged. Always captured. Free. Always works.
-- No query string = "I need compute." Lambda processes the body. Plugin provides the Lambda.
+- Data in the query string = fire and forget. CloudFront logs it. Free. Always works.
+- No query string = body needs saving. Lambda writes to S3. Plugin provides the Lambda.
 - POST (not GET) because CloudFront must not cache write requests.
 
 **Client contract:** POST, look at the status code. 2xx = success. 4xx = your fault. 503 = retry later (Lambda is down). If there's a response body, use it. If not, don't.
