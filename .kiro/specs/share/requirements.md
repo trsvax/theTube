@@ -43,7 +43,7 @@ type: image
 file: IMG_1234.HEIC
 captured: 2026-05-23
 caption: temple gate at sunset
-src: /shares/2026-05-23-abc123.jpg
+src: /shares/K1jaBcDeFgH.jpg
 ```
 
 Fields:
@@ -80,7 +80,7 @@ A POST to `/tube/share/upload` (no query string) with:
 - `X-Share-Meta: type={type}&file={file}&date={date}` header
 - Signature header (openssl-signed, public key in repo)
 
-Lambda verifies the signature, stores the file to `s3://bucket/shares/{date}-{hash}.{ext}`, returns the S3 path. The user (or agent) updates the `[share]:` block's `src:` field.
+Lambda verifies the signature, stores the file to `s3://bucket/shares/{requestId}.{ext}`, returns the S3 path. The user (or agent) updates the `[share]:` block's `src:` field.
 
 ### REQ-7: Namespace isolation
 
