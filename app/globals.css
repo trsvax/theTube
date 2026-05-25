@@ -474,3 +474,21 @@ footer {
   color: var(--color-accent, #455978);
   font-style: italic;
 }
+
+/* Share blocks */
+.share-image {
+  margin: 2rem 0;
+}
+
+.share-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.share-image figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  font-style: italic;
+}

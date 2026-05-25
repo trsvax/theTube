@@ -139,6 +139,25 @@ async function renderDesignBlocks(body: string): Promise<string> {
         result.push(`<img src="${src}" alt="${escapedAlt}">`);
         result.push("");
       }
+    } else if (!inFence && /^\[share\]:/.test(lines[i])) {
+      let caption = "";
+      let src = "";
+      let captured = "";
+      i++;
+      while (i < lines.length && lines[i].trim() !== "") {
+        if (lines[i].startsWith("caption: ")) caption = lines[i].slice(9).trim();
+        else if (lines[i].startsWith("src: ")) src = lines[i].slice(5).trim();
+        else if (lines[i].startsWith("captured: ")) captured = lines[i].slice(10).trim();
+        i++;
+      }
+      // Consume blank line terminator
+      if (i < lines.length) i++;
+      if (src) {
+        const esc = (s: string) => s.replace(/"/g, "&quot;");
+        const figcaption = [caption, captured].filter(Boolean).join(" · ");
+        result.push(`<figure class="share-image"><img src="${esc(src)}" alt="${esc(caption)}"><figcaption>${figcaption}</figcaption></figure>`);
+        result.push("");
+      }
     } else if (!inFence && /^\[journey\]:/.test(lines[i])) {
       const summaryRaw = lines[i].slice(10).trim();
       const summary = summaryRaw || "The journey";
