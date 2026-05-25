@@ -84,8 +84,13 @@ export function getPosts(): PostMeta[] {
         tags: (meta.tags as string[]) ?? [],
         audience: (meta.audience as string) ?? "public",
         draft: meta.draft === "true" || meta.draft === true,
-        workflow: ((meta.workflow as string) ?? "draft") as "draft" | "published",
-        type: ((meta.type as string) ?? "post") as "thought" | "post" | "journal",
+        workflow: ((meta.workflow as string) ?? "draft") as
+          | "draft"
+          | "published",
+        type: ((meta.type as string) ?? "post") as
+          | "thought"
+          | "post"
+          | "journal",
         summary: (meta.summary as string) ?? "",
         shortSlug: (meta.shortSlug as string) ?? undefined,
         coffee: meta.coffee ? Number(meta.coffee) : undefined,
@@ -145,9 +150,11 @@ async function renderDesignBlocks(body: string): Promise<string> {
       let captured = "";
       i++;
       while (i < lines.length && lines[i].trim() !== "") {
-        if (lines[i].startsWith("caption: ")) caption = lines[i].slice(9).trim();
+        if (lines[i].startsWith("caption: "))
+          caption = lines[i].slice(9).trim();
         else if (lines[i].startsWith("src: ")) src = lines[i].slice(5).trim();
-        else if (lines[i].startsWith("captured: ")) captured = lines[i].slice(10).trim();
+        else if (lines[i].startsWith("captured: "))
+          captured = lines[i].slice(10).trim();
         i++;
       }
       // Consume blank line terminator
@@ -155,7 +162,9 @@ async function renderDesignBlocks(body: string): Promise<string> {
       if (src) {
         const esc = (s: string) => s.replace(/"/g, "&quot;");
         const figcaption = [caption, captured].filter(Boolean).join(" · ");
-        result.push(`<figure class="share-image"><img src="${esc(src)}" alt="${esc(caption)}"><figcaption>${figcaption}</figcaption></figure>`);
+        result.push(
+          `<figure class="share-image"><img src="${esc(src)}" alt="${esc(caption)}"><figcaption>${figcaption}</figcaption></figure>`,
+        );
         result.push("");
       }
     } else if (!inFence && /^\[journey\]:/.test(lines[i])) {

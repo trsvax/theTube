@@ -1,5 +1,5 @@
 var SLUGS = {
-  su: "/posts/short-urls-in-frontmatter",
+  "su": "/posts/short-urls-in-frontmatter"
 };
 
 var REDIRECTS = {
