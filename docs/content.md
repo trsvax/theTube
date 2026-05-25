@@ -35,13 +35,17 @@ audience: public
 ---
 ```
 
+## File Organization
+
+Posts live in `content/posts/YYYY/MM/slug.md`. The date partition is derived from the `date:` frontmatter field. Slug = filename without `.md`. URLs are flat: `/posts/{slug}` — the directory structure is for humans and `ls`, not routing.
+
 ---
 
 ## Types
 
 | Type      | What it is                                                                 |
 | --------- | -------------------------------------------------------------------------- |
-| `journal` | A thinking-out-loud entry. Has a lifecycle (status). Starts at `user`.     |
+| `journal` | A thinking-out-loud entry. Has a lifecycle (status).                        |
 | `post`    | A finished piece of writing. No status — it's either draft or published.   |
 | `thought` | A one-liner or fragment. No status — it exists or it doesn't.              |
 
@@ -67,19 +71,26 @@ Posts and thoughts don't use status. If it's a post, it's either `workflow: draf
 
 ## Tag Registry
 
-Tags are namespaced with a `prefix:name` convention. The `tt:` prefix is the theTube namespace. If content from other sources is ever aggregated into `site.json`, their tags use a different prefix to avoid collisions.
+Plain tags — no prefix needed. They appear automatically in the index tag filter with no code change.
 
-| Tag       | Use                     |
-| --------- | ----------------------- |
-| tech   | Technical / programming |
-| travel | Travel writing          |
-| tg     | TxGang related          |
+| Tag      | Use                     |
+| -------- | ----------------------- |
+| `tech`   | Technical / programming |
+| `travel` | Travel writing          |
+| `tg`     | TxGang related          |
 
-New tags can be added freely — just use `tt:` prefix in frontmatter. They appear automatically in the index tag filter with no code change.
+New tags can be added freely in frontmatter.
 
 ---
 
 ## Audience / Roles
+
+The repo is the privacy boundary:
+
+- **theTube-content** (public repo) → always `audience: public`
+- **thetube-private** (private repo) → `audience: user`, `kids`, or `friends`
+
+`workflow: draft` keeps a post out of the index but the URL still works — you can share drafts by sending the link directly.
 
 | Value   | JSON index file         | Visible to                                                                                                                               |
 | ------- | ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
@@ -91,6 +102,14 @@ New tags can be added freely — just use `tt:` prefix in frontmatter. They appe
 `public` = shareable anywhere. `user` = self-selected by willingness to sign up, not a vetted list. `kids` and `friends` are the actually private tiers.
 
 The index page (`PostList`) reads the `thetube_roles` cookie and fetches only the feeds the current visitor can reach. Posts only appear if their index file is accessible.
+
+---
+
+## Blocks
+
+Posts use `[block]:` syntax for structured content. The registry is in [`blocks.md`](../blocks.md) — that's the source of truth for what each block does, how it renders, and where its spec lives.
+
+Registered blocks have behavior (render, strip, or trigger processing). Unregistered blocks pass through as plain text.
 
 ---
 

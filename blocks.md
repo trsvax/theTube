@@ -2,6 +2,8 @@
 
 Registry of `[block]:` extensions. How to use them and where their specs live.
 
+Any `[word]:` is valid syntax in a post. If it's registered here, it has defined behavior — renders, gets stripped, or triggers processing. If it's not here, it passes through as plain text. Use unregistered blocks freely for examples, aspirational ideas, or inline metadata that doesn't need rendering yet.
+
 Multiple entries for the same block merge — like Plan 9's `bind`. The order in the table is the priority. Move a line up or down to change precedence.
 
 This file is not just a table — it's a document. Add notes, rules, explanations anywhere. AI reads it all.
