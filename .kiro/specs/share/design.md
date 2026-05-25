@@ -68,7 +68,7 @@ Share Sheet input (image/URL/text)
   → Get current date (ISO format)
   → Prompt for caption (optional, skip if empty)
   → URL-encode all values
-  → POST https://thetube.today/w/share/add?type={type}&file={file}&date={date}&caption={caption}
+  → POST https://thetube.today/tube/share/add?type={type}&file={file}&date={date}&caption={caption}
     Headers: Authorization: Bearer {token}
   → Show notification: "Saved to Tube"
 ```
@@ -101,7 +101,7 @@ The block parsing pattern is the same for all: detect tag at line start, consume
 
 ## No infrastructure changes
 
-- CF function already returns 202 for `/w/*?*` — no change needed
+- CF function already returns 202 for `/tube/*?*` — no change needed
 - No Lambda for Phase 1
 - No S3 writes for Phase 1
 - No new CloudFront behaviors

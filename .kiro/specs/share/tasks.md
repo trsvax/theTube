@@ -31,7 +31,7 @@
 - [ ] Create "Save to Tube" Shortcut accepting share input
 - [ ] Add type detection logic (image/link/note)
 - [ ] Add caption prompt
-- [ ] POST to `/w/share/add?type=...&file=...&date=...&caption=...`
+- [ ] POST to `/tube/share/add?type=...&file=...&date=...&caption=...`
 - [ ] Store JWT in Shortcut variable or Keychain
 - [ ] Test: share a photo, confirm 202 response
 

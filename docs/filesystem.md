@@ -6,24 +6,24 @@ Everything is a file at a URL. The platform is a POSIX-like filesystem on a CDN.
 
 ## Syscall mapping
 
-| POSIX | Platform | Implementation |
-|---|---|---|
-| `open()` | `/w/{ns}/open?...` | Get a token (file descriptor). Checks permissions, returns a scoped handle. |
-| `write()` | `POST /w/{ns}/{verb}?...` | Write data. Token required. `?` = batch (202). No `?` = sync (Lambda). |
-| `create()` | Processor writes `/{ns}/{id}.json` | New file. Immutable once written. `If-None-Match: *`. |
-| `read()` | `GET /{path}` | Fetch a file. CloudFront serves from cache or origin. |
-| `readdir()` / `ls` | `GET /{path}/index.json` | List a directory. Static file or Lambda-generated. |
-| `stat()` | `HEAD /{path}` | Metadata: Last-Modified, Content-Length, ETag. |
-| `seek()` + `read()` | `GET /{path}` + `Range: bytes=N-M` | Random access. S3 supports byte-range requests. |
-| `close()` | Token expires | Implicit. No explicit close needed. |
-| `unlink()` | `/w/{ns}/delete?...` | Soft delete: writes `{"deleted": true}`. Log has history. |
-| `rename()` | Not needed | Files are addressed by ID, not name. Content can change slugs without moving files. |
-| `mkdir()` | Implicit | Directories exist when files exist in them. No explicit creation. |
-| `chmod()` | IAM + CloudFront behaviors | Change who can access a path. Platform-level, not per-file. |
-| `fork()` | New repo | Isolated process. Own namespace, own Lambda, own IAM, own S3 prefix. |
-| `append()` | Create a new file in the directory | `path/1`, `path/2`, `path/3`. The directory is the append log. |
-| `pipe()` | Logs → processor → files | Data flows: edge logs events, processor reads logs, writes files. |
-| `link()` | A file containing a URL | Not built yet. A file could redirect to another file. |
+| POSIX               | Platform                           | Implementation                                                                      |
+| ------------------- | ---------------------------------- | ----------------------------------------------------------------------------------- |
+| `open()`            | `/tube/{ns}/open?...`              | Get a token (file descriptor). Checks permissions, returns a scoped handle.         |
+| `write()`           | `POST /tube/{ns}/{verb}?...`       | Write data. Token required. `?` = batch (202). No `?` = sync (Lambda).              |
+| `create()`          | Processor writes `/{ns}/{id}.json` | New file. Immutable once written. `If-None-Match: *`.                               |
+| `read()`            | `GET /{path}`                      | Fetch a file. CloudFront serves from cache or origin.                               |
+| `readdir()` / `ls`  | `GET /{path}/index.json`           | List a directory. Static file or Lambda-generated.                                  |
+| `stat()`            | `HEAD /{path}`                     | Metadata: Last-Modified, Content-Length, ETag.                                      |
+| `seek()` + `read()` | `GET /{path}` + `Range: bytes=N-M` | Random access. S3 supports byte-range requests.                                     |
+| `close()`           | Token expires                      | Implicit. No explicit close needed.                                                 |
+| `unlink()`          | `/tube/{ns}/delete?...`            | Soft delete: writes `{"deleted": true}`. Log has history.                           |
+| `rename()`          | Not needed                         | Files are addressed by ID, not name. Content can change slugs without moving files. |
+| `mkdir()`           | Implicit                           | Directories exist when files exist in them. No explicit creation.                   |
+| `chmod()`           | IAM + CloudFront behaviors         | Change who can access a path. Platform-level, not per-file.                         |
+| `fork()`            | New repo                           | Isolated process. Own namespace, own Lambda, own IAM, own S3 prefix.                |
+| `append()`          | Create a new file in the directory | `path/1`, `path/2`, `path/3`. The directory is the append log.                      |
+| `pipe()`            | Logs → processor → files           | Data flows: edge logs events, processor reads logs, writes files.                   |
+| `link()`            | A file containing a URL            | Not built yet. A file could redirect to another file.                               |
 
 ---
 
@@ -65,7 +65,7 @@ Graceful degradation: if Lambda is down, CloudFront serves stale cache. Always w
 ## The write path
 
 ```
-Client → POST /w/{ns}/{verb}?data... → CloudFront Function
+Client → POST /tube/{ns}/{verb}?data... → CloudFront Function
   → Shape valid? (token present, size ok, params ok)
     → No: 4xx. Not logged.
     → Yes: 202. Logged.
@@ -81,13 +81,13 @@ The edge is fast and dumb. The processor is slow and smart. The log connects the
 
 ## Trust model
 
-| Level | Issued by | Proves | Behavior |
-|---|---|---|---|
-| None | — | Nothing | Rejected at edge (no token = 403) |
-| Low | Build-time HMAC in HTML | Client loaded the page | Moderated |
-| Medium | Rotated token file | Client loaded the page recently | Auto-filtered |
-| High | `open()` Lambda | Client asked permission now | Written immediately |
-| Admin | Auth header (no `?`) | Verified identity | Sync response, full access |
+| Level  | Issued by               | Proves                          | Behavior                          |
+| ------ | ----------------------- | ------------------------------- | --------------------------------- |
+| None   | —                       | Nothing                         | Rejected at edge (no token = 403) |
+| Low    | Build-time HMAC in HTML | Client loaded the page          | Moderated                         |
+| Medium | Rotated token file      | Client loaded the page recently | Auto-filtered                     |
+| High   | `open()` Lambda         | Client asked permission now     | Written immediately               |
+| Admin  | Auth header (no `?`)    | Verified identity               | Sync response, full access        |
 
 The `?` is the security boundary: present = data in URL = logged (low/medium trust). Absent = data in body = not logged (high/admin trust, credentials stay off disk).
 

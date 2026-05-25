@@ -200,12 +200,12 @@ The browser does the dynamic work. The build produces static assets. No server n
 
 ---
 
-## The `/w/` write protocol
+## The `/tube/` write protocol
 
 All writes go through one endpoint:
 
 ```
-POST /w/{namespace}/{verb}
+POST /tube/{namespace}/{verb}
 ```
 
 **The `?` is the routing signal and data-capture guarantee:**
@@ -227,9 +227,9 @@ The `?` means "the data is self-contained in the URL." The cheapest handler (log
 
 **Client contract:** POST, look at the status code. 2xx = success. 4xx = your fault. 503 = retry later (Lambda is down). If there's a response body, use it. If not, don't.
 
-**CloudFront config:** One behavior for `/w/*` — no cache, run the function. Auth, CORS, rate limiting all in one place.
+**CloudFront config:** One behavior for `/tube/*` — no cache, run the function. Auth, CORS, rate limiting all in one place.
 
-**Namespace is a convention, not a contract.** The path structure is `/w/{namespace}/{verb}` but nothing enforces that the namespace maps to a repo or that a schema exists. The CloudFront Function doesn't validate — it logs and returns 202. Structure is opt-in.
+**Namespace is a convention, not a contract.** The path structure is `/tube/{namespace}/{verb}` but nothing enforces that the namespace maps to a repo or that a schema exists. The CloudFront Function doesn't validate — it logs and returns 202. Structure is opt-in.
 
 ---
 
@@ -237,7 +237,7 @@ The `?` means "the data is self-contained in the URL." The cheapest handler (log
 
 Plugins that want typed operations bring a GraphQL schema. The schema lives in the plugin repo. It declares:
 
-- What operations exist (the namespace/verb combinations under `/w/`)
+- What operations exist (the namespace/verb combinations under `/tube/`)
 - What parameters each operation accepts (the query string shape)
 - What the output looks like
 - What directives apply
@@ -250,7 +250,7 @@ Plugins that want typed operations bring a GraphQL schema. The schema lives in t
 
 The schema is a type system and capability declaration, not a routing table. The operation name tells you the input and output shapes. The directives tell the client hook whether to include a body.
 
-You can also just `POST /w/whatever/thing?x=1` with no schema — it gets logged. Add structure when it earns its keep.
+You can also just `POST /tube/whatever/thing?x=1` with no schema — it gets logged. Add structure when it earns its keep.
 
 GraphQL schemas are backward compatible by design — add fields, don't remove them. Deprecate with `@deprecated`, don't delete. Old clients keep working because they only ask for fields they know about. This makes the plugin interface stable across tagged snapshots and time-traveled versions.
 
@@ -270,8 +270,8 @@ The namespace is the security boundary. Each plugin namespace maps to:
 Example:
 
 ```
-/w/comment/*  → thetube-comments repo → comment Lambda → IAM: s3://bucket/comments/* only
-/w/contact/*  → contact repo          → contact Lambda → IAM: s3://bucket/contact/* only
+/tube/comment/*  → thetube-comments repo → comment Lambda → IAM: s3://bucket/comments/* only
+/tube/contact/*  → contact repo          → contact Lambda → IAM: s3://bucket/contact/* only
 ```
 
 The contract repo (schema) declares what the plugin *can* do. IAM enforces the ceiling. A team with write access to one plugin repo cannot:

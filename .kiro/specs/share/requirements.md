@@ -16,7 +16,7 @@ You're out walking. You see something worth writing about. You take a photo. By 
 
 - Field capture is free — data in the query string, logged by CloudFront, 202. No compute, no upload, no cost.
 - Publish earns compute — binary upload to Lambda, verified by signature, stored to S3.
-- The `?` is the routing signal — same convention as the rest of `/w/`.
+- The `?` is the routing signal — same convention as the rest of `/tube/`.
 - The `[share]:` block follows the `[design]:` pattern — placeholder until `src:` is populated, real asset once it lands.
 - The photo stays in iCloud until you decide to publish it. The log is the breadcrumb.
 
@@ -26,9 +26,9 @@ You're out walking. You see something worth writing about. You take a photo. By 
 
 ### REQ-1: Field capture via query string
 
-A POST to `/w/share/add?type={type}&file={filename}&date={date}&caption={caption}` is logged by CloudFront and returns 202. No compute required. The query string is the data.
+A POST to `/tube/share/add?type={type}&file={filename}&date={date}&caption={caption}` is logged by CloudFront and returns 202. No compute required. The query string is the data.
 
-The CF function already handles this — any `/w/*` request with a query string returns 202.
+The CF function already handles this — any `/tube/*` request with a query string returns 202.
 
 ### REQ-2: `[share]:` block renderer
 
@@ -62,7 +62,7 @@ When `src:` is absent but the block exists, optionally render a styled placehold
 An Apple Shortcut named "Save to Tube" that:
 1. Accepts share input (image, URL, text)
 2. Extracts: type, filename, current date, user-provided caption (optional prompt)
-3. POSTs to `https://thetube.today/w/share/add?type={type}&file={file}&date={date}&caption={caption}`
+3. POSTs to `https://thetube.today/tube/share/add?type={type}&file={file}&date={date}&caption={caption}`
 4. Includes `Authorization: Bearer {token}` from Keychain
 5. Shows a brief confirmation
 
@@ -74,7 +74,7 @@ A long-lived JWT stored in the iOS Keychain. The token is sent as `Authorization
 
 ### REQ-6: Publish via Lambda (Phase 2)
 
-A POST to `/w/share/upload` (no query string) with:
+A POST to `/tube/share/upload` (no query string) with:
 - Binary body (the image/file)
 - `Content-Type` header
 - `X-Share-Meta: type={type}&file={file}&date={date}` header
@@ -85,7 +85,7 @@ Lambda verifies the signature, stores the file to `s3://bucket/shares/{date}-{ha
 ### REQ-7: Namespace isolation
 
 The share system owns:
-- Path: `/w/share/*`
+- Path: `/tube/share/*`
 - S3 prefix: `/shares/`
 - Lambda: share processor (Phase 2)
 - IAM: write only to `s3://bucket/shares/*`
@@ -98,8 +98,8 @@ Same isolation model as comments.
 
 | Phase | What | Depends on |
 |-------|------|-----------|
-| 1 | `[share]:` block renderer + CSS + iOS Shortcut (field capture only) | Nothing — CF function already handles `/w/*?*` |
-| 2 | Mac publish script (openssl signing) + Lambda for `/w/share/upload` + S3 storage | Phase 1 |
+| 1 | `[share]:` block renderer + CSS + iOS Shortcut (field capture only) | Nothing — CF function already handles `/tube/*?*` |
+| 2 | Mac publish script (openssl signing) + Lambda for `/tube/share/upload` + S3 storage | Phase 1 |
 | 3 | Native iOS/macOS SwiftUI app, Secure Enclave, replaces Shortcuts | Phase 2 |
 
 ---
@@ -115,7 +115,7 @@ Same isolation model as comments.
 
 ## Relationship to existing systems
 
-- **`/w/` protocol** — share uses the same `?`-routing convention. No new infrastructure for Phase 1.
+- **`/tube/` protocol** — share uses the same `?`-routing convention. No new infrastructure for Phase 1.
 - **`[design]:` block** — share follows the same render pattern (placeholder → real asset).
 - **Comment system** — same namespace isolation model, same log-based processing model.
 - **CloudFront Function** — already handles the 202 response. No changes needed.

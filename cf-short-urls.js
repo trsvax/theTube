@@ -1,5 +1,5 @@
 var SLUGS = {
-  "su": "/posts/short-urls-in-frontmatter"
+  su: "/posts/short-urls-in-frontmatter",
 };
 
 var REDIRECTS = {
@@ -11,7 +11,7 @@ function handler(event) {
   var uri = request.uri;
 
   // Write endpoint — return 202, CloudFront logs the request
-  if (uri.startsWith("/w/") && request.querystring) {
+  if (uri.startsWith("/tube/") && request.querystring) {
     return {
       statusCode: 202,
       statusDescription: "Accepted",
