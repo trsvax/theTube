@@ -54,7 +54,8 @@ function parseFrontmatter(raw: string): {
 }
 
 function slugify(filename: string): string {
-  return filename.replace(/\.md$/, "");
+  // Strip directory prefix (e.g. 2026/05/) and .md extension — slug is always flat
+  return path.basename(filename).replace(/\.md$/, "");
 }
 
 function findMarkdownFiles(dir: string, prefix = ""): string[] {
@@ -71,14 +72,25 @@ function findMarkdownFiles(dir: string, prefix = ""): string[] {
   return files;
 }
 
-export function getPosts(): PostMeta[] {
+// Build a map of slug → relative path for resolving nested files
+function buildSlugMap(): Map<string, string> {
   const files = findMarkdownFiles(POSTS_DIR);
-  return files
-    .map((filename) => {
+  const map = new Map<string, string>();
+  for (const f of files) {
+    map.set(slugify(f), f);
+  }
+  return map;
+}
+
+const slugMap = buildSlugMap();
+
+export function getPosts(): PostMeta[] {
+  return [...slugMap.entries()]
+    .map(([slug, filename]) => {
       const raw = fs.readFileSync(path.join(POSTS_DIR, filename), "utf8");
       const { meta } = parseFrontmatter(raw);
       return {
-        slug: slugify(filename),
+        slug,
         title: (meta.title as string) ?? slugify(filename),
         date: (meta.date as string) ?? "",
         tags: (meta.tags as string[]) ?? [],
@@ -102,7 +114,7 @@ export function getPosts(): PostMeta[] {
 
 // All slugs regardless of workflow — used by generateStaticParams to build all pages
 export function getAllSlugs(): string[] {
-  return findMarkdownFiles(POSTS_DIR).map(slugify);
+  return [...slugMap.keys()];
 }
 
 // Render [design]: blocks as <img> tags (src/alt from block fields; strip if no src yet)
@@ -204,7 +216,9 @@ async function renderDesignBlocks(body: string): Promise<string> {
 
 export async function getPost(slug: string): Promise<Post> {
   const { marked } = await import("marked");
-  const raw = fs.readFileSync(path.join(POSTS_DIR, `${slug}.md`), "utf8");
+  const relPath = slugMap.get(slug);
+  if (!relPath) throw new Error(`Post not found: ${slug}`);
+  const raw = fs.readFileSync(path.join(POSTS_DIR, relPath), "utf8");
   const { meta, body } = parseFrontmatter(raw);
   const comments = /^\[comment\]:/m.test(body);
   const html = await marked(await renderDesignBlocks(body));

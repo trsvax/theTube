@@ -28,12 +28,25 @@ function parseFrontmatter(raw) {
   return meta;
 }
 
+function findMarkdownFiles(dir) {
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  const files = [];
+  for (const entry of entries) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...findMarkdownFiles(full));
+    } else if (entry.name.endsWith(".md")) {
+      files.push(full);
+    }
+  }
+  return files;
+}
+
 const byRole = Object.fromEntries(ROLES.map((r) => [r, []]));
 
-for (const file of fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".md"))) {
-  const meta = parseFrontmatter(
-    fs.readFileSync(path.join(POSTS_DIR, file), "utf8"),
-  );
+for (const filepath of findMarkdownFiles(POSTS_DIR)) {
+  const file = path.basename(filepath);
+  const meta = parseFrontmatter(fs.readFileSync(filepath, "utf8"));
   const role = meta.audience ?? "public";
   if (!byRole[role]) continue;
   if (meta.workflow !== "published") continue;
