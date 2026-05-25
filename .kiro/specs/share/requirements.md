@@ -14,9 +14,9 @@ You're out walking. You see something worth writing about. You take a photo. By 
 
 ## Design principles
 
-- Field capture is free — data in the query string, logged by CloudFront, 202. No compute, no upload, no cost.
+- Field capture is free — data in the query string, logged by CloudFront, 202. No Lambda, no upload, no cost.
 - Publish earns compute — binary upload to Lambda, verified by signature, stored to S3.
-- The `?` is the routing signal — same convention as the rest of `/tube/`.
+- The `?` decides where data lands — URL (CF logs) or body (Lambda saves). JWT gates access to either path.
 - The `[share]:` block follows the `[design]:` pattern — placeholder until `src:` is populated, real asset once it lands.
 - The photo stays in iCloud until you decide to publish it. The log is the breadcrumb.
 
