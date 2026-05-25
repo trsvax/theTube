@@ -18,10 +18,10 @@ Consume subsequent non-blank lines as key-value pairs (`key: value`). Stop at bl
 
 ### Render rules
 
-| Condition | Output |
-|-----------|--------|
+| Condition      | Output                                                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | `src:` present | `<figure class="share-image"><img src="{src}" alt="{caption}"><figcaption>{caption} · {captured}</figcaption></figure>` |
-| `src:` absent | Strip entirely (v1) or render placeholder (stretch) |
+| `src:` absent  | Strip entirely (v1) or render placeholder (stretch)                                                                     |
 
 Use `<figure>` instead of bare `<img>` — the caption is meaningful context (what you thought when you captured it).
 
@@ -38,6 +38,7 @@ Use `<figure>` instead of bare `<img>` — the caption is meaningful context (wh
 ```
 
 CSS in `globals.css`:
+
 ```css
 .share-placeholder {
   border: 2px dashed var(--color-border);
@@ -46,9 +47,18 @@ CSS in `globals.css`:
   text-align: center;
   opacity: 0.6;
 }
-.share-placeholder-inner { display: flex; flex-direction: column; gap: 0.25rem; }
-.share-file { font-family: var(--font-mono); font-size: 0.85rem; }
-.share-caption { font-style: italic; }
+.share-placeholder-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.share-file {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.share-caption {
+  font-style: italic;
+}
 ```
 
 ### Strip agent blocks
@@ -79,11 +89,11 @@ The JWT lives in a Shortcuts text variable or Keychain item named `thetube-share
 
 ### Type detection
 
-| Input | Type | File |
-|-------|------|------|
+| Input | Type    | File                                  |
+| ----- | ------- | ------------------------------------- |
 | Image | `image` | Original filename from share metadata |
-| URL | `link` | The URL itself |
-| Text | `note` | `note-{timestamp}.txt` |
+| URL   | `link`  | The URL itself                        |
+| Text  | `note`  | `note-{timestamp}.txt`                |
 
 ---
 

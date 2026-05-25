@@ -1,17 +1,18 @@
 // CloudFront Function — /tube/share/* behavior (viewer-request)
 //
-// Routing:
-//   /tube/share/add?...  → 202 (field capture, data in URL, logged by CloudFront)
-//   /tube/share/upload   → pass through to Lambda (body needs processing)
-//   /tube/share/*?*      → 202 (default: query string = log only)
-//   /tube/share/*        → pass through to Lambda (no query string = compute)
+// Trust model:
+//   No JWT       → 404 (endpoint doesn't exist without auth)
+//   JWT + ?      → pass to Lambda (verify JWT, data already in CF log)
+//   JWT + no ?   → pass to Lambda (verify JWT, save body)
+//
+// Use an anonymous JWT for public/unauthenticated captures.
+// The ? decides where data lands. Lambda always verifies.
 
 function handler(event) {
   var request = event.request;
-  var uri = request.uri;
   var qs = request.querystring;
 
-  // Authorization header is part of the contract — the path doesn't exist without it.
+  // No JWT → 404. Endpoint doesn't exist without auth.
   if (!request.headers.authorization) {
     return {
       statusCode: 404,
@@ -20,23 +21,6 @@ function handler(event) {
     };
   }
 
-  // Query string present → log and 202 (CloudFront logs the full URL)
-  var hasQs = false;
-  for (var k in qs) {
-    hasQs = true;
-    break;
-  }
-  if (hasQs) {
-    return {
-      statusCode: 202,
-      statusDescription: "Accepted",
-      headers: {
-        "access-control-allow-origin": { value: "https://thetube.today" },
-        "cache-control": { value: "no-store" },
-      },
-    };
-  }
-
-  // No query string → needs compute, pass through to origin (Lambda)
+  // JWT present → pass through to Lambda (verify + decide)
   return request;
 }

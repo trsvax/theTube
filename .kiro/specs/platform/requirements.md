@@ -139,11 +139,11 @@ One S3 bucket, one CloudFront distribution. All content sources share them.
 
 **CloudFront behaviors:**
 
-| Path                               | Access                 | Notes                            |
-| ---------------------------------- | ---------------------- | -------------------------------- |
-| `default (*)`                      | Public                 | All static HTML, fonts, images   |
-| `/protected/*`                     | Signed cookie required | Role-gated assets                |
-| `/user/*`, `/kids/*`, `/friends/*` | Lambda@Edge auth       | Role-scoped `index.json` files   |
+| Path                               | Access                 | Notes                          |
+| ---------------------------------- | ---------------------- | ------------------------------ |
+| `default (*)`                      | Public                 | All static HTML, fonts, images |
+| `/protected/*`                     | Signed cookie required | Role-gated assets              |
+| `/user/*`, `/kids/*`, `/friends/*` | Lambda@Edge auth       | Role-scoped `index.json` files |
 
 **Auth stack:**
 
@@ -212,10 +212,10 @@ POST /tube/{namespace}/{verb}
 
 CloudFront logs the URL (path + query string), not the body. That's the whole driver.
 
-| Request | Where data lands | Who saves it |
-|---|---|---|
-| `?` present (data in query string) | CloudFront access log | CloudFront, automatically |
-| No `?` (data in body) | S3 (via Lambda) | Lambda — `s3.putObject`, nothing more |
+| Request                            | Where data lands      | Who saves it                          |
+| ---------------------------------- | --------------------- | ------------------------------------- |
+| `?` present (data in query string) | CloudFront access log | CloudFront, automatically             |
+| No `?` (data in body)              | S3 (via Lambda)       | Lambda — `s3.putObject`, nothing more |
 
 Two questions drive the choice: do you want the data in the logs, and do you need the body saved? Use `?` for fire-and-forget (metadata, events, captures — data safe to log, no body). Use body when data shouldn't be in the logs (PII, sensitive content), when you have a body to save, or when you need to verify a JWT — CF Functions can check for header presence but can't verify signatures; that requires Lambda.
 
@@ -244,11 +244,11 @@ Plugins that want typed operations bring a GraphQL schema. The schema lives in t
 - What the output looks like
 - What directives apply
 
-| Directive | Meaning | Client behavior |
-|---|---|---|
-| `@moderate` | Batch processing, no immediate result | Client includes `?` (data in query string) |
-| `@realtime` | Immediate processing, returns result | Client omits `?` (data in body) |
-| `@auth(role)` | JWT required with specified role | Lambda validates before processing |
+| Directive     | Meaning                               | Client behavior                            |
+| ------------- | ------------------------------------- | ------------------------------------------ |
+| `@moderate`   | Batch processing, no immediate result | Client includes `?` (data in query string) |
+| `@realtime`   | Immediate processing, returns result  | Client omits `?` (data in body)            |
+| `@auth(role)` | JWT required with specified role      | Lambda validates before processing         |
 
 The schema is a type system and capability declaration, not a routing table. The operation name tells you the input and output shapes. The directives tell the client hook whether to include a body.
 
@@ -262,12 +262,12 @@ GraphQL schemas are backward compatible by design — add fields, don't remove t
 
 The namespace is the security boundary. Each plugin namespace maps to:
 
-| Layer | Scope |
-|---|---|
-| Repo | Who can deploy code for this namespace |
-| Lambda | What code runs for this namespace |
-| IAM role | What the Lambda can write to |
-| S3 prefix | Where the output lives |
+| Layer     | Scope                                  |
+| --------- | -------------------------------------- |
+| Repo      | Who can deploy code for this namespace |
+| Lambda    | What code runs for this namespace      |
+| IAM role  | What the Lambda can write to           |
+| S3 prefix | Where the output lives                 |
 
 Example:
 
@@ -276,7 +276,7 @@ Example:
 /tube/contact/*  → contact repo          → contact Lambda → IAM: s3://bucket/contact/* only
 ```
 
-The contract repo (schema) declares what the plugin *can* do. IAM enforces the ceiling. A team with write access to one plugin repo cannot:
+The contract repo (schema) declares what the plugin _can_ do. IAM enforces the ceiling. A team with write access to one plugin repo cannot:
 
 - Deploy code to another namespace's Lambda
 - Write to another namespace's S3 prefix

@@ -33,10 +33,12 @@ The CF function already handles this — any `/tube/*` request with a query stri
 ### REQ-2: `[share]:` block renderer
 
 The `[share]:` block in a post renders as:
+
 - An `<img>` tag when `src:` is present (same as `[design]:`)
 - Nothing (stripped) when `src:` is absent — it's a placeholder waiting for the asset
 
 Block format:
+
 ```markdown
 [share]:
 type: image
@@ -47,6 +49,7 @@ src: /shares/K1jaBcDeFgH.jpg
 ```
 
 Fields:
+
 - `type` — media type (image, video, link, note)
 - `file` — original filename from the device
 - `captured` — date of field capture
@@ -60,6 +63,7 @@ When `src:` is absent but the block exists, optionally render a styled placehold
 ### REQ-4: iOS Shortcut for field capture
 
 An Apple Shortcut named "Save to Tube" that:
+
 1. Accepts share input (image, URL, text)
 2. Extracts: type, filename, current date, user-provided caption (optional prompt)
 3. POSTs to `https://thetube.today/tube/share/add?type={type}&file={file}&date={date}&caption={caption}`
@@ -75,6 +79,7 @@ A long-lived JWT stored in the iOS Keychain. The token is sent as `Authorization
 ### REQ-6: Publish via Lambda (Phase 2)
 
 A POST to `/tube/share/upload` (no query string) with:
+
 - Binary body (the image/file)
 - `Content-Type` header
 - `X-Share-Meta: type={type}&file={file}&date={date}` header
@@ -85,6 +90,7 @@ Lambda verifies the signature, stores the file to `s3://bucket/shares/{requestId
 ### REQ-7: Namespace isolation
 
 The share system owns:
+
 - Path: `/tube/share/*`
 - S3 prefix: `/shares/`
 - Lambda: share processor (Phase 2)
@@ -96,11 +102,11 @@ Same isolation model as comments.
 
 ## Phases
 
-| Phase | What | Depends on |
-|-------|------|-----------|
-| 1 | `[share]:` block renderer + CSS + iOS Shortcut (field capture only) | Nothing — CF function already handles `/tube/*?*` |
-| 2 | Mac publish script (openssl signing) + Lambda for `/tube/share/upload` + S3 storage | Phase 1 |
-| 3 | Native iOS/macOS SwiftUI app, Secure Enclave, replaces Shortcuts | Phase 2 |
+| Phase | What                                                                                | Depends on                                        |
+| ----- | ----------------------------------------------------------------------------------- | ------------------------------------------------- |
+| 1     | `[share]:` block renderer + CSS + iOS Shortcut (field capture only)                 | Nothing — CF function already handles `/tube/*?*` |
+| 2     | Mac publish script (openssl signing) + Lambda for `/tube/share/upload` + S3 storage | Phase 1                                           |
+| 3     | Native iOS/macOS SwiftUI app, Secure Enclave, replaces Shortcuts                    | Phase 2                                           |
 
 ---
 

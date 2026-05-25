@@ -42,7 +42,7 @@ function handler(event) {
   if (uri.startsWith("/tube/") && request.querystring) {
     return {
       statusCode: 202,
-      statusDescription: "Accepted",
+      statusDescription: "Noted",
       headers: {
         "access-control-allow-origin": { value: "https://thetube.today" },
         "cache-control": { value: "no-store" },

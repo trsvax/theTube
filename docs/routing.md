@@ -16,7 +16,7 @@ Runs on every viewer request. Handles routing, redirects, and the write protocol
 
 | Pattern                         | Action             | Response                            |
 | ------------------------------- | ------------------ | ----------------------------------- |
-| `/tube/*` with query string     | Return immediately | 202 Accepted (data in URL, logged)  |
+| `/tube/*` with query string     | Return immediately | 202 Noted (data in URL, logged)     |
 | `/blog`                         | Redirect           | 301 → `/journal`                    |
 | `/{shortSlug}` (in SLUGS map)   | Redirect           | 301 → `/posts/{fullSlug}`           |
 | `/{role}/*` with no auth cookie | Return immediately | 403 (planned — not yet implemented) |
