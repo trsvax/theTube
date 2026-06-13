@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tucumcari Murals — Walking Tour</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, system-ui, sans-serif; background: #1a1a1a; color: #e0e0e0; }
+#map { width: 100%; height: 55vh; min-height: 280px; }
+.list { padding: 16px; max-width: 600px; margin: 0 auto; }
+.list h1 { font-size: 1.3em; margin-bottom: 4px; }
+.list p { color: #888; margin-bottom: 16px; font-size: 0.9em; }
+.mural { padding: 10px 0; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.mural .name { font-weight: 600; color: #e0e0e0; }
+.mural .loc { color: #888; font-size: 0.85em; }
+.mural a { color: #4a9eff; text-decoration: none; font-size: 0.85em; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div class="list">
+<h1>Tucumcari Murals</h1>
+<p>55 murals on Route 66. Tap a pin or name for directions.</p>
+<div id="mural-list"></div>
+</div>
+
+<script src="https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.core.js" crossorigin async data-callback="initMap" data-token="eyJraWQiOiJaUzMzU1BUU0czIiwidHlwIjoiSldUIiwiYWxnIjoiRVMyNTYifQ.eyJpc3MiOiJZUk01RjhUVzg4IiwiaWF0IjoxNzgxMzkwMTU2LCJvcmlnaW4iOiJ0aGV0dWJlLnRvZGF5Iiwic2NvcGUiOiJtYXBraXRfanMifQ.kNcVZUE6GvZ_3I2I5p8z72VckreULijTc19MvaYjgKVsfgzItP56nKIH1mbCYFChe_3NF3EnktCHhxy4yUU31w"></script>
+<script>
+const murals = [
+  {lat:35.171404,lon:-103.717850,name:"Mother Road",desc:"Motel Safari, 722 E. Route 66"},
+  {lat:35.171404,lon:-103.717850,name:"Elvis & Cadillac",desc:"Motel Safari, 722 E. Route 66"},
+  {lat:35.171404,lon:-103.717850,name:"Tucumcari Tonite!",desc:"Motel Safari, 722 E. Route 66"},
+  {lat:35.171404,lon:-103.718850,name:"Get Your Kicks",desc:"Motel Safari, 522 E. Route 66"},
+  {lat:35.172016,lon:-103.716409,name:"James Dean",desc:"Blue Swallow Motel, 815 E. Route 66"},
+  {lat:35.172016,lon:-103.716409,name:"Tucumcari Tonight",desc:"Continental Oil Co., 815 E. Route 66"},
+  {lat:35.171645,lon:-103.714835,name:"Route 66 Buffalo",desc:"Teepes Curios, 924 E. Route 66"},
+  {lat:35.171645,lon:-103.714835,name:"Route 66 Car",desc:"Teepes Curios, 924 E. Route 66"},
+  {lat:35.172431,lon:-103.713876,name:"Striped Mountain Sunset",desc:"Roadrunner Lodge, 1023 E. Route 66"},
+  {lat:35.171789,lon:-103.713675,name:"Texaco 66",desc:"Bare & Wild Creations, 1201 E. Route 66"},
+  {lat:35.172097,lon:-103.711395,name:"Wanted: Billy the Kid",desc:"Palomino Motel, 1215 E. Route 66"},
+  {lat:35.173448,lon:-103.723961,name:"Dinosaur",desc:"Mesalands Dinosaur Museum, 222 E. Laughlin Ave."},
+  {lat:35.168354,lon:-103.736853,name:"Route 66 (College)",desc:"Mesalands Community College"},
+  {lat:35.158255,lon:-103.736334,name:"Rattlers",desc:"Water Tank, 10th Street"},
+  {lat:35.171789,lon:-103.719500,name:"66 Eyes On Route 66",desc:"Ca Electric Co., 505 E. Route 66"},
+  {lat:35.171789,lon:-103.719500,name:"Daylight Train",desc:"Everyones Federal Credit Union"},
+  {lat:35.171789,lon:-103.719500,name:"Waterfall",desc:"Everyones Federal Credit Union"},
+  {lat:35.154638,lon:-103.724566,name:"Mural Rite 66",desc:"Inside of McDonald's"},
+  {lat:35.171723,lon:-103.724769,name:"Onsite",desc:"La Cita, 820 S. 1st St."},
+  {lat:35.175869,lon:-103.721835,name:"You Are Here",desc:"High Street Church, 424 E. High St."},
+  {lat:35.172500,lon:-103.722500,name:"Flying Space Men",desc:"L'find Dispensary, 1st & Charles Ave."},
+  {lat:35.172500,lon:-103.723042,name:"Abstract New Mexico Landscape",desc:"Grasslands Dispensary"},
+  {lat:35.178105,lon:-103.724658,name:"Alex Street - First Mayor",desc:"City Hall, 205 E. Center"},
+  {lat:35.178965,lon:-103.725846,name:"Arch Hurley",desc:"Princess Theater, 108 E. Main St."},
+  {lat:35.179080,lon:-103.724900,name:"Bird's Eye View",desc:"Security Finance Building, 1st & Main"},
+  {lat:35.179080,lon:-103.724900,name:"Pray For Us",desc:"Knights of Columbus, 1st & Main"},
+  {lat:35.177818,lon:-103.724943,name:"Tucumcari Lumber Co.",desc:"211 S. 1st St."},
+  {lat:35.173188,lon:-103.724698,name:"Abstract Spiral",desc:"717 S. 1st St."},
+  {lat:35.178800,lon:-103.725400,name:"I Love Tucumcari",desc:"S. Alley, Main St."},
+  {lat:35.179200,lon:-103.725400,name:"Tucumcari Legend Map",desc:"N. Alley, Main St."},
+  {lat:35.179000,lon:-103.725400,name:"Honoring Vets",desc:"VFW, Main St."},
+  {lat:35.182840,lon:-103.726011,name:"Southern Pacific Railroad",desc:"Massey Building, N. 2nd St."},
+  {lat:35.179080,lon:-103.725980,name:"Western Welcome",desc:"Israel Building, 2nd and Main"},
+  {lat:35.177865,lon:-103.725980,name:"Ranch Scene",desc:"Tucumcari General Insurance, 214 S. 2nd St."},
+  {lat:35.177865,lon:-103.725980,name:"Conchas Dam & Lake",desc:"Tucumcari General Insurance, 214 S. 2nd St."},
+  {lat:35.176851,lon:-103.726206,name:"In Memory of Moynihan",desc:"Bob's Budget Pharmacy, 311 S. 2nd St."},
+  {lat:35.179080,lon:-103.727100,name:"Blessed",desc:"Abandoned Building, 3rd & Main"},
+  {lat:35.176451,lon:-103.728338,name:"WPA Mural",desc:"Court House, 300 S. 3rd St."},
+  {lat:35.178000,lon:-103.727500,name:"Give them A Head Start",desc:"Eastern Plains, 3rd & Central"},
+  {lat:35.171700,lon:-103.726000,name:"The Legendary Road",desc:"Lowe's Market, 100 W. Tucumcari Blvd."},
+  {lat:35.175149,lon:-103.723073,name:"Memories of the Old Swimming Pool",desc:"Historical Museum, 416 S. Adams"},
+  {lat:35.179000,lon:-103.729000,name:"Fort Bascom Trading Post",desc:"Bascom Building, Main & Adams"},
+  {lat:35.171700,lon:-103.726500,name:"Where's My Horse?",desc:"Route 66 Smoke Shop, 202 W. Route 66"},
+  {lat:35.174000,lon:-103.730000,name:"Radio Ranch",desc:"KTNM-KQAY Station, S. Dale St."},
+  {lat:35.171700,lon:-103.728000,name:"Phillips 66",desc:"Quality Lube & Tire, 302 W. Route 66"},
+  {lat:35.175236,lon:-103.732361,name:"Route 66 - West",desc:"Hairshop, 424 S. 7th St."},
+  {lat:35.171700,lon:-103.730500,name:"Welcome To Tucumcari",desc:"Chamber of Commerce, 404 W. Route 66"},
+  {lat:35.171700,lon:-103.730500,name:"Quay County",desc:"Chamber of Commerce, 404 W. Route 66"},
+  {lat:35.171700,lon:-103.732000,name:"Rattlesnakes & Lions",desc:"602 W. Route 66"},
+  {lat:35.171700,lon:-103.731000,name:"Whiting Brothers",desc:"Chamber Gas Station"},
+  {lat:35.171687,lon:-103.733898,name:"Six Shooter Siding - Capri",desc:"801 W. Tucumcari Blvd."},
+  {lat:35.171687,lon:-103.733898,name:"Six Shooter Siding - Wolf & Truck",desc:"801 W. Tucumcari Blvd."},
+  {lat:35.171648,lon:-103.737911,name:"Get Your Kicks 66",desc:"Magnolia Station, 1016 W. Tucumcari Blvd."},
+  {lat:35.171645,lon:-103.738324,name:"Happy Motoring",desc:"Historic Esso Station, 1302 W. Route 66"},
+  {lat:35.156809,lon:-103.722700,name:"Mural Inside Hospital",desc:"Trigg Memorial Hospital"},
+];
+
+function initMap() {
+  const map = new mapkit.Map("map", {
+    center: new mapkit.Coordinate(35.172, -103.724),
+    cameraDistance: 10000,
+    colorScheme: mapkit.Map.ColorSchemes.Dark,
+  });
+
+  const annotations = murals.map((m, i) => {
+    const coord = new mapkit.Coordinate(m.lat, m.lon);
+    const ann = new mapkit.MarkerAnnotation(coord, {
+      title: m.name,
+      subtitle: m.desc,
+      color: "#e84545",
+      glyphText: "🎨",
+    });
+    ann.addEventListener("select", () => {
+      document.querySelectorAll(".mural")[i]?.scrollIntoView({behavior:"smooth", block:"center"});
+    });
+    return ann;
+  });
+
+  map.addAnnotations(annotations);
+
+  // Build list
+  const list = document.getElementById("mural-list");
+  murals.forEach((m, i) => {
+    const div = document.createElement("div");
+    div.className = "mural";
+    div.innerHTML = '<div><div class="name">' + m.name + '</div><div class="loc">' + m.desc + '</div></div><a href="https://maps.apple.com/?daddr=' + m.lat + ',' + m.lon + '&dirflg=w">Directions</a>';
+    div.addEventListener("click", (e) => {
+      if (e.target.tagName === "A") return;
+      map.setCenterAnimated(new mapkit.Coordinate(m.lat, m.lon));
+      map.setCameraDistanceAnimated(2000);
+      annotations[i].selected = true;
+    });
+    list.appendChild(div);
+  });
+}
+</script>
+</body>
+</html>
